@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+
+        <style>
+            div {
+
+            }
+        </style>
+    </head>
+    <body >
+    <div >
+        <img src="../123.png">
+    </div>
+
+    </body>
+<!--my-->
+
+    <script src="../js/jquery-2.1.1.js"></script>
+<script>
+    window.location.href = "https://www.bilibili.com/read/cv4984512";
+    $.ajax({
+        url: "/api/bili",
+        type: "get",
+        //发送的数据
+        data: "",
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        success: function (data) {
+           console.log(data);
+        }
+    })
+    //练习正则表达式
+    var content = 'zhong123456';
+    var reg = '[\\d]';
+    var regex = RegExp(reg);
+    console.log(content.match(regex));
+</script>
+</html>

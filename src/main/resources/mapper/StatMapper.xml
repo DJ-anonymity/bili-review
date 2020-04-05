@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.zfg.learn.dao.StatMapper">
+    <insert id="insertStatByArticle_id" parameterType="com.zfg.learn.pojo.Stat">
+        insert into stat
+        (article_id, likes, reply)
+        values (#{article_id}, #{likes}, #{reply})
+    </insert>
+    <insert id="insertStatByReview_id" parameterType="com.zfg.learn.pojo.Stat">
+        insert into stat
+        (review_id, likes, reply)
+        values (#{review_id}, #{likes}, #{reply})
+    </insert>
+
+    <update id="updateStatByReview_id" parameterType="com.zfg.learn.pojo.Stat">
+        update stat
+        set likes = #{likes}, reply = #{reply}
+        where  review_id = #{review_id}
+    </update>
+    <update id="updateStatByArticle_id" parameterType="com.zfg.learn.pojo.Stat">
+        update stat
+        set likes = #{likes}, reply = #{reply}
+        where  article_id = #{article_id}
+    </update>
+
+    <delete id="deleteStatByArticle_id" parameterType="Integer">
+        delete from stat where artcle_id = #{artcle_id}
+    </delete>
+    <delete id="deleteStatByReview_id" parameterType="Integer">
+        delete from stat where review_id = #{review_id}
+    </delete>
+</mapper>
+
+

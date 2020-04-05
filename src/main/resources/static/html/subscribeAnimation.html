@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+
+    <script src="../js/jquery-2.1.1.js"></script>
+
+    <script>
+        function getAllSubscribeAnimation(){
+            $.ajax({
+                url: "/api/bili",
+                type: "get",
+                //发送的数据
+                data: "",
+                contentType: "application/json;charset=UTF-8",
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+                }
+            })
+        }
+    </script>
+</body>
+</html>

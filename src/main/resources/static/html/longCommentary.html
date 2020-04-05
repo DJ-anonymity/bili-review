@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        .btn:hover{
+            cursor: pointer;
+        }
+        ul{
+            list-style: none;
+        }
+        ul li{
+            margin-top:20px;
+            background-color: white;
+        }
+    </style>
+</head>
+<body style="background-color: lightgray">
+    <div>
+        <ul id="content">
+
+        </ul>
+
+
+    </div>
+
+</body>
+
+<script src="../jquery-2.1.1.js"></script>
+<script>
+    $(document).ready(function () {
+        getCommentary();
+    })
+    function getCommentary(){
+        $.ajax({
+            url: "/bili/commentary/long",
+            type: "get",
+            //发送的数据
+            data: "",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            success: function (data) {
+                var content = "";
+                console.log(data.length);
+                console.log(data[0].author.uname);
+                for (var i = 0; i<data.length ; i++){
+                    console.log(i);
+                    content+=   '<li>' +
+                                    '<div style="float: left;font-weight: bold;font-size: 18px">' +
+                                        data[i].author.uname+
+                                    '</div>' +
+                                    '<div  style="float: left;font-weight: bold;margin-left: 200px">' +
+                                        data[i].progress+
+                                    '</div>' +
+                                    '<div style="float: left;font-weight: bold;margin-left: 200px;font-size: 18px">' +
+                                         '评分:' +data[i].score+
+                                    '</div>' +
+                                    '<div class="btn" style="clear: both" data-url="'+data[i].url+'" onclick="go(this)">' +
+                                         '<h4 style="font-size: 18px">' +
+                                            data[i].title+
+                                         '</h4>' +
+                                         '<p>' +
+                                            data[i].content+
+                                         '</p>' +
+                                    '</div>' +
+                                '</li>';
+                }
+                document.getElementById("content").innerHTML = content;
+            }
+        })
+    }
+</script>
+<script>
+    function go(e) {
+        window.location.href = e.getAttribute("data-url");
+    }
+</script>
+</html>

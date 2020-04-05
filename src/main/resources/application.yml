@@ -1,0 +1,32 @@
+#数据库连接池
+spring:
+  datasource:
+    username: root
+    password: m381610m.
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/bili?useUnicode=true&charaterEncoding=UTF-8&serverTimezone=UTC
+
+#redis
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: illya0415
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 500
+        min-idle: 0
+    lettuce:
+      shutdown-timeout: 0
+    timeout: 2000
+
+#服务器配置
+server:
+  port: 8080
+  servlet:
+    context-path: /bili/resource
+
+#mybatis
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
