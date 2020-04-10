@@ -152,7 +152,7 @@ public class LongReview {
                 ", stat=" + stat +
                 ", title='" + title + '\'' +
                 ", url='" + url + '\'' +
-                '}';
+                '}'+"\n\r";
     }
 }
 

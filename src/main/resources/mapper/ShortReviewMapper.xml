@@ -24,24 +24,68 @@
         </association>
     </resultMap>
 
+    <select id="selectReviewByMedia_id" resultMap="ShortReview">
+        select shortreview.*, user.*, stat.* from shortreview, user, stat
+        where  shortreview.mid = user.mid
+        and    shortreview.review_id = stat.review_id
+        and    shortreview.media_id = #{media_id}
+        <if test="sortType != null">
+            order by ${sortType}
+        </if>
+    </select>
+
+    <select id="selectReviewByKeyWord" resultMap="ShortReview">
+        <bind name="keyword" value="'%'+keyword+'%'"/>
+        select shortreview.*, user.*, stat.*  from shortreview, user, stat
+        where  shortreview.mid = user.mid
+        and    shortreview.review_id = stat.review_id
+        and    shortreview.media_id = #{media_id}
+        <if test="keyword != null">
+            and   shortreview.content like #{keyword}
+        </if>
+        <if test="sortType != null">
+            order by ${sortType}
+        </if>
+    </select>
+
+    <select id="selectReviewByMid" resultMap="ShortReview">
+        select shortreview.*, user.*, stat.*  from shortreview, user, stat
+        where  shortreview.mid = user.mid
+        and    shortreview.review_id = stat.review_id
+        <if test="mid != null">
+            and   shortreview.mid = #{mid}
+        </if>
+        <if test="sortType != null">
+            order by ${sortType}
+        </if>
+    </select>
+
     <select id="findShortReviewByMediaId" parameterType="Integer" resultMap="ShortReview">
         select *from shortreview, user, stat
         where user.mid = shortreview.mid
         and stat.review_id = shortreview.review_id
     </select>
+
     <select id="selectShortReviewByReview_id" parameterType="Integer" resultMap="ShortReview">
         select *from shortreview, user, stat
         where user.mid = shortreview.mid
         and stat.review_id = shortreview.review_id
         and shortreview.review_id = #{review_id}
     </select>
+
     <select id="selectAllReview_id" resultType="Integer">
         select review_id from shortreview
     </select>
+
     <select id="selectLatestReviewByMedia_id" parameterType="Integer" resultType="com.zfg.learn.pojo.ShortReview">
         select  *from shortreview
         where media_id = #{media_id}
         order by mtime DESC limit 1
+    </select>
+
+    <select id="selectReviewByMtime" parameterType="Long" resultType="com.zfg.learn.pojo.ShortReview">
+        select  *from shortreview
+        where mtime >= #{mtime}
     </select>
 
     <insert id="insertShortReview" parameterType="com.zfg.learn.pojo.ShortReview">

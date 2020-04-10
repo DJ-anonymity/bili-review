@@ -11,19 +11,22 @@
         </style>
     </head>
     <body >
-    <div >
-        <img src="../123.png">
-    </div>
+   <div style="margin: 50px auto">
+       <form method="post" action="/bili/admin/review/short/pullNew">
+           <input type="text" name="media_id">
+           <input type="submit" value="go">
+       </form>
+   </div>
 
     </body>
 <!--my-->
 
     <script src="../js/jquery-2.1.1.js"></script>
 <script>
-    window.location.href = "https://www.bilibili.com/read/cv4984512";
-    $.ajax({
-        url: "/api/bili",
-        type: "get",
+   /* window.location.href = "https://www.bilibili.com/read/cv4984512";*/
+    /*$.ajax({
+        url: "/bili/admin/animation/pull",
+        type: "post",
         //发送的数据
         data: "",
         contentType: "application/json;charset=UTF-8",
@@ -31,7 +34,7 @@
         success: function (data) {
            console.log(data);
         }
-    })
+    })*/
     //练习正则表达式
     var content = 'zhong123456';
     var reg = '[\\d]';

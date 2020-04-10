@@ -27,17 +27,52 @@
         </association>
     </resultMap>
 
-    <select id="findLongReviewByMediaId" parameterType="Integer" resultMap="LongReview">
+    <select id="selectReviewByMedia_id" resultMap="LongReview">
+        select longreview.*, user.*, stat.likes, stat.reply  from longreview, user, stat
+        where user.mid = longreview.mid
+        and stat.article_id = longreview.article_id
+        and longreview.media_id = #{media_id}
+        <if test="sortType != null">
+            order by ${sortType}
+        </if>
+    </select>
+
+    <select id="selectReviewByKeyWord" resultMap="LongReview">
+        <bind name="keyword" value="'%'+keyword+'%'"/>
         select *from longreview, user, stat
         where user.mid = longreview.mid
         and stat.article_id = longreview.article_id
+        and longreview.media_id = #{media_id}
+        <if test="keyword != null">
+        and(
+            longreview.content like #{keyword}
+            or longreview.title like #{keyword}
+            )
+        </if>
+        <if test="sortType != null">
+            order by ${sortType}
+        </if>
     </select>
+
+    <select id="selectReviewByMid" resultMap="LongReview">
+        select *from longreview, user, stat
+        where user.mid = longreview.mid
+        and stat.article_id = longreview.article_id
+        <if test="mid != null">
+           and longreview.mid = #{mid}
+        </if>
+        <if test="sortType != null">
+            order by ${sortType}
+        </if>
+    </select>
+
     <select id="selectLongReviewByReview_id" parameterType="Integer" resultMap="LongReview">
         select *from longreview, user, stat
         where user.mid = longreview.mid
         and stat.article_id = longreview.article_id
         and longreview.review_id = #{review_id}
     </select>
+
     <select id="selectLatestReviewByMedia_id" parameterType="Integer" resultType="com.zfg.learn.pojo.LongReview">
         select  *from longreview
         where media_id = #{media_id}

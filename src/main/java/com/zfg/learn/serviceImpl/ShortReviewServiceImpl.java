@@ -2,6 +2,8 @@ package com.zfg.learn.serviceImpl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zfg.learn.common.Const;
 import com.zfg.learn.common.ServerResponse;
 import com.zfg.learn.dao.AnimationMapper;
@@ -14,9 +16,11 @@ import com.zfg.learn.pojo.ShortReviewPageInfo;
 import com.zfg.learn.pojo.Stat;
 import com.zfg.learn.service.ShortReviewService;
 import com.zfg.learn.until.CatchApi;
+import com.zfg.learn.until.SortUntil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,6 +39,7 @@ public class ShortReviewServiceImpl implements ShortReviewService {
     private AnimationMapper animationMapper;
 
     private CatchApi catchApi = new CatchApi();
+    private SortUntil sortUntil = new SortUntil();
 
     //向b站的api获取某番剧的全部评价，并存在本地,因为怕访问太频繁被封ip，一次最多只获取3w
     @Override
@@ -55,7 +60,7 @@ public class ShortReviewServiceImpl implements ShortReviewService {
             cursor = 1L;
         }
         //标志当前功能正在使用，无法再被执行
-        redisTemplate.opsForValue().set("pullShortReviewStatus",Const.IS_RUNNING);
+        redisTemplate.opsForValue().set("pullAllShortReview",Const.IS_RUNNING);
 
         while (cursor != 0){
             //第一次访问的时候不需要页码
@@ -96,23 +101,32 @@ public class ShortReviewServiceImpl implements ShortReviewService {
             //更改animation中的短评持久化状态
             animationMapper.updateShortReviewPersistenceMarkByMedia_id(Const.PERSISTENCE,media_id);
         }
+
         //标记该功能进入空闲状态
-        redisTemplate.opsForValue().set("pullShortReviewStatus",Const.IS_FREE);
+        redisTemplate.opsForValue().set("pullAllShortReview",Const.IS_FREE);
         return ServerResponse.createBySuccess();
     }
 
     //向b站的api获取某番剧的最新评价，并存在本地
     @Override
     public ServerResponse pullNewShortReviewFromBiliApi(Integer media_id) throws IOException {
-        //把该番剧最新的短评的id取出来
-        ShortReview latestReview =shortReviewMapper.selectLatestReviewByMedia_id(media_id);
-        System.out.println("最新的短评为:"+latestReview);
+        //如果该id的动漫还没有持久化，则无法更新
+        if (animationMapper.selectShortReviewPersistenceMarkByMedia_id(media_id) == Const.NO_PERSISTENCE){
+            return ServerResponse.createByErrorMessage("请先持久化");
+        }
+
         Long cursor = 1L;
         String apiUrl;
         String reviewJson;
         JSONObject jsonObject;
         ShortReviewPageInfo reviewPageInfo;
         List<ShortReview> reviewList;
+
+        //把该番剧最新的短评的id取出来
+        ShortReview latestReview =shortReviewMapper.selectLatestReviewByMedia_id(media_id);
+        System.out.println("最新的短评为:"+latestReview);
+        //标志当前功能正在使用，无法再被执行
+        redisTemplate.opsForValue().set("pullNewShortReview",Const.IS_RUNNING);
         while(cursor != 0){
             if (cursor == 1L){
                 apiUrl = "https://api.bilibili.com/pgc/review/short/list?ps=20&sort=1&media_id="+media_id;
@@ -149,10 +163,14 @@ public class ShortReviewServiceImpl implements ShortReviewService {
             }
             cursor = reviewPageInfo.getNext();
         }
+
+        //标记该功能进入空闲状态
+        redisTemplate.opsForValue().set("pullNewShortReview",Const.IS_FREE);
         return ServerResponse.createByError();
     }
 
     //把数据存进数据库，多条
+    @Transactional
     @Override
     public ServerResponse insertShortReviews(List<ShortReview> ShortReviewList) {
         if (ShortReviewList.size() == 0){
@@ -187,6 +205,7 @@ public class ShortReviewServiceImpl implements ShortReviewService {
     }
 
     //把数据存进数据库,一条
+    @Transactional
     @Override
     public ServerResponse insertShortReview(ShortReview shortReview) {
         if (shortReview == null){
@@ -237,4 +256,37 @@ public class ShortReviewServiceImpl implements ShortReviewService {
         }
         return ServerResponse.createByError();
     }
+
+    @Override
+    public ServerResponse listAll() {
+        return null;
+    }
+
+    @Override
+    public ServerResponse list(Integer media_id, Integer sort, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        String sortType = sortUntil.convertToReviewSortType(sort);
+        List<ShortReview> shortReviewList = shortReviewMapper.selectReviewByMedia_id(media_id, sortType);
+        PageInfo<ShortReview> pageInfo = new PageInfo<>(shortReviewList);
+        return ServerResponse.createBySuccess(pageInfo);
+    }
+
+    @Override
+    public ServerResponse searchReviewByKeyword(Integer media_id, String keyword, Integer sort, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        String sortType = sortUntil.convertToReviewSortType(sort);
+        List<ShortReview> shortReviewList = shortReviewMapper.selectReviewByKeyWord(media_id, keyword, sortType);
+        PageInfo<ShortReview> pageInfo = new PageInfo<>(shortReviewList);
+        return ServerResponse.createBySuccess(pageInfo);
+    }
+
+    @Override
+    public ServerResponse searchReviewByMid(Integer mid, Integer sort, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        String sortType = sortUntil.convertToReviewSortType(sort);
+        List<ShortReview> shortReviewList = shortReviewMapper.selectReviewByMid(mid, sortType);
+        PageInfo<ShortReview> pageInfo = new PageInfo<>(shortReviewList);
+        return ServerResponse.createBySuccess(pageInfo);
+    }
+
 }

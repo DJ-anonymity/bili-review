@@ -2,10 +2,8 @@ package com.zfg.learn;
 
 import com.zfg.learn.common.Const;
 import com.zfg.learn.dao.*;
-import com.zfg.learn.pojo.ShortReview;
-import com.zfg.learn.pojo.Stat;
-import com.zfg.learn.pojo.User;
-import com.zfg.learn.pojo.LongReview;
+import com.zfg.learn.pojo.*;
+import com.zfg.learn.service.AnimationService;
 import com.zfg.learn.service.LongReviewService;
 import com.zfg.learn.service.ShortReviewService;
 import org.junit.jupiter.api.Test;
@@ -40,11 +38,18 @@ class SpringbootFirstTestApplicationTests {
     private ShortReviewMapper shortReviewMapper;
     @Autowired
     private ShortReviewService shortReviewService;
+    @Autowired
+    private AnimationService animationService;
 
     @Test
     public void demo() throws IOException {
 
-        //System.out.println(longReviewService.pullNewLongReviewFromBiliApi(28224080));
+
+        animationService.pullNewAnimation(28224080);
+        //System.out.println(animationMapper.selectAnimationByMedia_id(28224080));
+        //System.out.println(shortReviewMapper.selectReviewByMedia_id(28224080, "mtime DESC"));
+       //System.out.println(longReviewMapper.selectReviewByMedia_id(28224080,"likes DESC"));
+        //System.out.println(shortReviewService.pullNewShortReviewFromBiliApi(28224080));
         //redisTemplate.opsForValue().set("shortReviewCursor",78417529834612L);
         /*User user = new User();
         user.setMid(452622756);
@@ -56,27 +61,17 @@ class SpringbootFirstTestApplicationTests {
             System.out.println(shortReviewService.deleteShortReviewByReview_id(i));
         }*/
         //System.out.println(shortReviewService.deleteShortReviewByReview_id(11656380).getStatus());
-        System.out.println(shortReviewService.pullAllShortReviewFromBiliApi(28224080).getMsg());
-        System.out.println(longReviewService.pullAllLongReviewFromBiliApi(28224080).getMsg());
+        //System.out.println(shortReviewService.pullAllShortReviewFromBiliApi(28224080).getMsg());
+        //System.out.println(longReviewService.pullAllLongReviewFromBiliApi(28224080).getMsg());
     }
 
     @Test
-    public String catchBili() throws IOException {
-        //接口地址
-        String apiUrl = "http://123.57.242.246:8080/project/foreground/projects";
-        URL url = new URL(apiUrl);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+    public void demo1() throws IOException {
+        List<ShortReview> shortReviews = shortReviewMapper.selectReviewByMtime(1586355729L);
+        System.out.println(shortReviews.size());
+        int i =0;
 
-        connection.setRequestMethod("GET");
-        connection.setRequestProperty("Accept", "application/json");
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        String line;
-        while((line =bufferedReader.readLine()) != null ){
-            System.out.println(line+"1");
-        }
 
-        bufferedReader.close();
-        return null;
     }
 
     @Test

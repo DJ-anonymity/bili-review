@@ -2,7 +2,7 @@ package com.zfg.learn.pojo;
 
 public class Rating {
     private Integer media_id;
-    private Integer score;
+    private Float score;
     private Integer count;
 
     public Integer getMedia_id() {
@@ -13,11 +13,11 @@ public class Rating {
         this.media_id = media_id;
     }
 
-    public Integer getScore() {
+    public Float getScore() {
         return score;
     }
 
-    public void setScore(Integer score) {
+    public void setScore(Float score) {
         this.score = score;
     }
 

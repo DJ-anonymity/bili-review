@@ -2,6 +2,9 @@ package com.zfg.learn.serviceImpl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zfg.learn.common.Const;
 import com.zfg.learn.common.ServerResponse;
 import com.zfg.learn.dao.AnimationMapper;
@@ -13,9 +16,12 @@ import com.zfg.learn.pojo.ReviewPageInfo;
 import com.zfg.learn.pojo.Stat;
 import com.zfg.learn.service.LongReviewService;
 import com.zfg.learn.until.CatchApi;
+import com.zfg.learn.until.SortUntil;
+import io.lettuce.core.GeoArgs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
@@ -34,12 +40,12 @@ public class LongReviewServiceImpl implements LongReviewService {
     private AnimationMapper animationMapper;
 
     private CatchApi catchApi = new CatchApi();
+    private SortUntil sortUntil = new SortUntil();
 
     //向b站的api获取某番剧的全部评价，并存在本地
     @Override
     public ServerResponse pullAllLongReviewFromBiliApi(Integer media_id) throws IOException {
         //如果该id的动漫已经拉取过全部评论了，则中断拉取并提醒只需更新就行了
-        animationMapper.selectLongReviewPersistenceMarkByMedia_id(media_id);
         if (animationMapper.selectLongReviewPersistenceMarkByMedia_id(media_id) == Const.PERSISTENCE){
             return ServerResponse.createByErrorMessage("该评论已经拉取过了，无序重复拉取");
         }
@@ -50,6 +56,8 @@ public class LongReviewServiceImpl implements LongReviewService {
         List<LongReview> longReviewList;
         Long cursor = 1L;
 
+        //标志当前功能正在使用，无法再被执行
+        redisTemplate.opsForValue().set("pullAllLongReview",Const.IS_RUNNING);
         while (cursor != 0){
             //第一次访问的时候不需要页码
             if (cursor.equals(1L)){
@@ -81,6 +89,9 @@ public class LongReviewServiceImpl implements LongReviewService {
             //更改animation中的短评持久化状态
             animationMapper.updateLongReviewPersistenceMarkByMedia_id(Const.PERSISTENCE,media_id);
         }
+
+        //标记该功能进入空闲状态
+        redisTemplate.opsForValue().set("pullAllLongReview",Const.IS_FREE);
         return ServerResponse.createBySuccess();
     }
 
@@ -88,17 +99,20 @@ public class LongReviewServiceImpl implements LongReviewService {
     @Override
     public ServerResponse pullNewLongReviewFromBiliApi(Integer media_id) throws IOException {
 
-
+        //如果该id的动漫还没有持久化完毕，无法更新
+        if (animationMapper.selectLongReviewPersistenceMarkByMedia_id(media_id) == Const.NO_PERSISTENCE){
+            return ServerResponse.createByErrorMessage("请先持久化完毕");
+        }
         Long cursor = 1L;
         String apiUrl;
         String reviewJson;
         JSONObject jsonObject;
         ReviewPageInfo reviewPageInfo;
         List<LongReview> reviewList;
+
         //把该番剧最新的长评的id取出来
         LongReview latestReview =longReviewMapper.selectLatestReviewByMedia_id(media_id);
         System.out.println("最新的长评为:"+latestReview);
-
         while(cursor != 0){
             if (cursor == 1L){
                 apiUrl = "https://api.bilibili.com/pgc/review/long/list?ps=20&sort=1&media_id="+media_id;
@@ -138,7 +152,8 @@ public class LongReviewServiceImpl implements LongReviewService {
         return ServerResponse.createByError();
     }
 
-    //把数据存进数据库
+    //把数据存进数据库,多条
+    @Transactional
     @Override
     public ServerResponse insertLongReviews(List<LongReview> longReviewList) {
         if (longReviewList.size() == 0){
@@ -169,6 +184,7 @@ public class LongReviewServiceImpl implements LongReviewService {
     }
 
     //把数据存进数据库,一条
+    @Transactional
     @Override
     public ServerResponse insertLongReview(LongReview longReview) {
         if (longReview == null){
@@ -219,5 +235,36 @@ public class LongReviewServiceImpl implements LongReviewService {
            }
         }
         return ServerResponse.createByError();
+    }
+
+    //查找对应番剧的评价
+    @Override
+    public ServerResponse list(Integer media_id, Integer sort, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum,pageSize);
+        //通过根据类的方法把排序变成可以拼接进sql中的字符串
+        String sortType = sortUntil.convertToReviewSortType(sort);
+        List<LongReview> longReviewList = longReviewMapper.selectReviewByMedia_id(media_id,sortType);
+        PageInfo<LongReview> pageInfo = new PageInfo<>(longReviewList);
+        return ServerResponse.createBySuccess(pageInfo);
+    }
+
+    //在番剧里面通过关键字搜索内容
+    @Override
+    public ServerResponse searchReviewByKeyword(Integer media_id, String keyword, Integer sort, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        String sortType = sortUntil.convertToReviewSortType(sort);
+        List<LongReview> longReviewList = longReviewMapper.selectReviewByKeyWord(media_id, keyword, sortType);
+        PageInfo<LongReview> pageInfo = new PageInfo(longReviewList);
+        return ServerResponse.createBySuccess(pageInfo);
+    }
+
+
+    @Override
+    public ServerResponse searchReviewByMid(Integer mid, Integer sort, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        String sortType = sortUntil.convertToReviewSortType(sort);
+        List<LongReview> longReviewList = longReviewMapper.selectReviewByMid(mid, sortType);
+        PageInfo<LongReview> pageInfo = new PageInfo(longReviewList);
+        return ServerResponse.createBySuccess(pageInfo);
     }
 }
