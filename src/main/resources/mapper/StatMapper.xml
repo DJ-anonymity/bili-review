@@ -5,15 +5,41 @@
 
 
 <mapper namespace="com.zfg.learn.dao.StatMapper">
-    <insert id="insertStatByArticle_id" parameterType="com.zfg.learn.pojo.Stat">
+    <insert id="insertLongReviewStat" parameterType="com.zfg.learn.pojo.Stat">
         insert into stat
         (article_id, likes, reply)
         values (#{article_id}, #{likes}, #{reply})
     </insert>
-    <insert id="insertStatByReview_id" parameterType="com.zfg.learn.pojo.Stat">
+    <insert id="insertShortReviewStat" parameterType="com.zfg.learn.pojo.Stat">
         insert into stat
         (review_id, likes, reply)
         values (#{review_id}, #{likes}, #{reply})
+    </insert>
+
+    <insert id="insertShortReviewStatList" parameterType="java.util.List">
+        insert into stat
+        (review_id, likes, reply)
+        values
+        <foreach item="stat" separator="," collection="statList">
+            (
+            #{stat.review_id},
+            #{stat.likes},
+            #{stat.reply}
+            )
+        </foreach>
+    </insert>
+
+    <insert id="insertLongReviewStatList" parameterType="java.util.List">
+        insert into stat
+        (article_id, likes, reply)
+        values
+        <foreach item="stat" separator="," collection="statList">
+            (
+            #{stat.article_id},
+            #{stat.likes},
+            #{stat.reply}
+            )
+        </foreach>
     </insert>
 
     <update id="updateStatByReview_id" parameterType="com.zfg.learn.pojo.Stat">
@@ -21,6 +47,7 @@
         set likes = #{likes}, reply = #{reply}
         where  review_id = #{review_id}
     </update>
+
     <update id="updateStatByArticle_id" parameterType="com.zfg.learn.pojo.Stat">
         update stat
         set likes = #{likes}, reply = #{reply}
@@ -30,6 +57,7 @@
     <delete id="deleteStatByArticle_id" parameterType="Integer">
         delete from stat where artcle_id = #{artcle_id}
     </delete>
+
     <delete id="deleteStatByReview_id" parameterType="Integer">
         delete from stat where review_id = #{review_id}
     </delete>

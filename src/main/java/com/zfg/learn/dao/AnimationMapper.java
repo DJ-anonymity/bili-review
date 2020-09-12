@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface AnimationMapper {
 
-    public List<Animation> selectAllAnimation();
+    public List<Animation> selectAllAnimation(@Param("persistenceMark") Integer persistenceMark);
 
     public Animation selectAnimationByMedia_id(Integer media_id);
 

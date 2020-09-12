@@ -17,6 +17,8 @@ public class ShortReview {
     private Integer mid;
     //最终修改时间
     private Long mtime;
+    //所属动漫
+    private Animation animation;
     //看到第几集
     private String progress;
     //该review的id
@@ -88,6 +90,14 @@ public class ShortReview {
 
     public void setMtime(Long mtime) {
         this.mtime = mtime;
+    }
+
+    public Animation getAnimation() {
+        return animation;
+    }
+
+    public void setAnimation(Animation animation) {
+        this.animation = animation;
     }
 
     public String getProgress() {

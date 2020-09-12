@@ -1,12 +1,15 @@
 package com.zfg.learn.service;
 
+import com.zfg.learn.bo.AnimationReviewBo;
 import com.zfg.learn.common.ServerResponse;
 
 import java.io.IOException;
 
 public interface AnimationService {
 
-    public ServerResponse list(Integer pageNum, Integer pageSize);
+    public ServerResponse list(Integer persistenceMark, Integer pageNum, Integer pageSize);
+
+    public AnimationReviewBo getReviewQuantity(Integer media_id) throws IOException;
 
     public ServerResponse findAnimationByMedia_id(Integer media_id);
 

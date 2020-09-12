@@ -27,12 +27,28 @@
         </association>
     </resultMap>
 
+
+    <!--取代pagehelper自带的性能低下的查询语句-->
+    <select id="selectReviewByMedia_id_COUNT" resultType="Long">
+        select count(*)from longreview
+        where longreview.media_id = #{media_id}
+        <if test="score != null">
+            and longreview.score = #{score}
+        </if>
+    </select>
+
     <select id="selectReviewByMedia_id" resultMap="LongReview">
         select longreview.*, user.*, stat.likes, stat.reply  from longreview, user, stat
         where user.mid = longreview.mid
         and stat.article_id = longreview.article_id
         and longreview.media_id = #{media_id}
+        <if test="score != null">
+            and longreview.score = #{score}
+        </if>
         <if test="sortType != null">
+            <if test="sortType == 'stat.LIKES DESC' ">
+                and stat.likes > 50
+            </if>
             order by ${sortType}
         </if>
     </select>
@@ -43,13 +59,19 @@
         where user.mid = longreview.mid
         and stat.article_id = longreview.article_id
         and longreview.media_id = #{media_id}
+        <if test="score != null">
+            and longreview.score = #{score}
+        </if>
         <if test="keyword != null">
-        and(
-            longreview.content like #{keyword}
-            or longreview.title like #{keyword}
-            )
+            and(
+                longreview.content like #{keyword}
+                or longreview.title like #{keyword}
+                )
         </if>
         <if test="sortType != null">
+            <if test="sortType == 'stat.LIKES DESC' ">
+                and stat.likes > 50
+            </if>
             order by ${sortType}
         </if>
     </select>
@@ -79,10 +101,41 @@
         order by mtime DESC limit 1
     </select>
 
+    <select id="selectReviewQuantityByMedia_id" parameterType="Integer" resultType="Integer">
+        select count(*)from longreview
+        where media_id = #{media_id}
+    </select>
+
+    <select id="selectReviewQuantityByMid" parameterType="Integer" resultType="Integer">
+        select count(*)from longreview
+        where mid = #{mid}
+    </select>
+
     <insert id="insertLongReview" parameterType="com.zfg.learn.pojo.LongReview">
         insert into longreview
         (article_id, content, ctime, media_id, mid, mtime, progress, review_id, score, title, url)
         values (#{article_id}, #{content}, #{ctime}, #{media_id}, #{mid}, #{mtime}, #{progress}, #{review_id}, #{score}, #{title}, #{url})
+    </insert>
+
+    <insert id="insertLongReviewList" parameterType="java.util.List">
+        insert into longreview
+        (article_id, content, ctime, media_id, mid, mtime, progress, review_id, score, title, url)
+        values
+        <foreach item="review" separator="," collection="reviewList">
+            (
+            #{review.article_id},
+            #{review.content},
+            #{review.ctime},
+            #{review.media_id},
+            #{review.mid},
+            #{review.mtime},
+            #{review.progress},
+            #{review.review_id},
+            #{review.score},
+            #{review.title},
+            #{review.url}
+            )
+        </foreach>
     </insert>
 
     <update id="updateContentByReview_id" parameterType="com.zfg.learn.pojo.LongReview">

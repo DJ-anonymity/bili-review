@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer" />
+    <title>Title</title>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="../js/jquery-2.1.1.js"></script>
+
+    <style>
+        .container{
+            padding: 60px;
+            text-align: center;
+        }
+        .animation-review-detail .animation-info img{
+            height: 400px;
+            width: 300px;
+        }
+        .loading{
+            display: none;
+            position: fixed;
+            left: 45%;
+            top: 40%;
+            width: 80px;
+            height: 80px;
+            background-image: url("../img/5-121204193R0-50.gif");
+            background-size: contain ;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="animation-review-detail">
+            <div class="animation-info">
+                <a href="#" id="animation-href">
+                    <img src="" id="animation-img">
+                    <div id="animation-title"></div>
+                </a>
+            </div>
+            <div class="animation-review-info">
+                <div class="animation-long-review-info">
+                    长评总数：<span id="all-long-review-num"></span>
+                    已获取：<span id="finished-long-review-num"></span>
+                </div>
+                <div class="animation-short-review-info">
+                    短评总数：<span id="all-short-review-num"></span>
+                    已获取： <span id="finished-short-review-num"></span>
+                </div>
+            </div>
+        </div>
+        <div class="animation-review-operate">
+                <input type="button" id="pull-long-review" value="更新长评">
+                <input type="button" id="pull-short-review" value="更新短评">
+            </div>
+        </div>
+    </div>
+    <!--加载效果-->
+    <div class="loading">
+
+    </div>
+</body>
+
+<script src="../js/common/until.js"></script>
+<script src="../js/admin/reviewUpdate.js"></script>
+</html>

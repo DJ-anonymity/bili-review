@@ -10,17 +10,13 @@ public class Animation {
     private Integer is_finish;
     private Rating rating;
 
+    //评论数量
+    private Integer short_review_total;
+    private Integer long_review_total;
+
     //评价是否已经持久化的标志
     private Integer longReviewPersistenceMark;
     private Integer shortReviewPersistenceMark;
-
-    public Integer getSeason_id() {
-        return season_id;
-    }
-
-    public void setSeason_id(Integer season_id) {
-        this.season_id = season_id;
-    }
 
     public Integer getMedia_id() {
         return media_id;
@@ -28,6 +24,14 @@ public class Animation {
 
     public void setMedia_id(Integer media_id) {
         this.media_id = media_id;
+    }
+
+    public Integer getSeason_id() {
+        return season_id;
+    }
+
+    public void setSeason_id(Integer season_id) {
+        this.season_id = season_id;
     }
 
     public String getShare_url() {
@@ -70,6 +74,22 @@ public class Animation {
         this.rating = rating;
     }
 
+    public Integer getShort_review_total() {
+        return short_review_total;
+    }
+
+    public void setShort_review_total(Integer short_review_total) {
+        this.short_review_total = short_review_total;
+    }
+
+    public Integer getLong_review_total() {
+        return long_review_total;
+    }
+
+    public void setLong_review_total(Integer long_review_total) {
+        this.long_review_total = long_review_total;
+    }
+
     public Integer getLongReviewPersistenceMark() {
         return longReviewPersistenceMark;
     }
@@ -96,6 +116,8 @@ public class Animation {
                 ", cover='" + cover + '\'' +
                 ", is_finish=" + is_finish +
                 ", rating=" + rating +
+                ", short_review_total=" + short_review_total +
+                ", long_review_total=" + long_review_total +
                 ", longReviewPersistenceMark=" + longReviewPersistenceMark +
                 ", shortReviewPersistenceMark=" + shortReviewPersistenceMark +
                 '}';

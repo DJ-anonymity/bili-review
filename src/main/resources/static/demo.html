@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>加载效果demo</title>
+    <!--引入jQuery-->
+    <meta name="referrer" content="no-referrer" />
+    <script src="http://apps.bdimg.com/libs/jquery/1.8.3/jquery.js"></script>
+    <script src="js/common/until.js"></script>
+    <style>
+       .loading{
+           width: 100px;
+           height: 100px;
+           background-image: url("img/5-121204193R0-50.gif");
+           background-size: contain ;
+       }
+    </style>
+</head>
+<body>
+   <!-- <form method="post" action="https://bangumi.bilibili.com/review/web_api/like">
+        <input type="text" name="media_id" value="28224080">
+        <input type="text" name="review_type" value="2">
+        <input type="text" name="review_id" value="11656380">
+        <input type="text" name="csrf" value="b0454daa7dfc8e76946600991164823e">
+        <input type="submit" value="提交">
+    </form>-->
+    <input type="text" id="date-demo">
+    <button onclick="getLoginUser()">go</button>
+</body>
+<script>
+    var mid;
+    function getLoginUser() {
+        window.location.href = "https://api.bilibili.com/x/web-interface/nav";
+    }
+    function getFollowers(){
+        getLoginUser();
+        $.ajax({
+            url:'/bili/portal/user/followers?mid='+mid,
+            type:'get',
+            data:'',
+            dataType: "jsonp",
+            jsonp: "callback",//传递给请求处理程序或页面的，用以获得jsonp回调函数名的参数名(一般默认为:callback)
+            jsonpCallback:"__jp5",//自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名，也可以不写这个参数，jQuery会自动为你处理数据
+            success: function(data){
+                console.log(data);
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+                console.log("服务器异常");
+                alert(XMLHttpRequest.status);
+                alert(XMLHttpRequest.readyState);
+                alert(XMLHttpRequest.responseText);
+                alert(textStatus);
+                alert(errorThrown);
+                console.log(textStatus);
+            }
+        });
+    }
+    function __jp5(result) {
+        var data = JSON.stringify(result); //json对象转成字符串
+        console.log(data);
+    }
+</script>
+</html>

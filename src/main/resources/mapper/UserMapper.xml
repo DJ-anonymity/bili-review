@@ -16,6 +16,19 @@
         values (#{avatar}, #{mid}, #{uname})
     </insert>
 
+    <insert id="insertUserList" parameterType="com.zfg.learn.pojo.User">
+        insert ignore into user
+        (avatar, mid, uname)
+        values
+        <foreach item="user" separator="," collection="userList">
+            (
+                #{user.avatar},
+                #{user.mid},
+                #{user.uname}
+            )
+        </foreach>
+    </insert>
+
     <delete id="deleteUserByMid" parameterType="Integer">
         delete from user where mid = #{mid}
     </delete>

@@ -12,6 +12,8 @@
         <result property="title" column="title"></result>
         <result property="cover" column="cover"></result>
         <result property="is_finish" column="is_finish"></result>
+        <result property="short_review_total" column="short_review_total"></result>
+        <result property="long_review_total" column="long_review_total"></result>
         <result property="longReviewPersistenceMark" column="longReviewPersistenceMark"></result>
         <result property="shortReviewPersistenceMark" column="shortReviewPersistenceMark"></result>
         <association property="rating" javaType="com.zfg.learn.pojo.Rating">
@@ -25,6 +27,18 @@
         select animation.*, rating.*
         from animation, rating
         where animation.media_id = rating.media_id
+        <if test="persistenceMark != null">
+            <if test="persistenceMark == 0">
+                and (
+                    animation.longReviewPersistenceMark = 0
+                    or animation.shortReviewPersistenceMark = 0
+                    )
+            </if>
+            <if test="persistenceMark == 1">
+                and animation.longReviewPersistenceMark = 1
+                and animation.shortReviewPersistenceMark = 1
+            </if>
+        </if>
     </select>
 
     <select id="selectAnimationByMedia_id" parameterType="Integer" resultMap="Animation">
@@ -40,6 +54,7 @@
         select longReviewPersistenceMark from animation
         where media_id = #{media_id}
     </select>
+
     <select id="selectShortReviewPersistenceMarkByMedia_id" parameterType="Integer" resultType="Integer">
         select shortReviewPersistenceMark from animation
         where media_id = #{media_id}
@@ -59,8 +74,10 @@
 
     <insert id="insertAnimation" parameterType="com.zfg.learn.pojo.Animation">
         insert into animation
-        (media_id, season_id, share_url, title, cover, is_finish, longReviewPersistenceMark, shortReviewPersistenceMark)
-        values (#{media_id}, #{season_id}, #{share_url}, #{title}, #{cover}, #{is_finish}, 0, 0)
+        (media_id, season_id, share_url, title, cover, is_finish,
+         short_review_total, long_review_total, longReviewPersistenceMark, shortReviewPersistenceMark)
+        values (#{media_id}, #{season_id}, #{share_url}, #{title}, #{cover}, #{is_finish},
+         #{short_review_total}, #{long_review_total}, 0, 0)
     </insert>
 </mapper>
 

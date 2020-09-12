@@ -12,9 +12,9 @@ public class SortUntil {
         } else if (sort == Const.SortReview.MTIME_DESC) {
             sortType = "MTIME DESC";
         } else if (sort == Const.SortReview.LIKES_ASC) {
-            sortType = "Likes ASC";
+            sortType = "stat.LIKES DESC";
         } else {
-            return sortType = null;
+            sortType = "SCORE DESC";//为了不影响用户的体验，默认排序为分数最高排前
         }
         return sortType;
     }

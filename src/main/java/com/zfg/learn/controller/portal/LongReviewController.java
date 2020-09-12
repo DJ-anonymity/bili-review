@@ -13,28 +13,30 @@ public class LongReviewController {
 
     @GetMapping("/list")
     public ServerResponse list(Integer media_id,
+                               @RequestParam(value = "score", required = false) Integer score,
                                @RequestParam(value = "sort", defaultValue = "0") Integer sort,
-                               @RequestParam(value = "pageNum", defaultValue = "1")Integer pageNum,
-                               @RequestParam(value = "pageSize", defaultValue = "8")Integer pageSize){
+                               @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                               @RequestParam(value = "pageSize", defaultValue = "8") Integer pageSize){
         if (media_id == null){
             return ServerResponse.createByErrorCodeMessage(2,"参数为null");
         }
-        return longReviewService.list(media_id, sort, pageNum, pageSize);
+        return longReviewService.list(media_id, score, sort, pageNum, pageSize);
     }
 
     //通过keyword搜索某番剧内的评论
     @GetMapping("/animation/{media_id}/search")
     public ServerResponse searchByKeywords(@PathVariable Integer media_id, String keyword,
+                                           @RequestParam(value = "score", required = false) Integer score,
                                            @RequestParam(value = "sort", defaultValue = "0") Integer sort,
                                            @RequestParam(value = "pageNum", defaultValue = "1")Integer pageNum,
                                            @RequestParam(value = "pageSize", defaultValue = "8")Integer pageSize){
         if (media_id == null && keyword == null){
             return ServerResponse.createByErrorCodeMessage(2,"参数为null");
         }
-        return longReviewService.searchReviewByKeyword(media_id, keyword, sort, pageNum ,pageSize);
+        return longReviewService.searchReviewByKeyword(media_id, keyword, score, sort, pageNum ,pageSize);
     }
 
-    //搜索某用户在所以番剧中的评价
+    //搜索某用户在所有番剧中的评价
     @GetMapping("/search")
     public ServerResponse searchByMid(@RequestParam(value = "mid", required = true) Integer mid,
                                       @RequestParam(value = "sort", defaultValue = "0") Integer sort,

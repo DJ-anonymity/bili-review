@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer" />
+    <title>Title</title>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="js/jquery-2.1.1.js"></script>
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            font-family: Microsoft Yahei,Tahoma,Helvetica,Arial,"\5B8B\4F53",sans-serif;
+        }
+        html{
+            background-color: #f4f5f7;
+        }
+        .review-container{
+            overflow: hidden;
+        }
+        .review-wrp{
+            width: 100%;
+        }
+        .review-nav{
+            background-color: white;
+        }
+        .review-nav::after{
+            content: "";
+            display: block;
+            width: 0;
+            height: 0;
+            clear: both;
+        }
+        .review-nav ul{
+            width: 1100px;
+            list-style-type: none;
+            margin: 0px auto;
+        }
+        .review-nav ul li{
+            cursor: pointer;
+            float: left;
+            padding: 0 6px;
+            width: 100px;
+            line-height: 58px;
+            color: #222;
+            font-family: Microsoft Yahei,Tahoma,Helvetica,Arial,"\5B8B\4F53",sans-serif;
+            border-bottom: 3px solid rgba(0,0,0,0);
+        }
+        .review-nav ul li.on{
+            color: #00a1d6;
+            border-bottom-color: #00a1d6;
+        }
+        .review-content{
+            margin: 10px auto;
+            width: 1100px;
+        }
+        .review-content-l{
+            background-color: white;
+            width: 740px;
+            padding: 20px;
+        }
+        /*排序和筛选条件*/
+        .review-content-l .review-tab-module-wrp .review-tab-module-sort,
+        .review-content-l .review-tab-module-wrp .review-tab-module-condition{
+            display: inline-block;
+            width: 68px;
+            height: 24px;
+            line-height: 24px;
+            margin-left: 13px;
+            font-size: 14px;
+        }
+        .review-content-l .review-tab-module-wrp .review-tab-module-sort .sort-type-wrp,
+        .review-content-l .review-tab-module-wrp .review-tab-module-condition {
+            position: relative;
+        }
+        /*当前排序,当前筛选条件*/
+        .sort-type-wrp div, .condition-type-wrp div{
+            position: relative;
+            width: 68px;
+            height: 24px;
+            font-size: 14px;
+            line-height: 24px;
+            text-align: center;
+            cursor: pointer;
+        }
+        /*当前排序图标，筛选图标*/
+        .sort-type-wrp div i, .condition-type-wrp div i{
+            display: block;
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border: 1px solid #99a2aa;
+            border-top: none;
+            border-left: none;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+            top: 8px;
+            right: 10px;
+        }
+        /*展示下拉排序列表*/
+        .sort-type-wrp:hover ul{
+            display: list-item;
+        }
+        /*排序选择列表,筛选条件选择列表*/
+        .sort-type-wrp ul, .condition-type-wrp ul{
+            position: absolute;
+            display: none;
+            list-style-type: none;
+            top: 22px;
+            padding: 5px 0;
+            background: #fff;
+            border: 1px solid #e5e9ef;
+            -webkit-box-shadow: 0 2px 4px 0 rgba(0,0,0,.14);
+            box-shadow: 0 2px 4px 0 rgba(0,0,0,.14);
+            border-radius: 4px;
+            z-index: 10;
+        }
+        /*排序选择列表项,筛选条件选择项*/
+        .sort-type-wrp ul li, .condition-type-wrp ul li{
+            width: 66px;
+            height: 36px;
+            color: #222;
+            line-height: 36px;
+            text-align: center;
+            cursor: pointer;
+        }
+        /*展示下拉筛选条件列表*/
+        .condition-type-wrp:hover ul{
+            display: list-item;
+        }
+        /*搜索栏*/
+        .review-content-l .review-tab-module-search{
+            float: right;
+        }
+        /*搜索框*/
+        .review-content-l .review-tab-module-search input{
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            border: 1px solid #00a1d6;
+            border-radius: 4px;
+            color: #00a1d6;
+            height: 28px;
+            width: 130px;
+            font-size: 12px;
+            text-align: center;
+        }
+        /*搜索框按钮*/
+        .review-content-l .review-tab-module-search button{
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            border: 1px solid #00a1d6;
+            border-radius: 4px;
+            color: #00a1d6;
+            height: 28px;
+            width: 40px;
+            font-size: 12px;
+        }
+        /*评论内容*/
+        .review-content-l .review-tab-module-content ul{
+            list-style-type: none;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            padding: 20px;
+            border-radius: 4px;
+            background-color: #fff;
+            -webkit-box-shadow: 0 1px 2px 0 rgba(0,0,0,.07);
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,.07);
+        }
+        .review-content-l .review-tab-module-content li{
+            border-bottom: 1px solid #f4f5f7;
+            padding: 20px 0 15px;
+        }
+        .review-content-l .review-tab-module-content li .review-author-info div{
+            vertical-align: top;
+            display: inline-block;
+        }
+        .review-content-l .review-tab-module-content li .review-author-info .review-author-face img{
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            margin-right: 13px;
+            border-radius: 50%;
+        }
+        .review-content-l .review-tab-module-content li .review-author-info .review-author-name{
+            cursor: pointer;
+            line-height: 30px;
+            font-size: 12px;
+            color: #6d757a;
+            margin-right: 20px;
+        }
+        .review-content-l .review-tab-module-content li .review-author-info .review-author-star{
+            line-height: 30px;
+        }
+        .review-content-l .review-tab-module-content li .review-author-info .icon-start{
+            color: #ffa726;
+        }
+        .review-content-l .review-tab-module-content li .review-author-info .review-author-time{
+            float: right;
+            font-size: 12px;
+            color: #99a2aa;
+            line-height: 30px;
+        }
+        .review-content-l .review-tab-module-content li .review-detail-title{
+            cursor: pointer;
+            color: #212121;
+            font-size: 16px;
+            line-height: 30px;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .review-content-l .review-tab-module-content li .review-detail-content{
+            font-size: 14px;
+            line-height: 24px;
+            margin-top: 8px;
+            max-height: 48px;
+            display: block;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            word-break: break-word;
+            color: #212121;
+        }
+        .review-content-l .review-tab-module-content li .review-data{
+            margin-top: 16px;
+        }
+        .review-content-l .review-tab-module-content li .review-data .review-data-like{
+            line-height: 16px;
+            font-size: 12px;
+            color: #99a2aa;
+        }
+        .review-content-r{
+            background-color: white;
+            width: 700px;
+        }
+    </style>
+</head>
+<body>
+    <div class="review-container">
+        <div class="review-wrp">
+            <div class="review-nav">
+                <ul>
+                    <li id="btn-to-short" class="on">短评（<span id="user-short-review-quantity">---</span>）</li>
+                    <li id="btn-to-long">长评（<span id="user-long-review-quantity">---</span>) </li>
+                    <li id="btn-to-detail">查看详情</li>
+                </ul>
+            </div>
+            <div class="review-content">
+                <div class="review-content-l">
+                    <div class="review-tab-module-wrp">
+                        <div class="review-tab-module-sort">
+                            <div class="sort-type-wrp">
+                                <div>
+                                    <div id="sort-type" data-sort-type-id="0">默认</div>
+                                    <i></i>
+                                </div>
+                                <ul class="sort-list">
+                                    <li data-sort-type-id="0">默认</li>
+                                    <li data-sort-type-id="1">最旧</li>
+                                    <li data-sort-type-id="2">最新</li>
+                                    <li data-sort-type-id="3">点赞</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="review-tab-module-condition">
+                            <div class="condition-type-wrp">
+                                <div>
+                                    <div id="condition-type" data-condition-type-id="">全部</div>
+                                    <i></i>
+                                </div>
+                                <ul class="condition-list">
+                                    <li data-condition-type-id="">all</li>
+                                    <li data-condition-type-id="2">1星</li>
+                                    <li data-condition-type-id="4">2星</li>
+                                    <li data-condition-type-id="6">3星</li>
+                                    <li data-condition-type-id="8">4星</li>
+                                    <li data-condition-type-id="10">5星</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="review-tab-module-search">
+                            <input type="text" id="search-keyword" placeholder="请输入需要搜索的用户">
+                            <button id="btn-search">搜索</button>
+                        </div>
+                        <div class="review-tab-module-content">
+                            <ul id="review-content"><!--
+                                <li>
+                                    <div class="review-author-info">
+                                        <div class="review-author-face">
+                                            <img alt="水穆001" src="http://i2.hdslb.com/bfs/face/1bf4d18c1f0aced86a8769625b8431f688ab390c.jpg" lazy="loaded">
+                                        </div>
+                                        <div class="review-author-name is-vip">
+                                            水穆001
+                                        </div>
+                                        <div class="review-author-star">
+                                            <span class="review-stars">
+                                                <i class="icon-start fa fa-star"></i>
+                                                <i class="icon-start fa fa-star"></i>
+                                                <i class="icon-start fa fa-star"></i>
+                                                <i class="icon-start fa fa-star"></i>
+                                            </span>
+                                        </div>
+                                        <div class="review-author-time">04-26</div>
+                                    </div>
+                                    <div class="review-detail">
+                                        <div class="review-detail-title">
+                                            <span>
+                                                写给非常热心的观众
+                                            </span>
+                                        </div>
+                                        <div class="review-detail-content">
+                                            恶心人！看番体验极差！每周都得熬夜看，看的时候还跟个蛆似的扭来扭去，
+                                            嘴角一直不明原因抽搐，看完嘴都发酸！半个小时都静不下来！
+                                            严重影响我的睡眠！大家千万不要跟节奏看！这番极易诱发糖尿病，失眠，甚至面瘫！
+                                        </div>
+                                    </div>
+                                    <div class="review-data">
+                                        <div class="review-data-like">
+                                            <i class="fa fa-thumbs-up"></i>
+                                            1.4W &nbsp;
+                                            <i class="fa fa-comment" ></i>
+                                            267
+                                        </div>
+                                    </div>
+                                    <div class="review-control">
+
+                                    </div>
+                                </li>
+                            --></ul>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="review-content-r">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="js/common/until.js"></script>
+<script src="js/portal/reviewSearch.js"></script>
+</body>
+</html>

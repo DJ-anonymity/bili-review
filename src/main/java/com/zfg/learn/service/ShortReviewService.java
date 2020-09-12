@@ -20,9 +20,9 @@ public interface ShortReviewService {
 
     public ServerResponse listAll();
 
-    public ServerResponse list(Integer media_id, Integer sort, Integer pageNum, Integer pageSize);
+    public ServerResponse list(Integer media_id, Integer score, Integer sort, Integer pageNum, Integer pageSize);
 
-    public ServerResponse searchReviewByKeyword(Integer media_id, String keyword, Integer sort, Integer pageNum, Integer pageSize);
+    public ServerResponse searchReviewByKeyword(Integer media_id, String keyword, Integer score, Integer sort, Integer pageNum, Integer pageSize);
 
     public ServerResponse searchReviewByMid(Integer mid, Integer sort, Integer pageNum, Integer pageSize);
 

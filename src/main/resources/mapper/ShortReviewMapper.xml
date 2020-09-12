@@ -13,6 +13,9 @@
         <result property="mtime" column="mtime"></result>
         <result property="progress" column="progress"></result>
         <result property="score" column="score"></result>
+        <association property="animation" javaType="com.zfg.learn.pojo.Animation">
+            <result property="title" column="title"></result>
+        </association>
         <association property="author" javaType="com.zfg.learn.pojo.User">
             <id property="mid" column="mid"></id>
             <result property="avatar" column="avatar"></result>
@@ -24,34 +27,77 @@
         </association>
     </resultMap>
 
+    <!--取代pagehelper自带的性能低下的查询语句-->
+    <select id="selectReviewByMedia_id_COUNT" resultType="Long">
+        select count(*)from shortreview
+        where shortreview.media_id = #{media_id}
+        <if test="score != null">
+            and shortreview.score = #{score}
+        </if>
+    </select>
+
     <select id="selectReviewByMedia_id" resultMap="ShortReview">
-        select shortreview.*, user.*, stat.* from shortreview, user, stat
-        where  shortreview.mid = user.mid
-        and    shortreview.review_id = stat.review_id
-        and    shortreview.media_id = #{media_id}
+        select shortreview.*, user.*, stat.*
+        from shortreview
+        left join user on shortreview.mid = user.mid
+        left join stat on shortreview.review_id = stat.review_id
+        where shortreview.media_id = #{media_id}
+        <if test="score != null">
+            and shortreview.score = #{score}
+        </if>
         <if test="sortType != null">
+            <if test="sortType == 'stat.LIKES DESC' ">
+            and stat.likes > 50
+            </if>
             order by ${sortType}
+        </if>
+    </select>
+
+    <!--取代pagehelper自带的性能低下的查询语句-->
+    <select id="selectReviewByKeyWord_COUNT" resultType="Long">
+        <bind name="keyword" value="'%'+keyword+'%'"/>
+        select count(*)from shortreview
+        where shortreview.media_id = #{media_id}
+        <if test="keyword != null">
+            and   shortreview.content like #{keyword}
         </if>
     </select>
 
     <select id="selectReviewByKeyWord" resultMap="ShortReview">
         <bind name="keyword" value="'%'+keyword+'%'"/>
-        select shortreview.*, user.*, stat.*  from shortreview, user, stat
-        where  shortreview.mid = user.mid
-        and    shortreview.review_id = stat.review_id
-        and    shortreview.media_id = #{media_id}
+        select shortreview.*, user.*, stat.*
+        from shortreview
+        left join user on shortreview.mid = user.mid
+        left join stat on shortreview.review_id = stat.review_id
+        where shortreview.media_id = #{media_id}
+        <if test="score != null">
+            and shortreview.score = #{score}
+        </if>
         <if test="keyword != null">
-            and   shortreview.content like #{keyword}
+            and shortreview.content like #{keyword}
         </if>
         <if test="sortType != null">
+            <if test="sortType == 'stat.LIKES DESC' ">
+                and stat.likes > 50
+            </if>
             order by ${sortType}
         </if>
     </select>
 
+    <!--取代pagehelper自带的性能低下的查询语句-->
+    <select id="selectReviewByMid_COUNT" resultType="Long">
+        select count(*)from shortreview
+        <if test="mid != null">
+            where  shortreview.mid = #{mid}
+        </if>
+    </select>
+
     <select id="selectReviewByMid" resultMap="ShortReview">
-        select shortreview.*, user.*, stat.*  from shortreview, user, stat
+        select shortreview.*, user.*, stat.*, animation.title
+        from shortreview, user, stat, animation
         where  shortreview.mid = user.mid
         and    shortreview.review_id = stat.review_id
+        and  shortreview.media_id = animation.media_id
         <if test="mid != null">
             and   shortreview.mid = #{mid}
         </if>
@@ -60,10 +106,9 @@
         </if>
     </select>
 
-    <select id="findShortReviewByMediaId" parameterType="Integer" resultMap="ShortReview">
-        select *from shortreview, user, stat
-        where user.mid = shortreview.mid
-        and stat.review_id = shortreview.review_id
+    <select id="findShortReviewByMediaId" parameterType="Integer" resultType="com.zfg.learn.pojo.ShortReview">
+        select *from shortreview
+        where media_id = #{media_id}
     </select>
 
     <select id="selectShortReviewByReview_id" parameterType="Integer" resultMap="ShortReview">
@@ -88,10 +133,38 @@
         where mtime >= #{mtime}
     </select>
 
+    <select id="selectReviewQuantityByMedia_id" parameterType="Integer" resultType="Integer">
+        select count(*)from shortreview
+        where media_id = #{media_id}
+    </select>
+
+    <select id="selectReviewQuantityByMid" parameterType="Integer" resultType="Integer">
+        select count(*)from shortreview
+        where mid = #{mid}
+    </select>
+
     <insert id="insertShortReview" parameterType="com.zfg.learn.pojo.ShortReview">
         insert into shortreview
         (content, ctime, media_id, mid, mtime, progress, review_id, score)
         values (#{content}, #{ctime}, #{media_id}, #{mid}, #{mtime}, #{progress}, #{review_id}, #{score})
+    </insert>
+
+    <insert id="insertShortReviewList" parameterType="java.util.List">
+        insert into shortreview
+        (content, ctime, media_id, mid, mtime, progress, review_id, score)
+        values
+        <foreach item="review" separator="," collection="reviewList">
+            (
+                #{review.content},
+                #{review.ctime},
+                #{review.media_id},
+                #{review.mid},
+                #{review.mtime},
+                #{review.progress},
+                #{review.review_id},
+                #{review.score}
+            )
+        </foreach>
     </insert>
 
     <update id="updateContentByReview_id" parameterType="com.zfg.learn.pojo.ShortReview">
@@ -102,5 +175,9 @@
 
     <delete id="deleteShortReviewByReview_id" parameterType="Integer">
         delete from shortreview where review_id = ${review_id}
+    </delete>
+
+    <delete id="deleteShortReviewByMedia_id" parameterType="Integer">
+        delete from shortreview where media_id = ${media_id}
     </delete>
 </mapper>
