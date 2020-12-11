@@ -24,6 +24,7 @@ public class ReadTxt {
             FileReader fr = new FileReader(path);
             BufferedReader bf = new BufferedReader(fr);
             String str;
+            
             // 按行读取字符串
             while ((str = bf.readLine()) != null) {
                 if (regex != null){
