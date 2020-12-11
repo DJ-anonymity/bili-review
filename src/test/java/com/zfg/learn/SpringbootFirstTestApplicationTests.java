@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.zfg.learn.common.Const;
 import com.zfg.learn.common.RedisConst;
 import com.zfg.learn.dao.*;
+import com.zfg.learn.interview.ReadTxt;
 import com.zfg.learn.pojo.*;
 import com.zfg.learn.service.AnimationService;
 import com.zfg.learn.service.KeywordCountService;
@@ -51,6 +52,8 @@ class SpringbootFirstTestApplicationTests {
     private AnimationService animationService;
     @Autowired
     private KeywordCountService keywordCountService;
+    @Autowired
+    private IconMapper iconMapper;
 
     private  int num = 1;
     //多线程
@@ -431,5 +434,19 @@ class SpringbootFirstTestApplicationTests {
             return n;
         }
         return f(n-1) + f(n-2);
+    }
+
+    @Test
+    public void xlsRead(){
+        List<String> iconList = ReadTxt.readTxt("C:\\Users\\Administrator\\Desktop\\icon.txt", "\".*?\"");
+        List<String> menuNameList = ReadTxt.readTxt("C:\\Users\\Administrator\\Desktop\\菜单名称.txt", null);
+        for (int i = 0;i < iconList.size();i++){
+            //iconMapper.updateIcon(menuNameList.get(i), iconList.get(i));
+
+            System.out.println(iconMapper.selectByName(menuNameList.get(i)));
+        }
+
+
+        //System.out.println(iconMapper.updateIcon("感知数据录管理","zfgnb"));
     }
 }

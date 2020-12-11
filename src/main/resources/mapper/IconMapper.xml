@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.zfg.learn.dao.IconMapper">
+
+    <update id="updateIcon" parameterType="com.zfg.learn.pojo.Stat">
+        UPDATE `sys_menu`
+        SET icon = #{iconName}
+        WHERE menu_name = #{menuName}
+    </update>
+
+    <select id="selectAll" resultType="com.zfg.learn.bo.Menu">
+        select *from sys_menu
+    </select>
+
+    <select id="selectByName" resultType="com.zfg.learn.bo.Menu">
+        select menu_name, icon from sys_menu where menu_name = #{menu_name} limit 1
+    </select>
+</mapper>
+
+

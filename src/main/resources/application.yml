@@ -4,7 +4,15 @@ spring:
     username: root
     password: m381610m.
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/bili?useUnicode=true&charaterEncoding=UTF-8&serverTimezone=UTC
+    url: jdbc:mysql://bootzhong.top:3306/bili?useUnicode=true&charaterEncoding=UTF-8&serverTimezone=UTC
+
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    type: com.alibaba.druid.pool.DruidDataSource
+#    name: mysql_ds
+#    url: jdbc:mysql://gz-cdb-f7xa45k3.sql.tencentcdb.com:60216/iot_base_admin?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=GMT%2B8
+#    username: root
+#    password: sawXG841rx
 
 #redis
   redis:
