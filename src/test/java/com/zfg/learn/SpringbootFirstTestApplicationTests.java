@@ -442,11 +442,22 @@ class SpringbootFirstTestApplicationTests {
         List<String> menuNameList = ReadTxt.readTxt("C:\\Users\\Administrator\\Desktop\\菜单名称.txt", null);
         for (int i = 0;i < iconList.size();i++){
             //iconMapper.updateIcon(menuNameList.get(i), iconList.get(i));
-
             System.out.println(iconMapper.selectByName(menuNameList.get(i)));
         }
 
-
         //System.out.println(iconMapper.updateIcon("感知数据录管理","zfgnb"));
+    }
+
+    @Test
+    public void demo300() {
+        String title = "abc[笑a哭][笑b哭][笑c哭]def[笑d哭][笑e哭][笑f哭]ghk";
+        String regex = "(\\[[\\w\\W].+?\\])";
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(title);
+        while (m.find()) {
+            String group = m.group();
+            /* title = title.replace(group, "");*/
+            System.out.println(group);
+        }
     }
 }
