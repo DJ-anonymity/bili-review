@@ -1,7 +1,4 @@
 package com.zfg.learn;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.zfg.learn.common.Const;
 import com.zfg.learn.common.RedisConst;
 import com.zfg.learn.dao.*;
 import com.zfg.learn.interview.ReadTxt;
@@ -10,20 +7,13 @@ import com.zfg.learn.service.AnimationService;
 import com.zfg.learn.service.KeywordCountService;
 import com.zfg.learn.service.LongReviewService;
 import com.zfg.learn.service.ShortReviewService;
-import com.zfg.learn.until.CatchApi;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Field;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -37,7 +27,7 @@ class SpringbootFirstTestApplicationTests {
     @Autowired
     private LongReviewMapper longReviewMapper;
     @Autowired
-    private UserMapper userMapper;
+    private BiliUserMapper biliUserMapper;
     @Autowired
     private StatMapper statMapper;
     @Autowired
@@ -258,8 +248,8 @@ class SpringbootFirstTestApplicationTests {
 
     /*死锁*/
     public static void main2(String []args) throws InterruptedException {
-        User user = new User();
-        User user1 = new User();
+        BiliUser user = new BiliUser();
+        BiliUser user1 = new BiliUser();
         Runnable runnable = new Runnable() {
             @Override
             public void run() {

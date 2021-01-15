@@ -9,11 +9,11 @@ import com.zfg.learn.common.ServerResponse;
 import com.zfg.learn.dao.AnimationMapper;
 import com.zfg.learn.dao.LongReviewMapper;
 import com.zfg.learn.dao.StatMapper;
-import com.zfg.learn.dao.UserMapper;
+import com.zfg.learn.dao.BiliUserMapper;
 import com.zfg.learn.pojo.LongReview;
 import com.zfg.learn.pojo.ReviewPageInfo;
 import com.zfg.learn.pojo.Stat;
-import com.zfg.learn.pojo.User;
+import com.zfg.learn.pojo.BiliUser;
 import com.zfg.learn.service.LongReviewService;
 import com.zfg.learn.until.CatchApi;
 import com.zfg.learn.until.SortUntil;
@@ -31,7 +31,7 @@ public class LongReviewServiceImpl implements LongReviewService {
     @Autowired
     private LongReviewMapper longReviewMapper;
     @Autowired
-    private UserMapper userMapper;
+    private BiliUserMapper biliUserMapper;
     @Autowired
     private StatMapper statMapper;
     @Autowired
@@ -165,11 +165,11 @@ public class LongReviewServiceImpl implements LongReviewService {
         }
 
         List<Stat> statList = new ArrayList<>();
-        List<User> userList = new ArrayList<>();
+        List<BiliUser> userList = new ArrayList<>();
         longReviewMapper.insertLongReviewList(longReviewList);
         for (LongReview longReview:longReviewList){
             //获取用户
-            User user = longReview.getAuthor();
+            BiliUser user = longReview.getAuthor();
             userList.add(user);
             //把stat组成一个集合
             Stat stat = longReview.getStat();
@@ -177,7 +177,7 @@ public class LongReviewServiceImpl implements LongReviewService {
             statList.add(stat);
         }
 
-        userMapper.insertUserList(userList);
+        biliUserMapper.insertUserList(userList);
         statMapper.insertLongReviewStatList(statList);
         return ServerResponse.createBySuccess();
     }
@@ -196,7 +196,7 @@ public class LongReviewServiceImpl implements LongReviewService {
              * 而且还不用再用select语句在几十w的数据中查询用户是否存在，节省了非常多的时间
              * */
             try {
-                userMapper.insertUser(longReview.getAuthor());
+                biliUserMapper.insertUser(longReview.getAuthor());
             } catch (Exception e){
 
             }

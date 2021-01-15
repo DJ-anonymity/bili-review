@@ -6,7 +6,7 @@ package com.zfg.learn.pojo;
 public class ShortReview {
 
     //作者
-    private User author;
+    private BiliUser author;
     //内容
     private String content;
     //猜测是时间
@@ -44,11 +44,11 @@ public class ShortReview {
                 '}'+"\n\r";
     }
 
-    public User getAuthor() {
+    public BiliUser getAuthor() {
         return author;
     }
 
-    public void setAuthor(User author) {
+    public void setAuthor(BiliUser author) {
         this.author = author;
     }
 

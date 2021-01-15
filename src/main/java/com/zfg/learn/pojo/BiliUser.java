@@ -2,7 +2,7 @@ package com.zfg.learn.pojo;
 /*
 * 评论的作者
 * */
-public class User {
+public class BiliUser {
     //作者的头像
     private String avatar;
     private Integer mid;

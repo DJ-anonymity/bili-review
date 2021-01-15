@@ -10,7 +10,7 @@ import com.zfg.learn.common.ServerResponse;
 import com.zfg.learn.dao.AnimationMapper;
 import com.zfg.learn.dao.ShortReviewMapper;
 import com.zfg.learn.dao.StatMapper;
-import com.zfg.learn.dao.UserMapper;
+import com.zfg.learn.dao.BiliUserMapper;
 import com.zfg.learn.pojo.*;
 import com.zfg.learn.service.ShortReviewService;
 import com.zfg.learn.until.CatchApi;
@@ -31,7 +31,7 @@ public class ShortReviewServiceImpl implements ShortReviewService {
     @Autowired
     private ShortReviewMapper shortReviewMapper;
     @Autowired
-    private UserMapper userMapper;
+    private BiliUserMapper biliUserMapper;
     @Autowired
     private StatMapper statMapper;
     @Autowired
@@ -187,7 +187,7 @@ public class ShortReviewServiceImpl implements ShortReviewService {
         }
 
         List<Stat> statList = new ArrayList<>();
-        List<User> userList = new ArrayList<>();
+        List<BiliUser> userList = new ArrayList<>();
 
         //先插入review表的数据
         shortReviewMapper.insertShortReviewList(shortReviewList);
@@ -202,7 +202,7 @@ public class ShortReviewServiceImpl implements ShortReviewService {
 
             }*/
             //把user存成一个集合 一起插入
-            User user = shortReview.getAuthor();
+            BiliUser user = shortReview.getAuthor();
             userList.add(user);
             //把stat存成一个集合 一起插入
             Stat stat = shortReview.getStat();
@@ -212,7 +212,7 @@ public class ShortReviewServiceImpl implements ShortReviewService {
         //插入stat表
         statMapper.insertShortReviewStatList(statList);
         //插入user表
-        userMapper.insertUserList(userList);
+        biliUserMapper.insertUserList(userList);
         return ServerResponse.createBySuccess();
     }
 
@@ -229,7 +229,7 @@ public class ShortReviewServiceImpl implements ShortReviewService {
              * 而且还不用再用select语句在几十w的数据中查询用户是否存在，节省了非常多的时间
              * */
             try {
-                userMapper.insertUser(shortReview.getAuthor());
+                biliUserMapper.insertUser(shortReview.getAuthor());
             } catch (Exception e){
 
             }
