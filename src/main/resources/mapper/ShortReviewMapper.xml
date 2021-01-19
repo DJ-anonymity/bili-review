@@ -16,7 +16,7 @@
         <association property="animation" javaType="com.zfg.learn.pojo.Animation">
             <result property="title" column="title"></result>
         </association>
-        <association property="author" javaType="com.zfg.learn.pojo.User">
+        <association property="author" javaType="com.zfg.learn.pojo.BiliUser">
             <id property="mid" column="mid"></id>
             <result property="avatar" column="avatar"></result>
             <result property="uname" column="uname"></result>
@@ -37,9 +37,9 @@
     </select>
 
     <select id="selectReviewByMedia_id" resultMap="ShortReview">
-        select shortreview.*, user.*, stat.*
+        select shortreview.*, bili_user.*, stat.*
         from shortreview
-        left join user on shortreview.mid = user.mid
+        left join bili_user on shortreview.mid = bili_user.mid
         left join stat on shortreview.review_id = stat.review_id
         where shortreview.media_id = #{media_id}
         <if test="score != null">
@@ -65,9 +65,9 @@
 
     <select id="selectReviewByKeyWord" resultMap="ShortReview">
         <bind name="keyword" value="'%'+keyword+'%'"/>
-        select shortreview.*, user.*, stat.*
+        select shortreview.*, bili_user.*, stat.*
         from shortreview
-        left join user on shortreview.mid = user.mid
+        left join bili_user on shortreview.mid = bili_user.mid
         left join stat on shortreview.review_id = stat.review_id
         where shortreview.media_id = #{media_id}
         <if test="score != null">
@@ -93,9 +93,9 @@
     </select>
 
     <select id="selectReviewByMid" resultMap="ShortReview">
-        select shortreview.*, user.*, stat.*, animation.title
-        from shortreview, user, stat, animation
-        where  shortreview.mid = user.mid
+        select shortreview.*, bili_user.*, stat.*, animation.title
+        from shortreview, bili_user, stat, animation
+        where  shortreview.mid = bili_user.mid
         and    shortreview.review_id = stat.review_id
         and  shortreview.media_id = animation.media_id
         <if test="mid != null">
@@ -112,8 +112,8 @@
     </select>
 
     <select id="selectShortReviewByReview_id" parameterType="Integer" resultMap="ShortReview">
-        select *from shortreview, user, stat
-        where user.mid = shortreview.mid
+        select *from shortreview, bili_user, stat
+        where bili_user.mid = shortreview.mid
         and stat.review_id = shortreview.review_id
         and shortreview.review_id = #{review_id}
     </select>

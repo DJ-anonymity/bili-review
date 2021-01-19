@@ -1,19 +1,26 @@
 package com.zfg.learn.controller.portal;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.zfg.learn.common.Const;
 import com.zfg.learn.common.ServerResponse;
 import com.zfg.learn.service.UserService;
 import com.zfg.learn.until.CatchApi;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * 用户相关控制层
+ * @author bootzhong
+ */
+@Api(tags = {"Catalog"})
 @RequestMapping("/portal/user")
 @RestController
 public class UserController {
@@ -53,5 +60,24 @@ public class UserController {
             return ServerResponse.createByErrorCodeMessage(2,"参数为空");
         }
         return ServerResponse.createBySuccess(userService.getReviewQuantity(mid));
+    }
+
+    @ApiOperation(value = "获取Chrome插件传送过来的cookie")
+    @PostMapping("/cookie")
+    public Object getFollowers(@RequestBody String cookie, HttpSession session) throws IOException {
+        JSONArray jsonArray = JSONObject.parseObject(cookie).getJSONArray("cookie");
+        JSONObject jSONObject = jsonArray.getJSONObject(0);
+
+        //获取cookie
+        String loginCookie = jSONObject.getString("value");
+        //验证cookie能不能用
+        if (userService.checkBiliCookie(loginCookie)){
+            //存进session
+            session.setAttribute(Const.COOKIE, loginCookie);
+            return ServerResponse.createBySuccess();
+        } else {
+            return ServerResponse.createByErrorMessage("该cookie已过期");
+        }
+
     }
 }

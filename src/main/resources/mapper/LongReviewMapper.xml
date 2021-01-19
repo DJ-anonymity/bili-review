@@ -16,7 +16,7 @@
         <result property="score" column="score"></result>
         <result property="title" column="title"></result>
         <result property="url" column="url"></result>
-        <association property="author" javaType="com.zfg.learn.pojo.User">
+        <association property="author" javaType="com.zfg.learn.pojo.BiliUser">
             <id property="mid" column="mid"></id>
             <result property="avatar" column="avatar"></result>
             <result property="uname" column="uname"></result>
@@ -38,8 +38,8 @@
     </select>
 
     <select id="selectReviewByMedia_id" resultMap="LongReview">
-        select longreview.*, user.*, stat.likes, stat.reply  from longreview, user, stat
-        where user.mid = longreview.mid
+        select longreview.*, bili_user.*, stat.likes, stat.reply  from longreview, bili_user, stat
+        where bili_user.mid = longreview.mid
         and stat.article_id = longreview.article_id
         and longreview.media_id = #{media_id}
         <if test="score != null">
@@ -55,8 +55,8 @@
 
     <select id="selectReviewByKeyWord" resultMap="LongReview">
         <bind name="keyword" value="'%'+keyword+'%'"/>
-        select *from longreview, user, stat
-        where user.mid = longreview.mid
+        select *from longreview, bili_user, stat
+        where bili_user.mid = longreview.mid
         and stat.article_id = longreview.article_id
         and longreview.media_id = #{media_id}
         <if test="score != null">
@@ -77,8 +77,8 @@
     </select>
 
     <select id="selectReviewByMid" resultMap="LongReview">
-        select *from longreview, user, stat
-        where user.mid = longreview.mid
+        select *from longreview, bili_user, stat
+        where bili_user.mid = longreview.mid
         and stat.article_id = longreview.article_id
         <if test="mid != null">
            and longreview.mid = #{mid}
@@ -89,8 +89,8 @@
     </select>
 
     <select id="selectLongReviewByReview_id" parameterType="Integer" resultMap="LongReview">
-        select *from longreview, user, stat
-        where user.mid = longreview.mid
+        select *from longreview, bili_user, stat
+        where bili_user.mid = longreview.mid
         and stat.article_id = longreview.article_id
         and longreview.review_id = #{review_id}
     </select>

@@ -4,20 +4,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 
-<mapper namespace="com.zfg.learn.dao.UserMapper">
-    <select id="selectUserByMid" parameterType="Integer" resultType="com.zfg.learn.pojo.User">
-        select *from user
+<mapper namespace="com.zfg.learn.dao.BiliUserMapper">
+    <select id="selectUserByMid" parameterType="Integer" resultType="com.zfg.learn.pojo.BiliUser">
+        select *from bili_user
         where mid = #{mid}
     </select>
 
-    <insert id="insertUser" parameterType="com.zfg.learn.pojo.User">
-        insert into user
+    <insert id="insertUser" parameterType="com.zfg.learn.pojo.BiliUser">
+        insert into bili_user
         (avatar, mid, uname)
         values (#{avatar}, #{mid}, #{uname})
     </insert>
 
-    <insert id="insertUserList" parameterType="com.zfg.learn.pojo.User">
-        insert ignore into user
+    <insert id="insertUserList" parameterType="com.zfg.learn.pojo.BiliUser">
+        insert ignore into bili_user
         (avatar, mid, uname)
         values
         <foreach item="user" separator="," collection="userList">
@@ -30,7 +30,7 @@
     </insert>
 
     <delete id="deleteUserByMid" parameterType="Integer">
-        delete from user where mid = #{mid}
+        delete from bili_user where mid = #{mid}
     </delete>
 </mapper>
 

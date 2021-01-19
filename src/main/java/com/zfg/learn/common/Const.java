@@ -9,6 +9,13 @@ public class Const {
     public static final int IS_RUNNING = 1;
     public static final int IS_FREE = 0;
 
+    //用户cookie
+    public static final String COOKIE = "cookie:";
+
+    //当前用户
+    public static final String CURRENT_USER = "current_user";
+
+
     public interface SortReview{
         int DEFAULT = 0;
         int MTIME_ASC = 1;
