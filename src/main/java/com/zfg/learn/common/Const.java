@@ -15,12 +15,18 @@ public class Const {
     //当前用户
     public static final String CURRENT_USER = "current_user";
 
-
     public interface SortReview{
         int DEFAULT = 0;
         int MTIME_ASC = 1;
         int MTIME_DESC = 2;
         int LIKES_ASC = 3;
+    }
+
+    /**
+     * url常量
+     */
+    public interface Url{
+        String USER_INFO = "https://api.bilibili.com/x/web-interface/nav";
     }
 
 }

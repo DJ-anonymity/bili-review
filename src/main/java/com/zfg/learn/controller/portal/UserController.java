@@ -64,7 +64,7 @@ public class UserController {
 
     @ApiOperation(value = "获取Chrome插件传送过来的cookie")
     @PostMapping("/cookie")
-    public Object getFollowers(@RequestBody String cookie, HttpSession session) throws IOException {
+    public Object setCookie(@RequestBody String cookie, HttpSession session) throws IOException {
         JSONArray jsonArray = JSONObject.parseObject(cookie).getJSONArray("cookie");
         JSONObject jSONObject = jsonArray.getJSONObject(0);
 
