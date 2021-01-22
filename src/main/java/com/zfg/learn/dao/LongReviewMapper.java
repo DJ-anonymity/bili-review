@@ -1,6 +1,6 @@
 package com.zfg.learn.dao;
 
-import com.zfg.learn.pojo.LongReview;
+import com.zfg.learn.model.po.LongReview;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

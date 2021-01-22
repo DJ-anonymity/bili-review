@@ -1,6 +1,6 @@
 package com.zfg.learn.dao;
 
-import com.zfg.learn.pojo.BiliUser;
+import com.zfg.learn.model.po.BiliUser;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

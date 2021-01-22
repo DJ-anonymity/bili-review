@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.zfg.learn.dao.ShortReviewMapper">
-    <resultMap id="ShortReview" type="com.zfg.learn.pojo.ShortReview">
+    <resultMap id="ShortReview" type="com.zfg.learn.model.po.ShortReview">
         <id property="review_id" column="review_id"></id>
         <result property="content" column="content"></result>
         <result property="ctime" column="ctime"></result>
@@ -13,15 +13,15 @@
         <result property="mtime" column="mtime"></result>
         <result property="progress" column="progress"></result>
         <result property="score" column="score"></result>
-        <association property="animation" javaType="com.zfg.learn.pojo.Animation">
+        <association property="animation" javaType="com.zfg.learn.model.po.Animation">
             <result property="title" column="title"></result>
         </association>
-        <association property="author" javaType="com.zfg.learn.pojo.BiliUser">
+        <association property="author" javaType="com.zfg.learn.model.po.BiliUser">
             <id property="mid" column="mid"></id>
             <result property="avatar" column="avatar"></result>
             <result property="uname" column="uname"></result>
         </association>
-        <association property="stat" javaType="com.zfg.learn.pojo.Stat">
+        <association property="stat" javaType="com.zfg.learn.model.po.Stat">
             <result property="likes" column="likes"></result>
             <result property="reply" column="reply"></result>
         </association>
@@ -106,7 +106,7 @@
         </if>
     </select>
 
-    <select id="findShortReviewByMediaId" parameterType="Integer" resultType="com.zfg.learn.pojo.ShortReview">
+    <select id="findShortReviewByMediaId" parameterType="Integer" resultType="com.zfg.learn.model.po.ShortReview">
         select *from shortreview
         where media_id = #{media_id}
     </select>
@@ -122,13 +122,13 @@
         select review_id from shortreview
     </select>
 
-    <select id="selectLatestReviewByMedia_id" parameterType="Integer" resultType="com.zfg.learn.pojo.ShortReview">
+    <select id="selectLatestReviewByMedia_id" parameterType="Integer" resultType="com.zfg.learn.model.po.ShortReview">
         select  *from shortreview
         where media_id = #{media_id}
         order by mtime DESC limit 1
     </select>
 
-    <select id="selectReviewByMtime" parameterType="Long" resultType="com.zfg.learn.pojo.ShortReview">
+    <select id="selectReviewByMtime" parameterType="Long" resultType="com.zfg.learn.model.po.ShortReview">
         select  *from shortreview
         where mtime >= #{mtime}
     </select>
@@ -143,7 +143,7 @@
         where mid = #{mid}
     </select>
 
-    <insert id="insertShortReview" parameterType="com.zfg.learn.pojo.ShortReview">
+    <insert id="insertShortReview" parameterType="com.zfg.learn.model.po.ShortReview">
         insert into shortreview
         (content, ctime, media_id, mid, mtime, progress, review_id, score)
         values (#{content}, #{ctime}, #{media_id}, #{mid}, #{mtime}, #{progress}, #{review_id}, #{score})
@@ -167,7 +167,7 @@
         </foreach>
     </insert>
 
-    <update id="updateContentByReview_id" parameterType="com.zfg.learn.pojo.ShortReview">
+    <update id="updateContentByReview_id" parameterType="com.zfg.learn.model.po.ShortReview">
         update shortreview
         set content = #{content}, mtime = #{mtime}
         where review_id = #{review_id}

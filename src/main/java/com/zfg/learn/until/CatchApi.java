@@ -171,7 +171,7 @@ public class CatchApi {
 
         //设置请求头
         for (Map.Entry<String, String> entry:headerMap.entrySet()){
-            connection.setRequestProperty(entry.getKey(), entry.getValue()); //请求方式为get
+            connection.setRequestProperty(entry.getKey(), entry.getValue());
         }
 
         connection.setRequestMethod("GET");

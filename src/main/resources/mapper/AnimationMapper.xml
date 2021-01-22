@@ -5,7 +5,7 @@
 
 
 <mapper namespace="com.zfg.learn.dao.AnimationMapper">
-    <resultMap id="Animation" type="com.zfg.learn.pojo.Animation">
+    <resultMap id="Animation" type="com.zfg.learn.model.po.Animation">
         <id property="media_id" column="media_id"></id>
         <result property="season_id" column="season_id"></result>
         <result property="share_url" column="share_url"></result>
@@ -16,7 +16,7 @@
         <result property="long_review_total" column="long_review_total"></result>
         <result property="longReviewPersistenceMark" column="longReviewPersistenceMark"></result>
         <result property="shortReviewPersistenceMark" column="shortReviewPersistenceMark"></result>
-        <association property="rating" javaType="com.zfg.learn.pojo.Rating">
+        <association property="rating" javaType="com.zfg.learn.model.po.Rating">
             <id property="media_id" column="media_id"></id>
             <result property="score" column="score"></result>
             <result property="count" column="count"></result>
@@ -72,7 +72,7 @@
         where media_id = #{media_id}
     </update>
 
-    <insert id="insertAnimation" parameterType="com.zfg.learn.pojo.Animation">
+    <insert id="insertAnimation" parameterType="com.zfg.learn.model.po.Animation">
         insert into animation
         (media_id, season_id, share_url, title, cover, is_finish,
          short_review_total, long_review_total, longReviewPersistenceMark, shortReviewPersistenceMark)

@@ -1,4 +1,4 @@
-package com.zfg.learn.bo;
+package com.zfg.learn.model.bo;
 /*
 * 存放用户的评论相关信息
 * */

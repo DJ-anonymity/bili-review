@@ -1,4 +1,4 @@
-package com.zfg.learn.bo;
+package com.zfg.learn.model.bo;
 
 public class AnimationReviewBo {
 

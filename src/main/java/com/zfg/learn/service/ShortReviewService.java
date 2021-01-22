@@ -1,7 +1,7 @@
 package com.zfg.learn.service;
 
 import com.zfg.learn.common.ServerResponse;
-import com.zfg.learn.pojo.ShortReview;
+import com.zfg.learn.model.po.ShortReview;
 
 import java.io.IOException;
 import java.util.List;

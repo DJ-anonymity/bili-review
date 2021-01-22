@@ -11,7 +11,7 @@ import com.zfg.learn.dao.AnimationMapper;
 import com.zfg.learn.dao.ShortReviewMapper;
 import com.zfg.learn.dao.StatMapper;
 import com.zfg.learn.dao.BiliUserMapper;
-import com.zfg.learn.pojo.*;
+import com.zfg.learn.model.po.*;
 import com.zfg.learn.service.ShortReviewService;
 import com.zfg.learn.until.CatchApi;
 import com.zfg.learn.until.SortUntil;

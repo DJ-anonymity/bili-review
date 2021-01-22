@@ -5,18 +5,18 @@
 
 
 <mapper namespace="com.zfg.learn.dao.BiliUserMapper">
-    <select id="selectUserByMid" parameterType="Integer" resultType="com.zfg.learn.pojo.BiliUser">
+    <select id="selectUserByMid" parameterType="Integer" resultType="com.zfg.learn.model.po.BiliUser">
         select *from bili_user
         where mid = #{mid}
     </select>
 
-    <insert id="insertUser" parameterType="com.zfg.learn.pojo.BiliUser">
+    <insert id="insertUser" parameterType="com.zfg.learn.model.po.BiliUser">
         insert into bili_user
         (avatar, mid, uname)
         values (#{avatar}, #{mid}, #{uname})
     </insert>
 
-    <insert id="insertUserList" parameterType="com.zfg.learn.pojo.BiliUser">
+    <insert id="insertUserList" parameterType="com.zfg.learn.model.po.BiliUser">
         insert ignore into bili_user
         (avatar, mid, uname)
         values

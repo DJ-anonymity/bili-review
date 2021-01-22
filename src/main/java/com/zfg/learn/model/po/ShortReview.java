@@ -1,12 +1,10 @@
-package com.zfg.learn.pojo;
+package com.zfg.learn.model.po;
 
 /*
 * 评论的内容
 * */
-public class LongReview {
+public class ShortReview {
 
-    //文章的id
-    private Integer article_id;
     //作者
     private BiliUser author;
     //内容
@@ -19,6 +17,8 @@ public class LongReview {
     private Integer mid;
     //最终修改时间
     private Long mtime;
+    //所属动漫
+    private Animation animation;
     //看到第几集
     private String progress;
     //该review的id
@@ -27,17 +27,21 @@ public class LongReview {
     private Integer score;
     //点赞和回复
     private Stat stat;
-    //标题
-    private String title;
-    //url
-    private String url;
 
-    public Integer getArticle_id() {
-        return article_id;
-    }
-
-    public void setArticle_id(Integer article_id) {
-        this.article_id = article_id;
+    @Override
+    public String toString() {
+        return "ShortReview{" +
+                "author=" + author +
+                ", content='" + content + '\'' +
+                ", ctime=" + ctime +
+                ", media_id=" + media_id +
+                ", mid=" + mid +
+                ", mtime=" + mtime +
+                ", progress='" + progress + '\'' +
+                ", review_id=" + review_id +
+                ", score=" + score +
+                ", stat=" + stat +
+                '}'+"\n\r";
     }
 
     public BiliUser getAuthor() {
@@ -88,6 +92,14 @@ public class LongReview {
         this.mtime = mtime;
     }
 
+    public Animation getAnimation() {
+        return animation;
+    }
+
+    public void setAnimation(Animation animation) {
+        this.animation = animation;
+    }
+
     public String getProgress() {
         return progress;
     }
@@ -118,41 +130,6 @@ public class LongReview {
 
     public void setStat(Stat stat) {
         this.stat = stat;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    @Override
-    public String toString() {
-        return "LongReview{" +
-                "article_id=" + article_id +
-                ", author=" + author +
-                ", content='" + content + '\'' +
-                ", ctime=" + ctime +
-                ", media_id=" + media_id +
-                ", mid=" + mid +
-                ", mtime=" + mtime +
-                ", progress='" + progress + '\'' +
-                ", review_id=" + review_id +
-                ", score=" + score +
-                ", stat=" + stat +
-                ", title='" + title + '\'' +
-                ", url='" + url + '\'' +
-                '}'+"\n\r";
     }
 }
 

@@ -1,13 +1,22 @@
 package com.zfg.learn.serviceImpl;
 
-import com.zfg.learn.bo.UserReviewBo;
+import com.alibaba.fastjson.JSONObject;
+import com.zfg.learn.common.Const;
+import com.zfg.learn.common.ResponseCode;
+import com.zfg.learn.common.ServerResponse;
 import com.zfg.learn.dao.LongReviewMapper;
 import com.zfg.learn.dao.ShortReviewMapper;
-import com.zfg.learn.pojo.User;
+import com.zfg.learn.model.bili.UserInfoBili;
+import com.zfg.learn.model.bo.UserReviewBo;
+import com.zfg.learn.model.po.User;
 import com.zfg.learn.service.UserService;
+import com.zfg.learn.until.CatchApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+
+import java.io.IOException;
+import java.util.HashMap;
 
 /**
  * 用户业务层, 主要处理user和biliUser
@@ -21,6 +30,8 @@ public class UserServiceImpl implements UserService {
     ShortReviewMapper shortReviewMapper;
     @Autowired
     RedisTemplate redisTemplate;
+
+    CatchApi catchApi = new CatchApi();
 
     /**
      * 获取用户发表的评论数量
@@ -41,11 +52,28 @@ public class UserServiceImpl implements UserService {
      * @return  Boolean
      */
     @Override
-    public Boolean checkBiliCookie(String loginCookie) {
+    public ServerResponse<UserInfoBili> checkBiliCookie(String loginCookie) throws IOException {
 
         //能用则直接存进redis中 并更新数据库
 
-        return null;
+        //设置请求头参数
+        HashMap<String, String> hashMap = new HashMap();
+        hashMap.put(Const.COOKIE, loginCookie);
+
+        //请求用户信息api
+        String apiData = catchApi.getJsonFromApiByHeader(Const.Url.USER_INFO, hashMap);
+
+        Integer code = (Integer) JSONObject.parseObject(apiData).get("cdoe");
+        if (code == ResponseCode.SUCCESS.getCode()){
+            UserInfoBili userInfoBili = (UserInfoBili) JSONObject.parseObject(apiData).get("data");
+            return  ServerResponse.createBySuccess(userInfoBili);
+        } else {
+            String msg = (String) JSONObject.parseObject(apiData).get("message");
+            return ServerResponse.createByErrorMessage(msg);
+        }
+
+
+
     }
 
     /**

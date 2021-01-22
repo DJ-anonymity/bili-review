@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.zfg.learn.dao.LongReviewMapper">
-    <resultMap id="LongReview" type="com.zfg.learn.pojo.LongReview">
+    <resultMap id="LongReview" type="com.zfg.learn.model.po.LongReview">
         <id property="review_id" column="review_id"></id>
         <result property="article_id" column="article_id"></result>
         <result property="content" column="content"></result>
@@ -16,12 +16,12 @@
         <result property="score" column="score"></result>
         <result property="title" column="title"></result>
         <result property="url" column="url"></result>
-        <association property="author" javaType="com.zfg.learn.pojo.BiliUser">
+        <association property="author" javaType="com.zfg.learn.model.po.BiliUser">
             <id property="mid" column="mid"></id>
             <result property="avatar" column="avatar"></result>
             <result property="uname" column="uname"></result>
         </association>
-        <association property="stat" javaType="com.zfg.learn.pojo.Stat">
+        <association property="stat" javaType="com.zfg.learn.model.po.Stat">
             <result property="likes" column="likes"></result>
             <result property="reply" column="reply"></result>
         </association>
@@ -95,7 +95,7 @@
         and longreview.review_id = #{review_id}
     </select>
 
-    <select id="selectLatestReviewByMedia_id" parameterType="Integer" resultType="com.zfg.learn.pojo.LongReview">
+    <select id="selectLatestReviewByMedia_id" parameterType="Integer" resultType="com.zfg.learn.model.po.LongReview">
         select  *from longreview
         where media_id = #{media_id}
         order by mtime DESC limit 1
@@ -111,7 +111,7 @@
         where mid = #{mid}
     </select>
 
-    <insert id="insertLongReview" parameterType="com.zfg.learn.pojo.LongReview">
+    <insert id="insertLongReview" parameterType="com.zfg.learn.model.po.LongReview">
         insert into longreview
         (article_id, content, ctime, media_id, mid, mtime, progress, review_id, score, title, url)
         values (#{article_id}, #{content}, #{ctime}, #{media_id}, #{mid}, #{mtime}, #{progress}, #{review_id}, #{score}, #{title}, #{url})
@@ -138,7 +138,7 @@
         </foreach>
     </insert>
 
-    <update id="updateContentByReview_id" parameterType="com.zfg.learn.pojo.LongReview">
+    <update id="updateContentByReview_id" parameterType="com.zfg.learn.model.po.LongReview">
         update longreview
         set content = #{content}, mtime = #{mtime}
         where review_id = #{review_id}

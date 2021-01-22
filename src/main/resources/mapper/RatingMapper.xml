@@ -5,7 +5,7 @@
 
 
 <mapper namespace="com.zfg.learn.dao.RatingMapper">
-    <insert id="insertRating" parameterType="com.zfg.learn.pojo.Rating">
+    <insert id="insertRating" parameterType="com.zfg.learn.model.po.Rating">
         insert into rating
         (media_id, score, count)
         values(#{media_id}, #{score}, #{count})

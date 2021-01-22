@@ -1,6 +1,6 @@
 package com.zfg.learn.dao;
 
-import com.zfg.learn.pojo.Rating;
+import com.zfg.learn.model.po.Rating;
 import org.springframework.stereotype.Repository;
 
 @Repository

@@ -1,4 +1,4 @@
-package com.zfg.learn.pojo;
+package com.zfg.learn.model.po;
 
 public class Stat {
 

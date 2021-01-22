@@ -1,6 +1,6 @@
 package com.zfg.learn.serviceImpl;
 
-import com.zfg.learn.bo.KeywordCountBo;
+import com.zfg.learn.model.bo.KeywordCountBo;
 import com.zfg.learn.service.KeywordCountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -8,7 +8,6 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class KeywordCountServiceImpl implements KeywordCountService {

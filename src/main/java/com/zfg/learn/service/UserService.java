@@ -1,7 +1,11 @@
 package com.zfg.learn.service;
 
-import com.zfg.learn.bo.UserReviewBo;
-import com.zfg.learn.pojo.User;
+import com.zfg.learn.common.ServerResponse;
+import com.zfg.learn.model.bili.UserInfoBili;
+import com.zfg.learn.model.bo.UserReviewBo;
+import com.zfg.learn.model.po.User;
+
+import java.io.IOException;
 
 /**
  * 用户业务层, 主要处理user和biliUser
@@ -20,7 +24,7 @@ public interface UserService {
      * 验证当前用户的cookie是否存在，若存在是否可用
      * @return  Boolean
      */
-    public Boolean checkBiliCookie(String loginCookie);
+    public ServerResponse<UserInfoBili> checkBiliCookie(String loginCookie) throws IOException;
 
 
     /**

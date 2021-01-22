@@ -2,8 +2,8 @@ package com.zfg.learn.until;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.zfg.learn.pojo.LongReview;
-import com.zfg.learn.pojo.ReviewPageInfo;
+import com.zfg.learn.model.po.LongReview;
+import com.zfg.learn.model.po.ReviewPageInfo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

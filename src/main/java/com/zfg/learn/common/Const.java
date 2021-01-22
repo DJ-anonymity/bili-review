@@ -10,7 +10,11 @@ public class Const {
     public static final int IS_FREE = 0;
 
     //用户cookie
-    public static final String COOKIE = "cookie:";
+    public static final String COOKIE = "cookie";
+
+    //用户seta
+    public static final String SESSDATA = "SESSDATA=";
+
 
     //当前用户
     public static final String CURRENT_USER = "current_user";

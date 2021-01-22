@@ -1,8 +1,7 @@
 package com.zfg.learn.service;
 
 import com.zfg.learn.common.ServerResponse;
-import com.zfg.learn.pojo.LongReview;
-import org.apache.catalina.Server;
+import com.zfg.learn.model.po.LongReview;
 
 import java.io.IOException;
 import java.util.List;

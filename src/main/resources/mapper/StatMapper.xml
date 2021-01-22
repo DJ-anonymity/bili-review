@@ -5,12 +5,12 @@
 
 
 <mapper namespace="com.zfg.learn.dao.StatMapper">
-    <insert id="insertLongReviewStat" parameterType="com.zfg.learn.pojo.Stat">
+    <insert id="insertLongReviewStat" parameterType="com.zfg.learn.model.po.Stat">
         insert into stat
         (article_id, likes, reply)
         values (#{article_id}, #{likes}, #{reply})
     </insert>
-    <insert id="insertShortReviewStat" parameterType="com.zfg.learn.pojo.Stat">
+    <insert id="insertShortReviewStat" parameterType="com.zfg.learn.model.po.Stat">
         insert into stat
         (review_id, likes, reply)
         values (#{review_id}, #{likes}, #{reply})
@@ -42,13 +42,13 @@
         </foreach>
     </insert>
 
-    <update id="updateStatByReview_id" parameterType="com.zfg.learn.pojo.Stat">
+    <update id="updateStatByReview_id" parameterType="com.zfg.learn.model.po.Stat">
         update stat
         set likes = #{likes}, reply = #{reply}
         where  review_id = #{review_id}
     </update>
 
-    <update id="updateStatByArticle_id" parameterType="com.zfg.learn.pojo.Stat">
+    <update id="updateStatByArticle_id" parameterType="com.zfg.learn.model.po.Stat">
         update stat
         set likes = #{likes}, reply = #{reply}
         where  article_id = #{article_id}

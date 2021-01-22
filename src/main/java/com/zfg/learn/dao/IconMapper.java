@@ -1,11 +1,9 @@
 package com.zfg.learn.dao;
 
-import com.zfg.learn.bo.Menu;
-import com.zfg.learn.pojo.Stat;
+import com.zfg.learn.model.bo.Menu;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
 import java.util.List;
 
 @Repository

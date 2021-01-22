@@ -1,6 +1,6 @@
 package com.zfg.learn.service;
 
-import com.zfg.learn.bo.AnimationReviewBo;
+import com.zfg.learn.model.bo.AnimationReviewBo;
 import com.zfg.learn.common.ServerResponse;
 
 import java.io.IOException;

@@ -6,17 +6,17 @@
 
 <mapper namespace="com.zfg.learn.dao.IconMapper">
 
-    <update id="updateIcon" parameterType="com.zfg.learn.pojo.Stat">
+    <update id="updateIcon" parameterType="com.zfg.learn.model.po.Stat">
         UPDATE `sys_menu`
         SET icon = #{iconName}
         WHERE menu_name = #{menuName}
     </update>
 
-    <select id="selectAll" resultType="com.zfg.learn.bo.Menu">
+    <select id="selectAll" resultType="com.zfg.learn.model.bo.Menu">
         select *from sys_menu
     </select>
 
-    <select id="selectByName" resultType="com.zfg.learn.bo.Menu">
+    <select id="selectByName" resultType="com.zfg.learn.model.bo.Menu">
         select menu_name, icon from sys_menu where menu_name = #{menu_name} limit 1
     </select>
 </mapper>

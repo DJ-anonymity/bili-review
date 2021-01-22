@@ -1,4 +1,4 @@
-package com.zfg.learn.pojo;
+package com.zfg.learn.model.po;
 
 import io.swagger.annotations.ApiModelProperty;
 
