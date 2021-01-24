@@ -2,10 +2,12 @@ package com.zfg.learn.serviceImpl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zfg.learn.common.Const;
+import com.zfg.learn.common.RedisConst;
 import com.zfg.learn.common.ResponseCode;
 import com.zfg.learn.common.ServerResponse;
 import com.zfg.learn.dao.LongReviewMapper;
 import com.zfg.learn.dao.ShortReviewMapper;
+import com.zfg.learn.dao.UserMapper;
 import com.zfg.learn.model.bili.UserInfoBili;
 import com.zfg.learn.model.bo.UserReviewBo;
 import com.zfg.learn.model.po.User;
@@ -30,6 +32,8 @@ public class UserServiceImpl implements UserService {
     ShortReviewMapper shortReviewMapper;
     @Autowired
     RedisTemplate redisTemplate;
+    @Autowired
+    UserMapper userMapper;
 
     CatchApi catchApi = new CatchApi();
 
@@ -63,17 +67,14 @@ public class UserServiceImpl implements UserService {
         //请求用户信息api
         String apiData = catchApi.getJsonFromApiByHeader(Const.Url.USER_INFO, hashMap);
 
-        Integer code = (Integer) JSONObject.parseObject(apiData).get("cdoe");
+        Integer code = JSONObject.parseObject(apiData).getInteger("code");
         if (code == ResponseCode.SUCCESS.getCode()){
-            UserInfoBili userInfoBili = (UserInfoBili) JSONObject.parseObject(apiData).get("data");
+            UserInfoBili userInfoBili = JSONObject.parseObject(apiData).getObject("data", UserInfoBili.class);
             return  ServerResponse.createBySuccess(userInfoBili);
         } else {
             String msg = (String) JSONObject.parseObject(apiData).get("message");
             return ServerResponse.createByErrorMessage(msg);
         }
-
-
-
     }
 
     /**
@@ -83,5 +84,62 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getBiliCookie() {
         return null;
+    }
+
+    /**
+     * 注册
+     */
+    @Override
+    public ServerResponse<User> register(User user) {
+        userMapper.insert(user);
+        return ServerResponse.createBySuccess();
+    }
+
+    /**
+     * 登录
+     */
+    @Override
+    public ServerResponse<User> login(User user) {
+        User userVail = userMapper.selectUserByAccount(user.getAccount());
+        if (userVail == null){
+            return ServerResponse.createByErrorMessage("用户不存在");
+        }
+
+        if (userVail.getPassword().equals(user.getPassword())){
+            return ServerResponse.createBySuccess(user);
+        } else {
+            return ServerResponse.createByErrorMessage("密码 错误");
+        }
+    }
+
+    /**
+     * 绑定B站账号
+     */
+    @Override
+    public boolean bindBiliCount(User user) {
+        Integer status = userMapper.bindBiliCount(user);
+        if (status > 0){
+            //更新redis信息 暂时redis没有用
+            //redisTemplate.opsForValue().set(RedisConst.COOKIE + user.getMid(), user.getCookie());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 验证账号是否重复
+     * @param account
+     * @return
+     */
+    @Override
+    public boolean checkAccountIsAvailable(String account) {
+        User originalUser = userMapper.selectUserByAccount(account);
+
+        if (originalUser != null){
+            return false;
+        } else {
+            return true;
+        }
     }
 }

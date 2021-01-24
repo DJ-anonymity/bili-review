@@ -3,7 +3,10 @@ package com.zfg.learn.controller.portal;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zfg.learn.common.Const;
+import com.zfg.learn.common.ResponseCode;
 import com.zfg.learn.common.ServerResponse;
+import com.zfg.learn.model.bili.UserInfoBili;
+import com.zfg.learn.model.po.User;
 import com.zfg.learn.service.UserService;
 import com.zfg.learn.until.CatchApi;
 import io.swagger.annotations.Api;
@@ -27,6 +30,49 @@ public class UserController {
     @Autowired
     UserService userService;
     CatchApi catchApi = new CatchApi();
+
+    //注册
+    @PostMapping("/register")
+    public ServerResponse register(@RequestBody User user){
+        boolean result = userService.checkAccountIsAvailable(user.getAccount());
+
+        if (result){
+            return userService.register(user);
+        } else {
+            return ServerResponse.createByErrorMessage("用户已存在");
+        }
+    }
+
+    //登录
+    @PostMapping("/login")
+    public ServerResponse login(@RequestBody User user, HttpSession session){
+        ServerResponse<User> serverResponse = userService.login(user);
+
+        if (serverResponse.getStatus() == ResponseCode.SUCCESS.getCode()){
+            session.setAttribute(Const.CURRENT_USER, serverResponse.getData());
+        }
+        return serverResponse;
+    }
+
+    //绑定B站账号
+    @PostMapping("/bili/bind")
+    public ServerResponse bindBiliAccount(HttpSession session){
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+
+        //todo 考虑线程安全问题  是否会出现验证的账号跟session里面存的不一致的问题
+        if (user != null && user.getMid() != null && user.getCookie() != null){
+            boolean result = userService.bindBiliCount(user);
+
+            if (result){
+                return ServerResponse.createBySuccess();
+            } else {
+                return ServerResponse.createByErrorMessage("Fail 未知原因");
+            }
+        } else {
+            return ServerResponse.createByErrorMessage("请先通过插件获取登录权限");
+        }
+
+    }
 
     //获取当前用户是否已经登录b站账号
     @GetMapping("/loginStatus")
@@ -69,15 +115,19 @@ public class UserController {
         JSONObject jSONObject = jsonArray.getJSONObject(0);
 
         //获取cookie
-        String loginCookie = jSONObject.getString("value");
+        String cookieName = jSONObject.getString("name");
+        String cookieValue = jSONObject.getString("value");
+
+        //连接起来 只在这里拼接一次
+        String loginCookie = cookieName+"="+cookieValue;
+
         //验证cookie能不能用
-        if (userService.checkBiliCookie(loginCookie)){
+        ServerResponse<UserInfoBili> serverResponse = userService.checkBiliCookie(loginCookie);
+        if (serverResponse.getStatus() == ResponseCode.SUCCESS.getCode()){
             //存进session
             session.setAttribute(Const.COOKIE, loginCookie);
-            return ServerResponse.createBySuccess();
-        } else {
-            return ServerResponse.createByErrorMessage("该cookie已过期");
         }
 
+        return serverResponse;
     }
 }

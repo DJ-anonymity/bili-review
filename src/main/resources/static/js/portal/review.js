@@ -106,10 +106,10 @@ function getReview() {
     var condition = $("#condition-type").attr("data-condition-type-id");
     if (currentReviewType == LONG_REVIEW){
         url = "/bili/portal/review/long/list";
-        document.getElementById("search-trend-list").style.display = 'none';
+        document.getElementById("rank-list").style.display = 'none';
     } else {
         url = "/bili/portal/review/short/list";
-        document.getElementById("search-trend-list").style.display = 'list-item';
+        document.getElementById("rank-list").style.display = 'list-item';
     }
     url+= "?media_id="+media_id+"&sort="+sortType;
     if (condition != null && condition != ''){
@@ -159,7 +159,7 @@ function search(keyword) {
         }
     })
 }
-
+/*排行榜*/
 function getSearchTrendList() {
     $.ajax({
         url: "/bili/portal/trending/search/keyword/list",
@@ -170,11 +170,19 @@ function getSearchTrendList() {
         dataType: "json",
         success: function (data) {
             var trendListContent = '';
-            for (var i = 0;i < data.data.length;i++){
-                var keyword = "'"+data.data[i].keyword+"'";
-                trendListContent+= '<li onclick="search('+keyword+')">'+data.data[i].keyword+'</li>';
+            for (var i = 0;i < data.data.length;i++) {
+                var keyword = data.data[i].keyword;
+                var rank = i+1;
+                trendListContent += '<div class="rank-wrap">\n' +
+                    '                    <span class="number on">'+rank+'</span>\n' +
+                    '                    <div onclick="search(\''+keyword+'\')" class="link">\n' +
+                    '                        <p title="' + keyword + '" class="title">\n' +
+                    '                         '+keyword +
+                    '                        </p>\n' +
+                    '                    </div>\n' +
+                    '                </div>';
             }
-            $("#search-trend-list").html(trendListContent);
+            $("#rank-list").html(trendListContent);
         }
     })
 }

@@ -34,18 +34,18 @@ public class CountMidAspect {
     public void AfterReturning(JoinPoint joinPoint, Object result) throws Throwable {
         ZSetOperations zSetOP = redisTemplate.opsForZSet();
         Integer mid = (Integer) JoinPointOperate.getFields(joinPoint).get("mid");
-
-        //如果该key不存在，则存进zset中，并设置初始值为1
-        if (zSetOP.score("count:mid", mid) == null){
-            System.out.println("first");
-            //第一次存key的时候，设置过期时间
-            zSetOP.add("count:mid", mid,1d);//返回false也会覆盖掉旧的
-            redisTemplate.expire("count:mid", 24, TimeUnit.HOURS);
-        } else {
-            System.out.println(zSetOP.score("count:mid", mid));
-            //如果该key存在，则对该key统计进行+1
-            zSetOP.incrementScore("count:mid", mid, 1d);
-            System.out.println(zSetOP.score("count:mid", mid));
+        synchronized (this){
+            //如果该key不存在，则存进zset中，并设置初始值为1
+            if (zSetOP.score("count:mid", mid) == null){
+                //第一次存key的时候，设置过期时间
+                zSetOP.add("count:mid", mid,1d);//返回false也会覆盖掉旧的
+                redisTemplate.expire("count:mid", 24, TimeUnit.HOURS);
+            } else {
+                //System.out.println(zSetOP.score("count:mid", mid));
+                //如果该key存在，则对该key统计进行+1
+                zSetOP.incrementScore("count:mid", mid, 1d);
+                //System.out.println(zSetOP.score("count:mid", mid));
+            }
         }
     }
 

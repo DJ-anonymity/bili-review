@@ -6,120 +6,10 @@
     <title>B站评价区辅助——BOOTZ</title>
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="js/jquery-2.1.1.js"></script>
-
+    <!--本页的css-->
+    <link rel="stylesheet" href="css/portal/index.css">
     <style>
-        *{
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            font-family: Microsoft Yahei,Tahoma,Helvetica,Arial,"\5B8B\4F53",sans-serif;
-        }
 
-        .animation-container{
-            width: 1400px;
-            margin: 0 auto;
-            border-color: white;
-            border-width: 1px;
-            text-align: center;
-        }
-        .animation-list-wrap{
-            width: 900px;
-            height: 500px;
-            margin: 100px auto;
-            overflow: hidden;
-            display: inline-block;
-            /*vertical-align: top;*/
-            background-color: #f4f5f7;
-        }
-        .animation-list-box{
-            display: -ms-flexbox;
-            display: flex; /*弹性布局*/
-            -ms-flex-line-pack: justify;
-            align-content: center;
-            -ms-flex-wrap: wrap;
-            flex-wrap: wrap;
-            -ms-flex-pack: justify;
-            justify-content: center;
-            width: 900px;
-            height: 450px;
-            overflow: hidden;
-        }
-        .animation-card{
-            width: 200px;
-            height: 170px;
-           /* margin-top: 30px;
-            margin-left: 40px;*/
-            box-sizing: border-box;
-            display: block;
-            cursor: pointer;
-        }
-        .animation-card img{
-            width: 150px;
-            height: 120px;
-            display: block;
-            border-radius: 4px;
-        }
-        .animation-card div{
-            padding: 10px;
-            width: 150px;
-            height: 120px;
-            font-size: 13px;
-        }
-        /*分页信息*/
-        .animation-list-wrap .page-info{
-            /*margin: 0 auto;*/
-        }
-        .animation-list-wrap .page-info ul{
-            list-style-type: none;
-        }
-        .animation-list-wrap .page-info li{
-            padding: 6px;
-            display: inline-block;
-            vertical-align: middle;
-            border-width: 2px;
-            border-color: white;
-            border-radius: 5px;
-            background-color: white;
-            cursor: pointer;
-        }
-        .animation-list-wrap .page-info li:hover{
-            background-color: cornflowerblue;
-        }
-        .animation-list-wrap .page-info li.on{
-            background-color: cornflowerblue;
-        }
-        /*右边操作栏*/
-        .operate-container{
-            box-sizing: border-box;
-            margin-top: 30px;
-            margin-left: 30px;
-            padding: 30px;
-            width: 400px;
-            height: 600px;
-            display: inline-block;
-            vertical-align: top;
-            background-color: #f4f5f7;
-        }
-        .review-search input[type=text]{
-            border: 1px solid #00a1d6;
-            border-radius: 4px;
-            color: #00a1d6;
-            height: 30px;
-            width: 250px;
-        }
-        .review-search button{
-            border: 1px solid #00a1d6;
-            border-radius: 4px;
-            color: #00a1d6;
-            font-size: 12px;
-            height: 30px;
-            width: 50px;
-        }
-        .review-search input[type=radio]{
-            margin-left: 3px;
-            margin-top:-2px;
-            margin-bottom:1px;
-        }
     </style>
 </head>
 <body>
@@ -163,10 +53,10 @@
         <div class="operate-container">
             <div class="review-search">
                 <div>
-                    <input type="text" id="review-search-keyword" placeholder="搜索某用户的评价">
+                    <input type="text" id="review-search-keyword" placeholder="通过uid搜索某用户的评价">
                     <label for="review-search-keyword"><button id="btn-review-search">搜索</button></label>
                 </div>
-                <div>
+                <div style="visibility: hidden"><!--暂时不用改功能-->
                     <label>
                         <input type="radio" name="search-type" value="1" class="review-search-type" checked> uid
                     </label>
@@ -175,14 +65,21 @@
                     </label>
                 </div>
             </div>
-            <div class="mid-count-rank-list" style="margin-top: 10px;font-size: 20px;">
-                <ul id="mid-trending-search">
-                    <li>666</li>
-                    <li>666</li>
-                    <li>666</li>
-                    <li>666</li>
-                    <li>666</li>
-                </ul>
+            <div class="rank-list">
+                <header class="rank-header">
+                    <span class="name">排行榜</span>
+                </header>
+                <div id="rank-wrap">
+                    <div class="rank-wrap">
+                        <span class="number on">1</span>
+                        <a href="//www.bilibili.com/video/BV1Yt4y1i7hH" target="_blank" class="link">
+                            <p title="20736117" class="title">
+                                20736117
+                            </p>
+                        </a>
+                        <!-- <span>综合得分：165.8万</span>-->
+                    </div>
+                </div>
             </div>
             <div class="left-nav" style="margin-top: 50px;font-size: 20px;">
                 <div>

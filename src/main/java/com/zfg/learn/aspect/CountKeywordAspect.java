@@ -34,13 +34,17 @@ public class CountKeywordAspect {
     public void AfterReturning(JoinPoint joinPoint, Object result) throws Throwable {
         ZSetOperations zSetOP = redisTemplate.opsForZSet();
         String keyword = (String) JoinPointOperate.getFields(joinPoint).get("keyword");
-        //如果该key不存在，则存进zset中，并设置初始值为1
-        if (zSetOP.add("count:keyword", keyword, 1d)){
-            //第一次存key的时候，设置过期时间
-            redisTemplate.expire("count:mid", 24, TimeUnit.HOURS);
-        } else {
-            //如果该key存在，则对该key统计进行+1
-            zSetOP.incrementScore("count:keyword", keyword, 1d);
+        //加上同步锁 防止并发访问时出现数据幻读
+        synchronized (this){
+            //如果该key不存在，则存进zset中，并设置初始值为1
+            if (zSetOP.score("count:keyword", keyword) == null){
+                zSetOP.add("count:keyword", keyword, 1d);
+                //第一次存key的时候，设置过期时间
+                redisTemplate.expire("count:keyword", 24, TimeUnit.HOURS);
+            } else {
+                //如果该key存在，则对该key统计进行+1
+                zSetOP.incrementScore("count:keyword", keyword, 1d);
+            }
         }
     }
 

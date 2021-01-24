@@ -25,7 +25,7 @@ function getAnimationList() {
             var pageInfo = '';
             if (data.data.pageNum != 1){
                 pageInfo+='<li onclick="back()">上一页</li>';
-            }
+            } 
             for (var i = 1;i <= data.data.pages; i++){
                 if (pageNum == i){
                     pageInfo+='<li class="on" onclick="change(this)">'+i+'</li>';
@@ -36,23 +36,22 @@ function getAnimationList() {
             if (data.data.pageNum != data.data.pages){
                 pageInfo+='<li onclick="next()">下一页</li>'
             }
-            console.log(pageInfo);
             $("#page-info-list").html(pageInfo);
         }
     })
 }
 //分页信息
 function next() {
-    pageNum = pageNum+1;
-    window.location.href = "animation.html?pageNum="+pageNum;
+    pageNum = parseInt(pageNum)+1;
+    window.location.href = "index.html?pageNum="+pageNum;
 }
 function change(e) {
     pageNum = e.innerHTML;
-    window.location.href = "animation.html?pageNum="+pageNum;
+    window.location.href = "index.html?pageNum="+pageNum;
 }
 function back() {
-    pageNum = pageNum-1;
-    window.location.href = "animation.html?pageNum="+pageNum;
+    pageNum = parseInt(pageNum)-1;
+    window.location.href = "index.html?pageNum="+pageNum;
 }
 function setAnimationContent(list) {
     var animationContent = '';
@@ -68,11 +67,8 @@ function setAnimationContent(list) {
 /*通过用户搜索评论*/
 $("#btn-review-search").click(function () {
     var keyword = $("#review-search-keyword").val();
-    var searchType = $("input[type=radio]:checked").val();
-    /*if (searchType == 2){
-        alert("现在只能通过id搜索");
-    }*/
-    if (!checkIsNum(searchType)){
+    //var searchType = $("input[type=radio]:checked").val();
+    if (!checkIsNum(keyword)){
         alert("只能输入数字");
         return;
     }
@@ -89,12 +85,20 @@ function getSearchTrend() {
         dataType: "json",
         success: function (data) {
             var rankListContent = '';
-            for (var i = 0;i < data.data.length;i++){
+            for (var i = 0;i < data.data.length;i++) {
                 var mid = data.data[i].mid;
-                rankListContent+= '<li><a href="reviewSearch.html?mid='+mid+'">'+mid+'</a></li>';
+                var rank = i+1;
+                rankListContent += '<div class="rank-wrap">\n' +
+                    '                    <span class="number on">'+rank+'</span>\n' +
+                    '                    <a href="reviewSearch.html?mid=' + mid + '"" target="_blank" class="link">\n' +
+                    '                        <p title="' + mid + '" class="title">\n' +
+                                                mid +
+                    '                        </p>\n' +
+                    '                    </a>\n' +
+                    '                </div>';
             }
             console.log(rankListContent)
-            $("#mid-trending-search").html(rankListContent);
+            $("#rank-wrap").html(rankListContent);
         }
     })
 }

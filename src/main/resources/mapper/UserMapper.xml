@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zfg.learn.dao.UserMapper">
+
+    <select id="selectUserByAccount" resultType="com.zfg.learn.model.po.User">
+        select *from user
+        where account = ${account}
+    </select>
+
+    <update id="updateCookie">
+        update user
+        set cookie = #{cookie}
+        where uid = #{uid}
+    </update>
+
+    <update id="bindBiliCount">
+        update user
+        set mid = #{mid},
+        cookie = #{cookie}
+        where uid = #{uid}
+    </update>
+
+    <insert id="insert">
+        insert into user
+        (username, account, password, mid, cookie)
+        values (#{username}, #{account}, #{paswword}, #{mid}, #{cookie})
+    </insert>
+</mapper>

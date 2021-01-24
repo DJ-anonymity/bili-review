@@ -9,6 +9,7 @@ public class RedisConst {
     public static final String PAGE_NUM = "pageNum:";
     public static final String PAGE_SIZE = "pageSize:";
     public static final String MID = "mid:";
+    public static final String COOKIE = "cookie:";
 
     public static String key(Integer media_id){
         String key = SHORT_REVIEW;

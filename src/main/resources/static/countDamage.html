@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>简单计算器</title>
+    <!--引入jQuery-->
+    <meta name="referrer" content="no-referrer" />
+    <script src="http://apps.bdimg.com/libs/jquery/1.8.3/jquery.js"></script>
+    <script src="js/common/until.js"></script>
+    <style>
+        .content-l{
+            float: left;
+        }
+        .content-r{
+            margin-left: 20px;
+            float: left;
+        }
+       .wrap{
+           margin: 50px auto;
+           width: 800px;
+       }
+       .text-input label{
+           display: inline-block;
+           width: 70px;
+           margin-left: 10px;
+       }
+       .text-input input{
+           height: 30px;
+           width: 60px;
+           font-size: 16px;
+           color: red;
+           text-align: center;
+       }
+       .text-input button{
+           margin-top: 10px;
+           height: 30px;
+           width: 80px;
+       }
+       .input-critical{
+           margin-top: 10px;
+       }
+       .damage-count-result{
+           margin-top: 10px;
+       }
+       .foot{
+           clear: both;
+           font: 14px "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif;
+           color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="content-l">
+            <div class="text-input">
+                <form method="post" action="#">
+                    <div class="input-atk">
+                        <label for="base-atk">基础攻击</label>
+                        <input type="text" class="" id="base-atk">
+                        <label for="add-atk">+攻击力</label>
+                        <input type="text" id="add-atk">
+                    </div>
+                    <div class="input-critical">
+                        <label for="critical-rating">暴击率</label>
+                        <input type="text" id="critical-rating">
+                        <label for="critical-damage">暴击伤害</label>
+                        <input type="text" id="critical-damage">
+                    </div>
+                    <div class="input-button">
+                        <label >计算</label>
+                        <button type="button" onclick="countDamage()">计算模式1</button>
+                    </div>
+                </form>
+            </div>
+            <div class="damage-count-result">
+                <div class="count-type-1">
+                    <div class="animation-short-review-info">
+                        1%攻击力提升：<span id="atk-enhance"></span>
+                    </div>
+                    <div class="animation-short-review-info">
+                        1%暴击率提升：<span id="critical-rating-enhance"></span>
+                    </div>
+                    <div class="animation-short-review-info">
+                        1%暴击伤害提升：<span id="critical-damage-enhance"></span>
+                    </div>
+                </div>
+                <div class="count-type-2">
+                    <div class="animation-short-review-info">
+                        当前属性下的伤害系数：<span id="total-enhance"></span>
+                        <button type="button" onclick="saveHistory()">save</button>
+                        <input id="remark"style="width: 80px" type="text" placeholder="remark">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-r">
+            <ul id="history" style="list-style-type: none">
+
+            </ul>
+        </div>
+        <div class="foot">
+            <br>
+            <div>
+                @Tip ：所有计算均不考虑暴击和攻击外的因素
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+
+<script>
+   function countDamage() {
+      var baseAtk = $("#base-atk").val();
+      var addAtk = $("#add-atk").val();
+      var totalAtk = parseInt(baseAtk)+parseInt(addAtk);
+      var criticalRating = $("#critical-rating").val()*0.01;
+      var criticalDamage = $("#critical-damage").val()*0.01;
+
+      var criticalRatingOver = false;
+      if (criticalRating > 1){
+          criticalRating = 1;
+          criticalRatingOver = true;
+      }
+       
+       //计算出在当前情况下 1%攻击力提高的伤害比
+       var atkEnhance = baseAtk*0.01/totalAtk;
+
+       //现在暴击提升的输出
+       var currentCriticalEnhance = criticalRating*criticalDamage;
+       //1%攻击力提高的伤害比
+       var criticalRatingEnhance = criticalDamage*0.01/(1+currentCriticalEnhance);
+       var criticalDamageEnhance = criticalRating*0.01/(1+currentCriticalEnhance);
+       var total = totalAtk*(1 + currentCriticalEnhance);
+
+       $("#atk-enhance").html(toPercent(atkEnhance));
+       if (criticalRatingOver){
+           $("#critical-rating-enhance").html("暴击率已满");
+       } else {
+           $("#critical-rating-enhance").html(toPercent(criticalRatingEnhance));
+       }
+       $("#critical-damage-enhance").html(toPercent(criticalDamageEnhance));
+       $("#total-enhance").html(total);
+   }
+
+   function countBaseNow(baseAtk, totalAtk, criticalRating, criticalDamage) {
+
+   }
+
+   function countAllDamage() {
+       const totalAtk = $("#total-atk").val();
+       const criticalRating = $("#critical-rating").val()*0.01;
+       const criticalDamage = $("#critical-damage").val()*0.01;
+
+       var total = totalAtk*(1+criticalRating*criticalDamage);
+       $("#total-enhance").html(total);
+   }
+
+   //转换成百分比 然后小数点后取两位
+   function toPercent(point){
+       var percent = Number(point*100).toFixed(2);
+       percent+="%";
+       return percent;
+   }
+   
+   function chehckNumb() {
+       
+   }
+
+   var count = 0;
+   function saveHistory() {
+       count = count + 1;
+       var history = $("#total-enhance").html();
+       var remark = $("#remark").val();
+       var historyContent = "<li>"+
+                                "<span style='color: dodgerblue'>"+count+"</span>"+": "+history+
+                                "<span style='color: dodgerblue'> "+remark+"</span>"+
+                            "</li>";
+       console.log(historyContent);
+       $("#history").append(historyContent);
+       //document.getElementById("history").innerHTML = historyContent;
+   }
+</script>
+</html>

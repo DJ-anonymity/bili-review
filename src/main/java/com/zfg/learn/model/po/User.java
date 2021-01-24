@@ -15,7 +15,7 @@ public class User {
     private String username;
 
     @ApiModelProperty(notes = "账号")
-    private String Account;
+    private String account;
 
     @ApiModelProperty(notes = "密码")
     private String password;
@@ -24,7 +24,7 @@ public class User {
     private String mid;
 
     @ApiModelProperty(notes = "b站登陆cookie")
-    private String biliCookie;
+    private String cookie;
 
     public Integer getUid() {
         return uid;
@@ -43,11 +43,11 @@ public class User {
     }
 
     public String getAccount() {
-        return Account;
+        return account;
     }
 
     public void setAccount(String account) {
-        Account = account;
+        this.account = account;
     }
 
     public String getPassword() {
@@ -66,12 +66,12 @@ public class User {
         this.mid = mid;
     }
 
-    public String getBiliCookie() {
-        return biliCookie;
+    public String getCookie() {
+        return cookie;
     }
 
-    public void setBiliCookie(String biliCookie) {
-        this.biliCookie = biliCookie;
+    public void setCookie(String cookie) {
+        this.cookie = cookie;
     }
 
     @Override
@@ -79,10 +79,10 @@ public class User {
         return "User{" +
                 "uid=" + uid +
                 ", username='" + username + '\'' +
-                ", Account='" + Account + '\'' +
+                ", account='" + account + '\'' +
                 ", password='" + password + '\'' +
                 ", mid='" + mid + '\'' +
-                ", biliCookie='" + biliCookie + '\'' +
+                ", cookie='" + cookie + '\'' +
                 '}';
     }
 }

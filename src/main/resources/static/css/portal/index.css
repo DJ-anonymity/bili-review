@@ -1,0 +1,202 @@
+*{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+* ::selection {
+    background: #73c9e5;
+    color: inherit;
+}
+::selection {
+    background: #1890ff;
+    color: #fff;
+}
+a {
+    color: #212121;
+    background-color: transparent;
+    text-decoration: none;
+    outline: none;
+    cursor: pointer;
+    transition: color .3s;
+    -webkit-text-decoration-skip: objects;
+}
+a, a:hover {
+    text-decoration: none;
+}
+a:hover {
+    color: #00a1d6;
+}
+a:active, a:hover {
+    outline: 0;
+    text-decoration: none;
+}
+/*内容*/
+.animation-container{
+    width: 1400px;
+    margin: 0 auto;
+    border-color: white;
+    border-width: 1px;
+    text-align: center;
+}
+.animation-list-wrap{
+    width: 900px;
+    height: 500px;
+    margin: 100px auto;
+    overflow: hidden;
+    display: inline-block;
+    /*vertical-align: top;*/
+    background-color: #f4f5f7;
+}
+.animation-list-box{
+    display: -ms-flexbox;
+    display: flex; /*弹性布局*/
+    -ms-flex-line-pack: justify;
+    align-content: center;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-pack: justify;
+    justify-content: center;
+    width: 900px;
+    height: 450px;
+    overflow: hidden;
+}
+.animation-card{
+    width: 200px;
+    height: 170px;
+    /* margin-top: 30px;
+     margin-left: 40px;*/
+    box-sizing: border-box;
+    display: block;
+    cursor: pointer;
+}
+.animation-card img{
+    width: 150px;
+    height: 120px;
+    display: block;
+    border-radius: 4px;
+}
+.animation-card div{
+    padding: 10px;
+    width: 150px;
+    height: 120px;
+    font-size: 13px;
+}
+/*分页信息*/
+.animation-list-wrap .page-info{
+    /*margin: 0 auto;*/
+}
+.animation-list-wrap .page-info ul{
+    list-style-type: none;
+}
+.animation-list-wrap .page-info li{
+    padding: 6px;
+    display: inline-block;
+    vertical-align: middle;
+    border-width: 2px;
+    border-color: white;
+    border-radius: 5px;
+    background-color: white;
+    cursor: pointer;
+}
+.animation-list-wrap .page-info li:hover{
+    background-color: cornflowerblue;
+}
+.animation-list-wrap .page-info li.on{
+    background-color: cornflowerblue;
+}
+/*右边操作栏*/
+.operate-container{
+    box-sizing: border-box;
+    margin-top: 30px;
+    margin-left: 30px;
+    padding: 30px;
+    width: 400px;
+    height: 600px;
+    display: inline-block;
+    vertical-align: top;
+    background-color: #f4f5f7;
+}
+.review-search input[type=text]{
+    border: 1px solid #00a1d6;
+    border-radius: 4px;
+    color: #00a1d6;
+    height: 30px;
+    width: 250px;
+}
+.review-search button{
+    border: 1px solid #00a1d6;
+    border-radius: 4px;
+    color: #00a1d6;
+    font-size: 12px;
+    height: 30px;
+    width: 50px;
+}
+.review-search input[type=radio]{
+    margin-left: 3px;
+    margin-top:-2px;
+    margin-bottom:1px;
+}
+/*排行榜*/
+.rank-list {
+    background-color: white;
+    margin-top: 10px;
+    font-size: 20px;
+}
+.rank-header{
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    height: 36px;
+    color: #505050;
+    font: 12px -apple-system,BlinkMacSystemFont,Helvetica Neue,Helvetica,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+.rank-header .name {
+    display: inline-block;
+    color: #212121;
+    vertical-align: bottom;
+    font-size: 20px;
+    line-height: 28px;
+}
+.rank-wrap {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-pack: justify;
+    justify-content: flex-start;
+    margin-bottom: 18px;
+    position: relative;
+}
+.rank-wrap .number {
+    font-size: 14px;
+    color: #999;
+    width: 18px;
+    height: 18px;
+    text-align: center;
+    line-height: 18px;
+    background: #fff;
+    border-radius: 2px;
+    display: inline-block;
+}
+.rank-wrap .number.on {
+    color: #fff;
+    background: #00a1d6;
+}
+.rank-wrap .link {
+    display: inline-block;
+}
+.rank-wrap .title {
+    width: 235px;
+    margin-left: 10px;
+    text-align: left;
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

@@ -5,6 +5,7 @@ import com.zfg.learn.model.bili.UserInfoBili;
 import com.zfg.learn.model.bo.UserReviewBo;
 import com.zfg.learn.model.po.User;
 
+import javax.xml.ws.Service;
 import java.io.IOException;
 
 /**
@@ -26,10 +27,32 @@ public interface UserService {
      */
     public ServerResponse<UserInfoBili> checkBiliCookie(String loginCookie) throws IOException;
 
-
     /**
      * 获取当前浏览器的B站登陆Cookie
      * @return
      */
     public User getBiliCookie();
+
+    /**
+     * 注册
+     * @return
+     */
+    public ServerResponse<User> register(User user);
+
+    /**
+     * 登录
+     * @return
+     */
+    public ServerResponse<User> login(User user);
+
+    /**
+     * 绑定b站账号
+     * @return
+     */
+    public boolean bindBiliCount(User user);
+
+    /**
+     *  验证账号是否重复
+     */
+    public boolean checkAccountIsAvailable(String account);
 }
