@@ -8,8 +8,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
-
-
+    
     /*拦截器的执行是在spring容器中bean初始化之前的，
     拦截器执行时，spring中我们定义的bean还未初始化，自然也就无法自动注入，无法使用。*/
     // 将拦截器bean化
@@ -25,4 +24,9 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(reviewManageInterceptor()).addPathPatterns("/admin/review/**")
                 .excludePathPatterns("");
     }
+
+    /*拦截器的执行是在spring容器中bean初始化之前的，
+    拦截器执行时，spring中我们定义的bean还未初始化，自然也就无法自动注入，无法使用。*/
+    // 将拦截器bean化
+
 }

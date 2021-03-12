@@ -2,7 +2,6 @@ package com.zfg.learn.serviceImpl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zfg.learn.common.Const;
-import com.zfg.learn.common.RedisConst;
 import com.zfg.learn.common.ResponseCode;
 import com.zfg.learn.common.ServerResponse;
 import com.zfg.learn.dao.LongReviewMapper;
@@ -10,15 +9,20 @@ import com.zfg.learn.dao.ShortReviewMapper;
 import com.zfg.learn.dao.UserMapper;
 import com.zfg.learn.model.bili.UserInfoBili;
 import com.zfg.learn.model.bo.UserReviewBo;
+import com.zfg.learn.model.para.UserPara;
 import com.zfg.learn.model.po.User;
 import com.zfg.learn.service.UserService;
 import com.zfg.learn.until.CatchApi;
+import com.zfg.learn.until.EmailUntil;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 用户业务层, 主要处理user和biliUser
@@ -90,9 +94,15 @@ public class UserServiceImpl implements UserService {
      * 注册
      */
     @Override
-    public ServerResponse<User> register(User user) {
-        userMapper.insert(user);
-        return ServerResponse.createBySuccess();
+    public ServerResponse<User> register(UserPara user) {
+        Integer checkNum = (Integer) redisTemplate.opsForValue().get("checkNum:email:" + user.getEmail());
+        if (checkNum != null && checkNum.equals(user.getCheckNum())) {
+            userMapper.insert(user);
+            redisTemplate.delete("checkNum:email:" + user.getEmail());
+            return ServerResponse.createBySuccess();
+        }
+
+       return ServerResponse.createByError();
     }
 
     /**
@@ -100,7 +110,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public ServerResponse<User> login(User user) {
-        User userVail = userMapper.selectUserByAccount(user.getAccount());
+        User userVail = userMapper.selectByEmail(user.getEmail());
         if (userVail == null){
             return ServerResponse.createByErrorMessage("用户不存在");
         }
@@ -128,18 +138,57 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 验证账号是否重复
-     * @param account
+     * 验证用户名是否重复
+     * @param username
      * @return
      */
     @Override
-    public boolean checkAccountIsAvailable(String account) {
-        User originalUser = userMapper.selectUserByAccount(account);
+    public boolean checkName(String username) {
+        User originalUser = userMapper.selectByName(username);
 
         if (originalUser != null){
             return false;
         } else {
             return true;
         }
+    }
+
+    /**
+     * 发送验证码
+     * @param email
+     */
+    @Override
+    public void sendCheckNum(String email) throws MessagingException {
+        Integer checkNum;
+
+        //60s只能获取一次
+        checkNum  = (Integer) redisTemplate.opsForValue().get("checkNum:email:" + email);
+        if (checkNum != null){
+            return;
+        }
+
+        checkNum = (int) (Math.random()*1000);
+        try {
+            EmailUntil.emailPost(email, checkNum);
+            redisTemplate.opsForValue().set("checkNum:email:"+email, checkNum, 60, TimeUnit.SECONDS);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            throw e;
+        }
+    }
+
+    /**
+     * 验证邮箱是否可用
+     * @param email
+     * @return
+     */
+    @Override
+    public Boolean checkEmail(String email) {
+        User user = userMapper.selectByEmail(email);
+        if (user == null){
+            return true;
+        }
+
+        return false;
     }
 }

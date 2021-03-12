@@ -2,6 +2,9 @@ package com.zfg.learn.model.po;
 
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 /**
  * 用户实体类
  * @author bootzhong
@@ -11,20 +14,30 @@ public class User {
     @ApiModelProperty(notes = "主键")
     private Integer uid;
 
+    @NotBlank(groups = Register.class)
     @ApiModelProperty(notes = "用户名")
     private String username;
 
     @ApiModelProperty(notes = "账号")
     private String account;
 
+    @NotBlank(groups = Register.class)
     @ApiModelProperty(notes = "密码")
     private String password;
+
+    @Email(groups = Register.class)
+    @ApiModelProperty(notes = "邮箱")
+    private String email;
 
     @ApiModelProperty(notes = "b站账号id")
     private String mid;
 
     @ApiModelProperty(notes = "b站登陆cookie")
     private String cookie;
+
+    public interface Register{
+
+    }
 
     public Integer getUid() {
         return uid;
@@ -58,6 +71,14 @@ public class User {
         this.password = password;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getMid() {
         return mid;
     }
@@ -85,4 +106,6 @@ public class User {
                 ", cookie='" + cookie + '\'' +
                 '}';
     }
+
+
 }

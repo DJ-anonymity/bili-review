@@ -5,9 +5,14 @@
 
 <mapper namespace="com.zfg.learn.dao.UserMapper">
 
-    <select id="selectUserByAccount" resultType="com.zfg.learn.model.po.User">
+    <select id="selectByName" resultType="com.zfg.learn.model.po.User">
         select *from user
-        where account = ${account}
+        where username = #{username}
+    </select>
+
+    <select id="selectByEmail" resultType="com.zfg.learn.model.po.User">
+        select *from user
+        where email = #{email}
     </select>
 
     <update id="updateCookie">
@@ -23,9 +28,9 @@
         where uid = #{uid}
     </update>
 
-    <insert id="insert">
+    <insert id="insert" parameterType="com.zfg.learn.model.po.User">
         insert into user
-        (username, account, password, mid, cookie)
-        values (#{username}, #{account}, #{paswword}, #{mid}, #{cookie})
+        (username, password, email)
+        values (#{username}, #{password}, #{email})
     </insert>
 </mapper>

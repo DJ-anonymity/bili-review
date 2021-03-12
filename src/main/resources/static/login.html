@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: "PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif";
+            -webkit-tap-highlight-color: rgba(255,255,255,0);
+        }
+        a {
+            text-decoration: none;
+        }
+
+        .title-line {
+            width: 980px;
+            height: 28px;
+            margin: 0 auto;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 28px;
+            text-align: center;
+        }
+
+        .title-line .tit {
+            height: 56px;
+            line-height: 56px;
+            margin: 0 auto;
+            padding: 0 20px;
+            font-size: 40px;
+            background: #fff;
+            text-align: center;
+        }
+
+        .login-box{
+            margin: 50px auto;
+            width: 414px;
+        }
+
+        .login-box .login-input-box{
+
+        }
+
+        .login-box .login-input-box input{
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            color: #aaa;
+            font-size: 14px;
+            padding: 10px;
+            height: 40px;
+            vertical-align: middle;
+            border-radius: 4px;
+            -webkit-writing-mode: horizontal-tb !important;
+            text-rendering: auto;
+            letter-spacing: normal;
+            word-spacing: normal;
+            text-transform: none;
+            text-indent: 0px;
+            text-shadow: none;
+            display: inline-block;
+            text-align: start;
+            -webkit-rtl-ordering: logical;
+            cursor: text;
+            font: 400 13.3333px Arial;
+            background-color: rgb(232, 240, 254) !important;
+        }
+
+        .login-box .login-input-box .text{
+            margin: 6px 0;
+            font-size: 12px;
+            min-height: 20px;
+            line-height: 20px;
+        }
+
+        .clearfix:after {
+            display: block;
+            content: "";
+            clear: both;
+        }
+
+        .login-box .btn-box {
+            display: flex;
+            -webkit-box-pack: justify;
+            justify-content: space-between;
+            align-content: center;
+        }
+
+        .login-box .btn-box .btn{
+            color: #555;
+            display: inline-block;
+            height: 36px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            width: 184px;
+            line-height: 38px;
+            font-size: 14px;
+            text-align: center;
+            cursor: pointer;
+            -webkit-transition: all .3s;
+            -o-transition: all .3s;
+            -moz-transition: all .3s;
+            transition: all .3s;
+        }
+        .btn-box .btn-login:hover {
+            background: #00bee7;
+        }
+        .btn-box .btn-login {
+            border: 1px solid #0381aa;
+            color: #fff;
+            background-color: #00a7de;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div class="container">
+            <div class="top-banner">
+                1230
+            </div>
+            <div data-v-2c844fd9="" class="title-line">
+                <span class="tit" style="font-size: 38px;">登录</span>
+            </div>
+            <div class="login-box">
+                <div class="login-input-box">
+                    <div class="item username status-box">
+                        <input type="text" value="" placeholder="你的手机号/邮箱" id="login-email" maxlength="50" autocomplete="off" class="">
+                        <span class="status"></span>
+                        <div class="text clearfix">
+                            <p class="tips"></p>
+                        </div> <!---->
+                    </div>
+                    <div class="item password status-box">
+                        <input type="password" placeholder="密码" id="login-passwd" class="">
+                        <span class="status"></span>
+                        <div class="text clearfix">
+                            <p class="tips"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-box">
+                    <a class="btn btn-login" id="btn-login">登录</a>
+                    <a href="register.html" class="btn btn-reg">注册</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jquery-2.1.1.js"></script>
+    <script src="js/common/model.js"></script>
+    <script src="js/common/const.js"></script>
+    <script src="js/portal/login.js"></script>
+</body>
+</html>

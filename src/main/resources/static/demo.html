@@ -24,40 +24,25 @@
         <input type="text" name="csrf" value="b0454daa7dfc8e76946600991164823e">
         <input type="submit" value="提交">
     </form>-->
-    <input type="text" id="date-demo">
+    <input type="text" id="date-demo" name="zhong" value="100">
     <button onclick="getLoginUser()">go</button>
 </body>
+
+<script src="js/common/model.js"></script>
 <script>
-    var mid;
-    function getLoginUser() {
-        window.location.href = "https://api.bilibili.com/x/web-interface/nav";
+
+    var user = new User();
+    console.log(user);
+    user.username = "zhong";
+    user.password = "123456";
+    console.log(JSON.stringify(user));
+
+    for(var key in user){
+       var byName = document.getElementsByName("zhong");
+       console.log(byName[0].value);
     }
-    function getFollowers(){
-        getLoginUser();
-        $.ajax({
-            url:'/bili/portal/user/followers?mid='+mid,
-            type:'get',
-            data:'',
-            dataType: "jsonp",
-            jsonp: "callback",//传递给请求处理程序或页面的，用以获得jsonp回调函数名的参数名(一般默认为:callback)
-            jsonpCallback:"__jp5",//自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名，也可以不写这个参数，jQuery会自动为你处理数据
-            success: function(data){
-                console.log(data);
-            },
-            error:function(XMLHttpRequest, textStatus, errorThrown){
-                console.log("服务器异常");
-                alert(XMLHttpRequest.status);
-                alert(XMLHttpRequest.readyState);
-                alert(XMLHttpRequest.responseText);
-                alert(textStatus);
-                alert(errorThrown);
-                console.log(textStatus);
-            }
-        });
-    }
-    function __jp5(result) {
-        var data = JSON.stringify(result); //json对象转成字符串
-        console.log(data);
-    }
+
+    var user2 = new User();
+    console.log(JSON.stringify(user2));
 </script>
 </html>

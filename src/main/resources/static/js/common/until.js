@@ -34,6 +34,27 @@ function timestampToTime(timestamp) {
     return M + D;
 }
 
+/**
+ * 按钮定时不能使用 并且附带倒计时
+ * @param btn
+ * @param time
+ */
+function btnInvalidate(btn, time){
+    let content = btn.innerHTML;
+    let timeout = time/1000;
+
+    btn.disabled = true;
+    let interval = window.setInterval(function (){
+        timeout--;
+        btn.innerHTML = "<span>"+timeout+"</span>";
+    }, 1000);
+
+    window.setTimeout(function (){
+        btn.disabled = false;
+        btn.innerHTML = content;
+        window.clearInterval(interval);
+    }, time);
+}
 
 function setReviewContent(list, reviewType){
     var content = "";

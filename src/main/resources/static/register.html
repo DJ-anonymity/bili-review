@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: "PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif";
+            -webkit-tap-highlight-color: rgba(255,255,255,0);
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .title-line {
+            width: 980px;
+            height: 28px;
+            margin: 0 auto;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 28px;
+            text-align: center;
+        }
+
+        .title-line .tit {
+            height: 56px;
+            line-height: 56px;
+            margin: 0 auto;
+            padding: 0 20px;
+            font-size: 40px;
+            background: #fff;
+            text-align: center;
+        }
+
+        .login-box{
+            margin: 50px auto;
+            width: 414px;
+        }
+
+        .login-box .login-input-box input{
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            width: 100%;
+            border: 1px solid #ddd;
+            color: #aaa;
+            font-size: 14px;
+            padding: 10px;
+            height: 40px;
+            vertical-align: middle;
+            border-radius: 4px;
+            -webkit-writing-mode: horizontal-tb !important;
+            text-rendering: auto;
+            letter-spacing: normal;
+            word-spacing: normal;
+            text-transform: none;
+            text-indent: 0px;
+            text-shadow: none;
+            display: inline-block;
+            text-align: start;
+            -webkit-rtl-ordering: logical;
+            cursor: text;
+            font: 400 13.3333px Arial;
+            background-color: rgb(232, 240, 254);
+        }
+
+        .login-box .login-input-box .email input{
+           background-color: white;
+        }
+
+        .login-box .login-input-box .text{
+            margin: 6px 0;
+            font-size: 12px;
+            min-height: 20px;
+            line-height: 20px;
+        }
+
+        .clearfix:after {
+            display: block;
+            content: "";
+            clear: both;
+        }
+
+        .login-box .btn-box {
+            display: flex;
+            -webkit-box-pack: justify;
+            justify-content: space-between;
+            align-content: center;
+        }
+
+        .login-box .btn-box .btn{
+            color: #555;
+            display: inline-block;
+            height: 36px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            width: 100%;
+            line-height: 38px;
+            font-size: 14px;
+            text-align: center;
+            cursor: pointer;
+            -webkit-transition: all .3s;
+            -o-transition: all .3s;
+            -moz-transition: all .3s;
+            transition: all .3s;
+        }
+
+        .el-input {
+            position: relative;
+            font-size: 14px;
+            display: inline-block;
+            width: 100%;
+        }
+
+        /**没用**/
+        .el-button {
+            display: inline-block;
+            line-height: 1;
+            white-space: nowrap;
+            cursor: pointer;
+            background: #fff;
+            border: 1px solid #dcdfe6;
+            color: #606266;
+            -webkit-appearance: none;
+            text-align: center;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            outline: 0;
+            margin: 0;
+            -webkit-transition: .1s;
+            transition: .1s;
+            font-weight: 500;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            padding: 12px 20px;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+
+        .el-button--primary {
+            color: #fff;
+            background-color: #00a1d6;
+            border-color: #00a1d6;
+        }
+
+        .form-desc[data-v-4ec3110e], .form-group[data-v-4ec3110e] {
+            width: 420px;
+            margin: 0 auto;
+            font-size: 12px;
+            position: relative;
+        }
+
+        .yzm-buttom[data-v-4ec3110e] {
+            width: 130px;
+            height: 36px;
+            position: absolute;
+            right: 2px;
+            top: 2px;
+            padding: 0 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div class="container">
+            <div class="top-banner">
+                1230
+            </div>
+            <div data-v-2c844fd9="" class="title-line">
+                <span class="tit" style="font-size: 38px;">注册</span>
+            </div>
+            <div class="login-box">
+                <div class="login-input-box">
+                    <div class="item username status-box" style="position: relative">
+                        <input type="text" placeholder="用户名" id="register-username" class="">
+                        <p class="error-message" id="name-check-tip" style="position: absolute;right: -80px;top: 12px;color: #f45d90;font-size: 14px;display: none">昵称已存在</p>
+                        <span class="status"></span>
+                        <div class="text clearfix">
+                            <p class="tips"></p>
+                        </div>
+                    </div>
+                    <div class="item password status-box">
+                        <input type="password" placeholder="密码" id="register-passwd" class="">
+                        <span class="status"></span>
+                        <div class="text clearfix">
+                            <p class="tips"></p>
+                        </div>
+                    </div>
+                    <div class="item email status-box">
+                        <input type="text" value="" placeholder="你的手机号/邮箱" id="register-email" maxlength="50" autocomplete="off" class="">
+                        <span class="status"></span>
+                        <div class="text clearfix">
+                            <p class="tips" id="tips"></p>
+                        </div> <!---->
+                    </div>
+                    <div data-v-4ec3110e="" class="form-group yzm yzm_buttom_a back-fff">
+                        <div data-v-4ec3110e="" class="code-input el-input"><!---->
+                            <input type="text" autocomplete="off" placeholder="请输入短信验证码" name="code" id="register-yzm" class="el-input__inner" style="background-color: white">
+                        </div>
+                        <div data-v-4ec3110e="" id="yzm-check-tip" class="check" style="display: none;">
+                            <p style="position: absolute;right: -120px;top: 12px;color: #f45d90;font-size: 14px" class="error-message">该邮箱账号已存在</p>
+                        </div>
+                        <button data-v-4ec3110e="" type="button" class="el-button yzm-buttom el-button--primary" id="btn-yzm">
+                           <span>点击获取</span>
+                        </button>
+                        <p data-v-4ec3110e="" class="error-message"></p>
+                        <div class="text clearfix">
+                            <p class="tips"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-box">
+                    <a class="btn btn-reg" id="btn-reg">注册</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jquery-2.1.1.js"></script>
+    <script src="js/common/until.js"></script>
+    <script src="js/common/const.js"></script>
+    <script src="js/common/model.js"></script>
+    <script src="js/portal/register.js"></script>
+</body>
+</html>

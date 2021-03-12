@@ -16,10 +16,17 @@ public interface UserMapper {
 
     /**
      * 通过用户名获取账号
-     * @param account
+     * @param username
      * @return
      */
-    User selectUserByAccount(@Param("account") String account);
+    User selectByName(@Param("username") String username);
+
+    /**
+     * 通过用户名获取账号
+     * @param email
+     * @return
+     */
+    User selectByEmail(@Param("email") String email);
 
     /**
      * 增加用户

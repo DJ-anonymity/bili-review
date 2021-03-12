@@ -3,8 +3,10 @@ package com.zfg.learn.service;
 import com.zfg.learn.common.ServerResponse;
 import com.zfg.learn.model.bili.UserInfoBili;
 import com.zfg.learn.model.bo.UserReviewBo;
+import com.zfg.learn.model.para.UserPara;
 import com.zfg.learn.model.po.User;
 
+import javax.mail.MessagingException;
 import javax.xml.ws.Service;
 import java.io.IOException;
 
@@ -37,7 +39,7 @@ public interface UserService {
      * 注册
      * @return
      */
-    public ServerResponse<User> register(User user);
+    public ServerResponse<User> register(UserPara user);
 
     /**
      * 登录
@@ -54,5 +56,13 @@ public interface UserService {
     /**
      *  验证账号是否重复
      */
-    public boolean checkAccountIsAvailable(String account);
+    public boolean checkName(String name);
+
+    /**
+     *  发送验证码
+     * @param email
+     */
+    public void sendCheckNum(String email) throws MessagingException;
+
+    Boolean checkEmail(String email);
 }
