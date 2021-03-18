@@ -26,7 +26,7 @@ public class CountMidAspect {
     private RedisTemplate redisTemplate;
 
     /*mid搜索切入点*/
-    @Pointcut("execution(* com.zfg.learn.serviceImpl.*ReviewServiceImpl.searchReviewByMid(..))")
+    @Pointcut("execution(* com.zfg.learn.service.serviceImpl.*ReviewServiceImpl.searchReviewByMid(..))")
     private void midPoint(){}
 
     /*关键词搜索*/

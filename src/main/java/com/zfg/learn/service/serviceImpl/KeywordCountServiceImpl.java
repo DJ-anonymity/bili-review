@@ -1,4 +1,4 @@
-package com.zfg.learn.serviceImpl;
+package com.zfg.learn.service.serviceImpl;
 
 import com.zfg.learn.model.bo.KeywordCountBo;
 import com.zfg.learn.service.KeywordCountService;

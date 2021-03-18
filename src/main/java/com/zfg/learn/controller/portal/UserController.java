@@ -17,7 +17,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.MessagingException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -37,7 +36,7 @@ public class UserController {
     //获取校验码
     @PostMapping("/checkNum/send")
     public ServerResponse sendCheckNum(@RequestParam("email") String email, HttpSession session){
-        if (email == null){
+        if (email == null || email.equals("")){
             return ServerResponse.createByErrorMessage("邮箱不能为空");
         }
         if (!userService.checkEmail(email)){
@@ -55,12 +54,34 @@ public class UserController {
 
     //注册
     @PostMapping("/register")
-    public ServerResponse register(@RequestBody @Validated(User.Register.class) UserPara user){
+    public ServerResponse register(@RequestBody @Validated(User.Register.class) UserPara user, HttpSession session) throws IOException {
+        Object cookie = session.getAttribute(Const.COOKIE);
+        if (cookie == null){
+            return ServerResponse.createByErrorMessage("请先打开插件");
+        }
+
+        //验证用户名和邮箱是否合法
         boolean result = userService.checkName(user.getUsername());
         Boolean result2 = userService.checkEmail(user.getEmail());
 
         if (result && result2){
-            return userService.register(user);
+            String loginCookie = cookie.toString();
+
+            //通过cookie去b站获取信息
+            UserInfoBili userInfoBili = userService.getBiliAcountByCookie(loginCookie);
+            if (userInfoBili == null){
+                return ServerResponse.createByErrorMessage("请重新打开插件");
+            }
+
+            user.setCookie(loginCookie);
+            user.setMid(userInfoBili.getMid());
+            boolean registerResult = userService.register(user);
+
+            if (registerResult){
+                return ServerResponse.createBySuccess();
+            } else {
+                return ServerResponse.createByErrorMessage("验证码不正确");
+            }
         } else {
             return ServerResponse.createByErrorMessage("用户名称或邮箱已存在");
         }
@@ -87,12 +108,10 @@ public class UserController {
             return ServerResponse.createByErrorMessage("请填写必填信息");
         }
 
-        ServerResponse<User> serverResponse = userService.login(user);
+        User userIsLogin = userService.login(user);
+        session.setAttribute(Const.CURRENT_USER, userIsLogin);
 
-        if (serverResponse.getStatus() == ResponseCode.SUCCESS.getCode()){
-            session.setAttribute(Const.CURRENT_USER, serverResponse.getData());
-        }
-        return serverResponse;
+        return ServerResponse.createBySuccess(userIsLogin);
     }
 
     //绑定B站账号
@@ -113,20 +132,6 @@ public class UserController {
             return ServerResponse.createByErrorMessage("请先通过插件获取登录权限");
         }
 
-    }
-
-    //获取当前用户是否已经登录b站账号
-    @GetMapping("/loginStatus")
-    public String getLoginStatus(HttpServletRequest request) throws IOException {
-        Cookie[] cookies = request.getCookies();
-        String cookie = null;
-        for (Cookie cookie1:cookies){
-            cookie+= cookie1.getName()+"="+cookie1.getValue()+"; ";
-        }
-        System.out.println(cookie);
-        String url = "https://api.bilibili.com/x/web-interface/nav";
-
-        return catchApi.getJsonFromApiByCook(url, cookie);
     }
 
     //获取当前用户的好友列表
@@ -154,24 +159,38 @@ public class UserController {
     public Object setCookie(@RequestBody String cookie, HttpSession session) throws IOException {
         JSONArray jsonArray = JSONObject.parseObject(cookie).getJSONArray("cookie");
         if (jsonArray == null || jsonArray.size() == 0){
-            return ServerResponse.createByError();
+            return ServerResponse.createByErrorMessage("请先登录b站");
         }
-        JSONObject jSONObject = jsonArray.getJSONObject(0);
 
+        //从数组中随便获取一个
+        JSONObject jSONObject = jsonArray.getJSONObject(0);
         //获取cookie
         String cookieName = jSONObject.getString("name");
         String cookieValue = jSONObject.getString("value");
 
         //连接起来 只在这里拼接一次
         String loginCookie = cookieName+"="+cookieValue;
+        //存进session
+        session.setAttribute(Const.COOKIE, loginCookie);
 
-        //验证cookie能不能用
+/*        //验证cookie能不能用
         ServerResponse<UserInfoBili> serverResponse = userService.checkBiliCookie(loginCookie);
         if (serverResponse.getStatus() == ResponseCode.SUCCESS.getCode()){
-            //存进session
-            session.setAttribute(Const.COOKIE, loginCookie);
+
+        }*/
+
+        return ServerResponse.createBySuccess();
+    }
+
+    //判断现在用户的cookie是否存在 如果存在则返回用户信息
+    @GetMapping("/bili/info")
+    public ServerResponse getLoginStatus(HttpSession session) throws IOException {
+        Object ck = session.getAttribute(Const.COOKIE);
+        if (ck == null){
+            return ServerResponse.createByErrorMessage("请先使用插件获取权限");
         }
 
-        return serverResponse;
+        UserInfoBili userBili = userService.getBiliAcountByCookie((String) ck);
+        return ServerResponse.createBySuccess(userBili);
     }
 }

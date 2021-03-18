@@ -26,7 +26,7 @@ public class CountKeywordAspect {
     private RedisTemplate redisTemplate;
 
     /*keyword搜索切入点*/
-    @Pointcut("execution(* com.zfg.learn.serviceImpl.*ReviewServiceImpl.searchReviewByKeyword(..))")
+    @Pointcut("execution(* com.zfg.learn.service.serviceImpl.*ReviewServiceImpl.searchReviewByKeyword(..))")
     private void keywordPoint(){}
 
     /*关键词搜索*/

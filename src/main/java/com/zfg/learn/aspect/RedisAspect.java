@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class RedisAspect {
     @Autowired
     private RedisTemplate redisTemplate;
-    @Pointcut("execution(* com.zfg.learn.serviceImpl.ShortReviewServiceImpl.search*(..))")
+    @Pointcut("execution(* com.zfg.learn.service.serviceImpl.ShortReviewServiceImpl.search*(..))")
     private void myPoint(){}
 
     @Around("myPoint()")
