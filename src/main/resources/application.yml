@@ -2,7 +2,7 @@
 spring:
   datasource:
     username: root
-    password: m381610m.
+    password: illya0415
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://bootzhong.top:3306/bili?useUnicode=true&charaterEncoding=UTF-8&serverTimezone=UTC
 

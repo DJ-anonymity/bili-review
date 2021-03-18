@@ -4,7 +4,6 @@ import com.zfg.learn.LearnApplication;
 import com.zfg.learn.common.ServerResponse;
 import com.zfg.learn.exception.ServiceException;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
  */
 @Component
 @Aspect
-@ControllerAdvice
 public class ExceptionAspect {
     Logger logger = LoggerFactory.getLogger(LearnApplication.class);
 
@@ -42,7 +40,6 @@ public class ExceptionAspect {
         }
 
         return result;
-
     }
 
 

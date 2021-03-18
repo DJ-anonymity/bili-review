@@ -1,5 +1,6 @@
-
 window.onload = function (){
+    getBiliUser();
+
     document.getElementById("btn-yzm").addEventListener("click", function (event){
         getCheckNum();
     });
@@ -51,7 +52,7 @@ function register(){
                 alert("注册成功");
                 window.location.href = "/bili/login.html";
             } else {
-                alert("验证码不对");
+                alert(data.msg);
             }
         }
     });
@@ -75,3 +76,22 @@ function checkName(username){
     }
 }
 
+function getBiliUser(){
+    $.ajax({
+        url: "/bili/portal/user/bili/info",
+        type: "get",
+        //发送的数据
+        dataType: "json",
+        success: function (data) {
+            if (data.status == Status.SUCCESS){
+                if (data.data != null){
+                    alert("插件已经成功获取权限");
+                } else {
+                    alert("请重新打开插件")
+                }
+            } else {
+               alert(data.msg);
+            }
+        }
+    });
+}

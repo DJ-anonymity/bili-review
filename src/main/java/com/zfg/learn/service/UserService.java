@@ -24,10 +24,10 @@ public interface UserService {
     public UserReviewBo getReviewQuantity(Integer mid);
 
     /**
-     * 验证当前用户的cookie是否存在，若存在是否可用
+     * 通过cookie获取用户的b站信息
      * @return  Boolean
      */
-    public ServerResponse<UserInfoBili> checkBiliCookie(String loginCookie) throws IOException;
+    public UserInfoBili getBiliAcountByCookie(String loginCookie) throws IOException;
 
     /**
      * 获取当前浏览器的B站登陆Cookie
@@ -39,13 +39,13 @@ public interface UserService {
      * 注册
      * @return
      */
-    public ServerResponse<User> register(UserPara user);
+    public boolean register(UserPara user);
 
     /**
      * 登录
      * @return
      */
-    public ServerResponse<User> login(User user);
+    public User login(User user);
 
     /**
      * 绑定b站账号

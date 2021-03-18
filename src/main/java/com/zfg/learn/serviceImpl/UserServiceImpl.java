@@ -3,10 +3,10 @@ package com.zfg.learn.serviceImpl;
 import com.alibaba.fastjson.JSONObject;
 import com.zfg.learn.common.Const;
 import com.zfg.learn.common.ResponseCode;
-import com.zfg.learn.common.ServerResponse;
 import com.zfg.learn.dao.LongReviewMapper;
 import com.zfg.learn.dao.ShortReviewMapper;
 import com.zfg.learn.dao.UserMapper;
+import com.zfg.learn.exception.ServiceException;
 import com.zfg.learn.model.bili.UserInfoBili;
 import com.zfg.learn.model.bo.UserReviewBo;
 import com.zfg.learn.model.para.UserPara;
@@ -14,10 +14,10 @@ import com.zfg.learn.model.po.User;
 import com.zfg.learn.service.UserService;
 import com.zfg.learn.until.CatchApi;
 import com.zfg.learn.until.EmailUntil;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
@@ -56,12 +56,13 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 验证当前cookie是否可用
+     * 通过cookie
+     * 从b站api获取账号信息
      * @return  Boolean
      */
     @Override
-    public ServerResponse<UserInfoBili> checkBiliCookie(String loginCookie) throws IOException {
-
+    public UserInfoBili getBiliAcountByCookie(String loginCookie) throws IOException {
+        UserInfoBili userInfoBili;
         //能用则直接存进redis中 并更新数据库
 
         //设置请求头参数
@@ -73,11 +74,13 @@ public class UserServiceImpl implements UserService {
 
         Integer code = JSONObject.parseObject(apiData).getInteger("code");
         if (code == ResponseCode.SUCCESS.getCode()){
-            UserInfoBili userInfoBili = JSONObject.parseObject(apiData).getObject("data", UserInfoBili.class);
-            return  ServerResponse.createBySuccess(userInfoBili);
+            userInfoBili  = JSONObject.parseObject(apiData).getObject("data", UserInfoBili.class);
+            return  userInfoBili;
         } else {
+            //todo 考虑b站拉黑等情况 如果是拉黑情况直接抛出异常
             String msg = (String) JSONObject.parseObject(apiData).get("message");
-            return ServerResponse.createByErrorMessage(msg);
+            System.out.println(msg);
+            return null;
         }
     }
 
@@ -94,31 +97,32 @@ public class UserServiceImpl implements UserService {
      * 注册
      */
     @Override
-    public ServerResponse<User> register(UserPara user) {
+    @Transactional
+    public boolean register(UserPara user) {
         Integer checkNum = (Integer) redisTemplate.opsForValue().get("checkNum:email:" + user.getEmail());
         if (checkNum != null && checkNum.equals(user.getCheckNum())) {
             userMapper.insert(user);
             redisTemplate.delete("checkNum:email:" + user.getEmail());
-            return ServerResponse.createBySuccess();
+            return true;
         }
 
-       return ServerResponse.createByError();
+        return false;
     }
 
     /**
      * 登录
      */
     @Override
-    public ServerResponse<User> login(User user) {
+    public User login(User user) {
         User userVail = userMapper.selectByEmail(user.getEmail());
         if (userVail == null){
-            return ServerResponse.createByErrorMessage("用户不存在");
+            throw new ServiceException("用户不存在");
         }
 
         if (userVail.getPassword().equals(user.getPassword())){
-            return ServerResponse.createBySuccess(user);
+            return userVail;
         } else {
-            return ServerResponse.createByErrorMessage("密码 错误");
+            throw new ServiceException("密码错误");
         }
     }
 
@@ -183,6 +187,7 @@ public class UserServiceImpl implements UserService {
      * @return
      */
     @Override
+    @Transactional
     public Boolean checkEmail(String email) {
         User user = userMapper.selectByEmail(email);
         if (user == null){
@@ -191,4 +196,5 @@ public class UserServiceImpl implements UserService {
 
         return false;
     }
+
 }

@@ -33,4 +33,7 @@ public class Const {
         String USER_INFO = "https://api.bilibili.com/x/web-interface/nav";
     }
 
+    public interface Path{
+        String CHROME_EXTENSION = "C:\\Users\\zhong\\Desktop\\毕业设计\\毕业设计\\钟房桂\\谷歌插件\\chrome插件.zip";
+    }
 }

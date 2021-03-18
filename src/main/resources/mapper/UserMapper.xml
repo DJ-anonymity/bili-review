@@ -30,7 +30,7 @@
 
     <insert id="insert" parameterType="com.zfg.learn.model.po.User">
         insert into user
-        (username, password, email)
-        values (#{username}, #{password}, #{email})
+        (username, password, email, mid, cookie)
+        values (#{username}, #{password}, #{email}, #{mid}, #{cookie})
     </insert>
 </mapper>
