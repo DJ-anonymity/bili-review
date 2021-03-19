@@ -1,12 +1,10 @@
 package com.zfg.learn.until;
 
+import com.alibaba.fastjson.JSONObject;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
@@ -176,6 +174,57 @@ public class CatchApi {
 
         connection.setRequestMethod("GET");
         /*connection.setRequestProperty("Content-Type", "application/json");*/
+        // 通过连接对象获取一个输入流，向远程读取
+        if (connection.getResponseCode() == 200) {
+            System.out.println("link ok");
+            InputStream is = connection.getInputStream();
+            // 对输入流对象进行包装:charset根据工作项目组的要求来设置
+            BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            //使用字符缓冲流，
+            StringBuffer sbf = new StringBuffer();
+            String temp = null;
+            // 循环遍历一行一行读取数据
+            while ((temp = br.readLine()) != null) {
+                sbf.append(temp);
+                sbf.append("\r\n");
+            }
+
+            result = sbf.toString();
+            System.out.println(sbf);
+        } else {
+            System.out.println("link fault");
+        }
+
+        return result;
+    }
+
+    //发送请求并且携带参数
+    public String request(String originalUrl, String data) throws IOException {
+        String result = "";
+        URL url = new URL(originalUrl);
+
+        HttpURLConnection connection = null;
+        try {
+            connection = (HttpURLConnection) url.openConnection();
+        } catch (IOException e) {
+            System.out.println("请求过于频繁，请一小时后再获取数据");
+            e.printStackTrace();
+        }
+
+        connection.setDoOutput(true);
+        // 设置连接主机服务器超时时间：10000毫秒
+        connection.setConnectTimeout(10000);
+        // 设置读取主机服务器返回数据超时时间：60000毫秒
+        connection.setReadTimeout(60000);
+        //请求方式为get
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/json");
+        //发送数据
+        OutputStream outputStream = connection.getOutputStream();
+        PrintWriter printWriter = new PrintWriter(outputStream);
+        printWriter.println(data);
+        printWriter.flush();
+
         // 通过连接对象获取一个输入流，向远程读取
         if (connection.getResponseCode() == 200) {
             System.out.println("link ok");

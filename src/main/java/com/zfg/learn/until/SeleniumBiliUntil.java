@@ -1,5 +1,6 @@
 package com.zfg.learn.until;
 
+import com.zfg.learn.exception.SeleniumException;
 import com.zfg.learn.exception.ServiceException;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -73,22 +74,23 @@ public class SeleniumBiliUntil {
      * @param fid
      * @param type
      */
-    public void subscribe(String fid, Integer type){
+    public void subscribe(String fid, Integer type) throws SeleniumException {
         if (!initialized){
-            throw new ServiceException("订阅失败 请先初始化sn");
+            throw new SeleniumException("订阅失败 请先初始化sn");
         }
 
         String url;
         WebElement element;
 
         if (type.equals(Type.MEDIA)){
-            url = "https://space.bilibili.com/"+fid;
-            element = webDriver.findElement(new By.ByClassName("h-f-btn h-follow"));
-        } else if (type.equals(Type.UP)){
             url = "https://www.bilibili.com/bangumi/media/md"+fid;
+            //TIP 选择器不能出现多类名
             element = webDriver.findElement(new By.ByClassName("btn-follow"));
+        } else if (type.equals(Type.UP)){
+            url = "https://space.bilibili.com/"+fid;
+            element = webDriver.findElement(new By.ByCssSelector(".h-action>span"));
         } else {
-            throw new ServiceException("没有这种类型");
+            throw new SeleniumException("没有这种类型");
         }
 
         webDriver.get(url);

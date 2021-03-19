@@ -36,8 +36,8 @@ public class SubscriptionController {
         subscription.setFid(subPara.getFid());
         subscription.setType(subPara.getType());
         subscription.setCtime(System.currentTimeMillis());
-
         subscriptionService.sub(subscription);
+
         return ServerResponse.createBySuccess();
     }
 }

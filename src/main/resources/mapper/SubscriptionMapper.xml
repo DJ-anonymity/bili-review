@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zfg.learn.dao.SubscriptionMapper">
+
+    <select id="selectFollowerByFid" resultType="Integer">
+        select uid
+        from subscription
+        where fid = #{fid}
+    </select>
+
+    <select id="selectByMultiple" parameterType="com.zfg.learn.model.query.SubscriptionQuery" resultType="com.zfg.learn.model.po.Subscription">
+        select *from subscription
+        where 1 = 1
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="uid != null">
+            and uid = #{uid}
+        </if>
+        <if test="fid != null">
+            and fid = #{fid}
+        </if>
+        <if test="type != null">
+            and type = #{type}
+        </if>
+        <if test="level != null">
+            and level = #{level}
+        </if>
+        <if test="status != null">
+            and status = #{status}
+        </if>
+        <if test="ctime != null">
+            and ctime = #{ctime}
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="com.zfg.learn.model.po.Subscription">
+       insert into subscription
+       (uid, fid, type, ctime)
+       values (#{uid}, #{fid}, #{type}, #{ctime})
+    </insert>
+</mapper>

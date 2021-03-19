@@ -3,7 +3,7 @@ package com.zfg.learn.model.po;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * 订阅内容
+ * 订阅内容实体类
  */
 public class Subscription {
     @ApiModelProperty(notes = "主键")
