@@ -37,6 +37,7 @@ public class SeleniumBiliUntil {
      * @param cookies
      */
     public void initialized(Set<Cookie> cookies){
+        System.setProperty("webdriver.chrome.driver", "E:/zfg/chromedriver.exe");
         webDriver = new ChromeDriver();
         webDriver.get(INI_URL);
         //与浏览器同步非常重要，必须等待浏览器加载完毕
@@ -74,7 +75,7 @@ public class SeleniumBiliUntil {
      * @param fid
      * @param type
      */
-    public void subscribe(String fid, Integer type) throws SeleniumException {
+    public void subscribe(Integer fid, Integer type) throws SeleniumException {
         if (!initialized){
             throw new SeleniumException("订阅失败 请先初始化sn");
         }
@@ -84,11 +85,8 @@ public class SeleniumBiliUntil {
 
         if (type.equals(Type.MEDIA)){
             url = "https://www.bilibili.com/bangumi/media/md"+fid;
-            //TIP 选择器不能出现多类名
-            element = webDriver.findElement(new By.ByClassName("btn-follow"));
         } else if (type.equals(Type.UP)){
             url = "https://space.bilibili.com/"+fid;
-            element = webDriver.findElement(new By.ByCssSelector(".h-action>span"));
         } else {
             throw new SeleniumException("没有这种类型");
         }
@@ -96,6 +94,13 @@ public class SeleniumBiliUntil {
         webDriver.get(url);
         // 与浏览器同步非常重要，必须等待浏览器加载完毕
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+        if (type.equals(Type.MEDIA)){
+            //TIP 选择器不能出现多类名
+            element = webDriver.findElement(new By.ByClassName("btn-follow"));
+        }else{
+            element = webDriver.findElement(new By.ByCssSelector(".h-f-btn.h-follow"));
+        }
         element.click();
     }
 

@@ -22,6 +22,15 @@ function getDataFromUrl() {
         return  r[0].substr(1);
     return null;
 }
+//获取url最后一个/后面的内容
+function getUrlLast(kw) {
+    var reg = '[^/]+(?!.*/)';
+    var regex = new RegExp(reg);
+    var r = kw.match(regex);
+    if(r!=null)
+        return  r[0];
+    return null;
+}
 //时间戳转变成普通日期
 function timestampToTime(timestamp) {
     var date = new Date(timestamp * 1000);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
@@ -128,4 +137,12 @@ function setReviewContent(list, reviewType){
             '</li>';
     }
     $("#review-content").html(content);
+}
+
+function isBlank(item) {
+    if (item === null || item === ''){
+        return true;
+    } else {
+        return false;
+    }
 }

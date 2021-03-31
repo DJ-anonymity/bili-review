@@ -1,0 +1,109 @@
+body {
+    font-family: Helvetica Neue, Helvetica, Arial, Microsoft Yahei, Hiragino Sans GB, Heiti SC, WenQuanYi Micro Hei, sans-serif;
+    color: #222;
+    font-size: 14px;
+    background-color: #d2e9fb;
+}
+.tc-black {
+    color: #222;
+}
+.c-pointer {
+    cursor: pointer;
+}
+.f-left {
+    float: left;
+}
+.fs-14 {
+    font-size: 14px;
+}
+a {
+    outline: none;
+    text-decoration: none;
+}
+.adaptive-scroll[data-v-08ab5c2b] {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+.scroll-content[data-v-08ab5c2b] {
+    z-index: 1;
+}
+.ls-0 {
+    letter-spacing: 0;
+}
+<!-- 左边内容 -->
+.left-panel[data-v-3532d7bf] {
+    width: 244px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+<!--左边内容 个人信息 -->
+.user-wrapper[data-v-f8464120] {
+    position: relative;
+    width: 244px;
+    height: 188px;
+}
+.user-panel[data-v-f8464120] {
+    position: relative;
+    width: 244px;
+    height: 188px;
+    background: #fff;
+    border-radius: 4px;
+    overflow: hidden;
+}
+.user-panel .loading-content[data-v-f8464120] {
+    width: 100%;
+    height: 188px;
+    line-height: 188px;
+}
+.user-panel .content[data-v-f8464120] {
+    width: 100%;
+    height: 188px;
+}
+.user-panel .content .user-pic[data-v-f8464120] {
+    width: 100%;
+    height: 64px;
+    background: center/cover no-repeat;
+}
+.user-panel .content .user-name[data-v-f8464120] {
+    display: inline-block;
+    font-size: 13px;
+    letter-spacing: 0;
+    margin-left: 80px;
+    padding-top: 10px;
+}
+.user-panel .content .bottom[data-v-f8464120] {
+    width: 192px;
+    height: 92px;
+    margin: 0 26px 0 26px;
+}
+.user-panel .content .bottom .number-part[data-v-f8464120] {
+    width: calc(100% / 3);
+    height: 92px;
+    text-align: center;
+}
+.user-panel .content .user-head[data-v-f8464120] {
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    left: 16px;
+    top: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+<!-- 左下边 -->
+.adaptive-scroll{
+    position: relative;
+    background: #fff;
+    float: left;
+}
+<!-- 中间主要部分 -->
+.center-panel[data-v-3532d7bf] {
+    width: 632px;
+    margin: 0 8px;
+}

@@ -13,7 +13,7 @@ public class Subscription {
     private Integer uid;
 
     @ApiModelProperty(notes = "订阅的内容id")
-    private String fid;
+    private Integer fid;
 
     @ApiModelProperty(notes = "订阅的内容类型 0：影剧；1：up ")
     private Integer type;
@@ -23,6 +23,9 @@ public class Subscription {
 
     @ApiModelProperty(notes = "订阅的状态 待开发")
     private Integer status;
+
+    @ApiModelProperty(notes = "更新时间")
+    private Long mtime;
 
     @ApiModelProperty(notes = "创建时间")
     private Long ctime;
@@ -44,11 +47,11 @@ public class Subscription {
         this.uid = uid;
     }
 
-    public String getFid() {
+    public Integer getFid() {
         return fid;
     }
 
-    public void setFid(String fid) {
+    public void setFid(Integer fid) {
         this.fid = fid;
     }
 
@@ -74,6 +77,14 @@ public class Subscription {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Long getMtime() {
+        return mtime;
+    }
+
+    public void setMtime(Long mtime) {
+        this.mtime = mtime;
     }
 
     public Long getCtime() {

@@ -6,13 +6,18 @@ import com.zfg.learn.common.Const;
 import com.zfg.learn.common.ResponseCode;
 import com.zfg.learn.common.ServerResponse;
 import com.zfg.learn.model.bili.UserInfoBili;
+import com.zfg.learn.model.dto.BIliUserDto;
 import com.zfg.learn.model.para.UserPara;
+import com.zfg.learn.model.po.BiliUser;
+import com.zfg.learn.model.po.Subscription;
 import com.zfg.learn.model.po.User;
+import com.zfg.learn.service.SubscriptionService;
 import com.zfg.learn.service.UserService;
 import com.zfg.learn.until.CatchApi;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +36,8 @@ import java.io.IOException;
 public class UserController {
     @Autowired
     UserService userService;
+    @Autowired
+    SubscriptionService subService;
     CatchApi catchApi = new CatchApi();
 
     //获取校验码
@@ -192,5 +199,28 @@ public class UserController {
 
         UserInfoBili userBili = userService.getBiliAcountByCookie((String) ck);
         return ServerResponse.createBySuccess(userBili);
+    }
+
+    //通过用户的id获取用户b站信息
+    @GetMapping("/bili/{mid}")
+    public ServerResponse getBiliInfo(@PathVariable Integer mid ,HttpSession session) {
+        BIliUserDto bIliUserDto = new BIliUserDto();
+        BiliUser biliUser = userService.getBiliAccountByMid(mid);
+
+        if (biliUser != null){
+            bIliUserDto.setAvatar(biliUser.getAvatar());
+            bIliUserDto.setMid(biliUser.getMid());
+            bIliUserDto.setUname(biliUser.getUname());
+
+            User user = (User) session.getAttribute(Const.CURRENT_USER);
+            Subscription relation = subService.getRelation(user.getUid(), mid, Const.Sub.TYPE_UP);
+            if (relation == null){
+                bIliUserDto.setIs_follow(false);
+            } else {
+                bIliUserDto.setIs_follow(true);
+            }
+        }
+
+        return ServerResponse.createBySuccess(bIliUserDto);
     }
 }

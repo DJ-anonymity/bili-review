@@ -11,10 +11,16 @@ public class SubscriptionQuery {
     private Integer uid;
 
     @ApiModelProperty(notes = "订阅的内容id")
-    private String fid;
+    private Integer fid;
 
     @ApiModelProperty(notes = "订阅的内容类型 0：影剧；1：up ")
     private Integer type;
+
+    @ApiModelProperty(notes = "订阅的级别 -待开发")
+    private Integer level;
+
+    @ApiModelProperty(notes = "订阅的状态 -待开发")
+    private Integer status;
 
     public Integer getUid() {
         return uid;
@@ -24,11 +30,11 @@ public class SubscriptionQuery {
         this.uid = uid;
     }
 
-    public String getFid() {
+    public Integer getFid() {
         return fid;
     }
 
-    public void setFid(String fid) {
+    public void setFid(Integer fid) {
         this.fid = fid;
     }
 
@@ -40,4 +46,19 @@ public class SubscriptionQuery {
         this.type = type;
     }
 
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 }

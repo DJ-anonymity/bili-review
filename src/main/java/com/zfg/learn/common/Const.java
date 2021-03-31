@@ -15,7 +15,6 @@ public class Const {
     //用户seta
     public static final String SESSDATA = "SESSDATA=";
 
-
     //当前用户
     public static final String CURRENT_USER = "current_user";
 
@@ -24,6 +23,14 @@ public class Const {
         int MTIME_ASC = 1;
         int MTIME_DESC = 2;
         int LIKES_ASC = 3;
+    }
+
+    public interface Sub{
+        int TYPE_MEDIA= 0;
+        int TYPE_UP = 1;
+
+        int CANCEL = 0;
+        int FOLLOW = 1;
     }
 
     /**

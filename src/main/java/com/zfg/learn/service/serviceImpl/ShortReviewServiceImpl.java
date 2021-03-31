@@ -192,15 +192,6 @@ public class ShortReviewServiceImpl implements ShortReviewService {
         //先插入review表的数据
         shortReviewMapper.insertShortReviewList(shortReviewList);
         for (ShortReview shortReview:shortReviewList){
-            /* 这里使用try来执行插入用户信息语句，这样因为主键mid重复报错就不会导致程序中断执行，不重复就会直接插入成功
-             * 而且还不用再用select语句在几十w的数据中查询用户是否存在，节省了非常多的时间
-             * NEW: 使用ignore关键字可以直接使用sql处理主键重复问题，不需要在代码中处理，从而减少请求数量。
-             * *//*
-            try {
-                userMapper.insertUser(shortReview.getAuthor());
-            } catch (Exception e){
-
-            }*/
             //把user存成一个集合 一起插入
             BiliUser user = shortReview.getAuthor();
             userList.add(user);

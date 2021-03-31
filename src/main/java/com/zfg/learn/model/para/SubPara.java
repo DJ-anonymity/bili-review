@@ -8,24 +8,25 @@ import javax.validation.constraints.NotNull;
  */
 public class SubPara {
     //订阅的内容id
-    @NotBlank
-    private String fid;
+    @NotNull
+    private Integer fid;
 
     //订阅的内容类型
     @NotNull
     private Integer type;
 
+    //订阅状态
+    @NotNull
+    private Integer status;
+
     //订阅级别
     private Integer level;
 
-    //订阅状态
-    private Integer status;
-
-    public String getFid() {
+    public Integer getFid() {
         return fid;
     }
 
-    public void setFid(String fid) {
+    public void setFid(Integer fid) {
         this.fid = fid;
     }
 

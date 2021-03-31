@@ -3,6 +3,7 @@ package com.zfg.learn.service.serviceImpl;
 import com.alibaba.fastjson.JSONObject;
 import com.zfg.learn.common.Const;
 import com.zfg.learn.common.ResponseCode;
+import com.zfg.learn.dao.BiliUserMapper;
 import com.zfg.learn.dao.LongReviewMapper;
 import com.zfg.learn.dao.ShortReviewMapper;
 import com.zfg.learn.dao.UserMapper;
@@ -10,6 +11,7 @@ import com.zfg.learn.exception.ServiceException;
 import com.zfg.learn.model.bili.UserInfoBili;
 import com.zfg.learn.model.bo.UserReviewBo;
 import com.zfg.learn.model.para.UserPara;
+import com.zfg.learn.model.po.BiliUser;
 import com.zfg.learn.model.po.User;
 import com.zfg.learn.service.UserService;
 import com.zfg.learn.until.CatchApi;
@@ -38,6 +40,8 @@ public class UserServiceImpl implements UserService {
     RedisTemplate redisTemplate;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    BiliUserMapper biliUserMapper;
 
     CatchApi catchApi = new CatchApi();
 
@@ -71,8 +75,8 @@ public class UserServiceImpl implements UserService {
 
         //请求用户信息api
         String apiData = catchApi.getJsonFromApiByHeader(Const.Url.USER_INFO, hashMap);
-
         Integer code = JSONObject.parseObject(apiData).getInteger("code");
+
         if (code == ResponseCode.SUCCESS.getCode()){
             userInfoBili  = JSONObject.parseObject(apiData).getObject("data", UserInfoBili.class);
             return  userInfoBili;
@@ -196,5 +200,42 @@ public class UserServiceImpl implements UserService {
 
         return false;
     }
+
+    /**
+     * 通过mid
+     * @param mid
+     * @return
+     */
+    @Override
+    public BiliUser getBiliAccountByMid(Integer mid) {
+        BiliUser user = biliUserMapper.selectUserByMid(mid.intValue());
+
+        //数据库没有的时候就去访问B站api
+        if (user == null){
+            String json;
+
+            try {
+                json = catchApi.getJsonFromApi("https://api.bilibili.com/x/space/acc/info?jsonp=jsonp&mid="+mid);
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new ServiceException("服务器出现问题", 500);
+            }
+
+            JSONObject data = JSONObject.parseObject(json).getJSONObject("data");
+            if (data != null){
+                user = new BiliUser();
+                user.setUname(data.getString("name"));
+                user.setMid(data.getInteger("mid"));
+                user.setAvatar(data.getString("face"));
+
+                //插入数据库
+                biliUserMapper.insertUser(user);
+            } else {
+                user = null;
+            }
+        }
+        return user;
+    }
+
 
 }

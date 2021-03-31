@@ -2,6 +2,7 @@ package com.zfg.learn.service;
 
 import com.zfg.learn.model.bo.AnimationReviewBo;
 import com.zfg.learn.common.ServerResponse;
+import com.zfg.learn.model.po.Animation;
 
 import java.io.IOException;
 
@@ -11,7 +12,7 @@ public interface AnimationService {
 
     public AnimationReviewBo getReviewQuantity(Integer media_id) throws IOException;
 
-    public ServerResponse findAnimationByMedia_id(Integer media_id);
+    public Animation findAnimationByMedia_id(Integer media_id);
 
-    public ServerResponse pullNewAnimation(Integer media_id) throws IOException;
+    public Animation pullNewAnimation(Integer media_id) throws IOException;
 }

@@ -7,6 +7,9 @@
     <meta name="referrer" content="no-referrer" />
     <script src="http://apps.bdimg.com/libs/jquery/1.8.3/jquery.js"></script>
     <script src="js/common/until.js"></script>
+
+    <script src="js/common/component.js"></script>
+    <link rel="stylesheet" href="js/common/component.css">
     <style>
        .loading{
            width: 100px;
@@ -17,6 +20,7 @@
     </style>
 </head>
 <body>
+
    <!-- <form method="post" action="https://bangumi.bilibili.com/review/web_api/like">
         <input type="text" name="media_id" value="28224080">
         <input type="text" name="review_type" value="2">
@@ -24,8 +28,11 @@
         <input type="text" name="csrf" value="b0454daa7dfc8e76946600991164823e">
         <input type="submit" value="提交">
     </form>-->
+
     <input type="text" id="date-demo" name="zhong" value="100">
     <button onclick="getLoginUser()">go</button>
+
+    <button onclick="zb(1, 0)">史诗ss</button>
 </body>
 
 <script src="js/common/model.js"></script>
@@ -44,5 +51,9 @@
 
     var user2 = new User();
     console.log(JSON.stringify(user2));
+
+    function zb(a, b) {
+        console.log(a,b);
+    }
 </script>
 </html>

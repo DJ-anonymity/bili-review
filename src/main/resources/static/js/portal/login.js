@@ -20,7 +20,7 @@ function login(){
         dataType: "json",
         success: function (data) {
             if (data.status == Status.SUCCESS){
-                window.location.href = "index.html";
+                window.location.href = "sub.html";
             } else {
                 alert("账号密码有误");
             }

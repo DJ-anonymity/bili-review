@@ -4,6 +4,7 @@ import com.zfg.learn.common.ServerResponse;
 import com.zfg.learn.model.bili.UserInfoBili;
 import com.zfg.learn.model.bo.UserReviewBo;
 import com.zfg.learn.model.para.UserPara;
+import com.zfg.learn.model.po.BiliUser;
 import com.zfg.learn.model.po.User;
 
 import javax.mail.MessagingException;
@@ -65,4 +66,7 @@ public interface UserService {
     public void sendCheckNum(String email) throws MessagingException;
 
     Boolean checkEmail(String email);
+
+    BiliUser getBiliAccountByMid(Integer mid);
+
 }

@@ -221,7 +221,8 @@ public class CatchApi {
         connection.setRequestProperty("Content-Type", "application/json");
         //发送数据
         OutputStream outputStream = connection.getOutputStream();
-        PrintWriter printWriter = new PrintWriter(outputStream);
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, "utf-8");
+        PrintWriter printWriter = new PrintWriter(outputStreamWriter);
         printWriter.println(data);
         printWriter.flush();
 

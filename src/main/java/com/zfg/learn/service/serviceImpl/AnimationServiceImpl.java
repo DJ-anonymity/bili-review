@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.zfg.learn.exception.ServiceException;
 import com.zfg.learn.model.bo.AnimationReviewBo;
 import com.zfg.learn.common.ServerResponse;
 import com.zfg.learn.dao.AnimationMapper;
@@ -76,43 +77,29 @@ public class AnimationServiceImpl implements AnimationService {
     }
 
     @Override
-    public ServerResponse findAnimationByMedia_id(Integer media_id) {
+    public Animation findAnimationByMedia_id(Integer media_id) {
         Animation animation = animationMapper.selectAnimationByMedia_id(media_id);
-
-        if (animation == null){
-            return ServerResponse.createByErrorMessage("没找到");
-        }
-        return ServerResponse.createBySuccess(animation);
+        return animation;
     }
 
     @Transactional
     @Override
-    public ServerResponse pullNewAnimation(Integer media_id) throws IOException {
+    public Animation pullNewAnimation(Integer media_id) throws IOException {
         if (animationMapper.selectAnimationByMedia_id(media_id) != null){
-            return ServerResponse.createByErrorMessage("该剧已经拉取过");
+            throw new ServiceException("已经爬取过了");
         }
+
         String api = "https://api.bilibili.com/pgc/review/user?media_id="+media_id;
         String dataJson = catchApi.getJsonFromApi(api);
         JSONObject jsonObject = JSON.parseObject(dataJson);
         JSONObject result = jsonObject.getJSONObject("result");
         //获取番剧的基本信息
         Animation animation = result.getObject("media",Animation.class);
-     /*   //获取短评总数
-        String api2 = "https://api.bilibili.com/pgc/review/short/list?media_id="+media_id;
-        String dataJson2 = catchApi.getJsonFromApi(api2);
-        Integer short_review_total = JSON.parseObject(dataJson2).getJSONObject("data").getInteger("total");
-        //获取长评的总数
-        String api3 = "https://api.bilibili.com/pgc/review/long/list?media_id="+media_id;
-        String dataJson3 = catchApi.getJsonFromApi(api3);
-        Integer long_review_total = JSON.parseObject(dataJson3).getJSONObject("data").getInteger("total");
-        //设置评论数量并插入番剧内容
-        animation.setShort_review_total(short_review_total);
-        animation.setLong_review_total(long_review_total);*/
         animationMapper.insertAnimation(animation);
         //设置比分并插入数据库
         Rating rating = animation.getRating();
         rating.setMedia_id(media_id);
         ratingMapper.insertRating(rating);
-        return ServerResponse.createBySuccess();
+        return animation;
     }
 }

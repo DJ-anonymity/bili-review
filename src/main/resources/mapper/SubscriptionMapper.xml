@@ -4,19 +4,33 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.zfg.learn.dao.SubscriptionMapper">
+    <!--取代pagehelper自带的性能低下的查询语句-->
+    <select id="selectMediaFollows_COUNT" resultType="Long">
+        select count(*)from subscription
+        where status = 1
+        <if test="uid != null">
+            and uid = #{uid}
+        </if>
+    </select>
+    <select id="selectUpFollows_COUNT" resultType="Long">
+        select count(*)from subscription
+        where status = 1
+        <if test="uid != null">
+            and uid = #{uid}
+        </if>
+    </select>
 
-    <select id="selectFollowerByFid" resultType="Integer">
-        select uid
-        from subscription
-        where fid = #{fid}
+
+    <select id="selectFollowerByFid" resultType="Long">
+        select u.qq
+        from subscription s, user u
+        where s.uid = u.uid
+        and s.fid = #{fid}
     </select>
 
     <select id="selectByMultiple" parameterType="com.zfg.learn.model.query.SubscriptionQuery" resultType="com.zfg.learn.model.po.Subscription">
         select *from subscription
         where 1 = 1
-        <if test="id != null">
-            and id = #{id}
-        </if>
         <if test="uid != null">
             and uid = #{uid}
         </if>
@@ -32,14 +46,52 @@
         <if test="status != null">
             and status = #{status}
         </if>
-        <if test="ctime != null">
-            and ctime = #{ctime}
+    </select>
+
+    <select id="selectRelation" resultType="com.zfg.learn.model.po.Subscription">
+        select *from
+        subscription
+        where fid = #{fid}
+        and uid = #{uid}
+        and type = #{type}
+    </select>
+
+    <select id="selectMediaFollows" resultType="com.zfg.learn.model.dto.SubscriptionDto">
+        select s.type, s.status, s.fid,
+        a.title as name, a.cover as cover
+        from subscription s left join animation a
+        on s.fid = a.media_id
+        where status = 1
+        and type = 0
+        <if test="uid != null">
+            and uid = #{uid}
+        </if>
+    </select>
+
+    <select id="selectUpFollows" resultType="com.zfg.learn.model.dto.SubscriptionDto">
+        select s.type, s.status, s.fid,
+        b.uname as name, b.avatar as cover
+        from subscription s left join bili_user b
+        on s.fid = b.mid
+        where status = 1
+        and type = 1
+        <if test="uid != null">
+            and uid = #{uid}
         </if>
     </select>
 
     <insert id="insert" parameterType="com.zfg.learn.model.po.Subscription">
        insert into subscription
-       (uid, fid, type, ctime)
-       values (#{uid}, #{fid}, #{type}, #{ctime})
+       (uid, fid, type, mtime, ctime)
+       values (#{uid}, #{fid}, #{type} ,#{mtime}, #{ctime})
     </insert>
+
+    <update id="updateStatus" parameterType="com.zfg.learn.model.po.Subscription">
+        update subscription
+        set status = #{status},
+        mtime = #{mtime}
+        where fid = #{fid}
+        and uid = #{uid}
+        and type = #{type}
+    </update>
 </mapper>

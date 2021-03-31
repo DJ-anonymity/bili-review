@@ -1,6 +1,7 @@
 package com.zfg.learn.controller.admin;
 
 import com.zfg.learn.common.ServerResponse;
+import com.zfg.learn.model.po.Animation;
 import com.zfg.learn.service.AnimationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,8 @@ public class AnimationManageController {
         if (media_id == null){
             return ServerResponse.createByErrorCodeMessage(2,"参数为空");
         }
-        return animationService.pullNewAnimation(media_id);
+
+        animationService.pullNewAnimation(media_id);
+        return ServerResponse.createBySuccess();
     }
 }
