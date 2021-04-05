@@ -52,10 +52,10 @@ public class SeleniumDemo {
         cookies.stream().forEach(e ->
                 webDriver.manage().addCookie(e));
 
-        webDriver.get("https://www.bilibili.com/bangumi/media/md4316482");
+        webDriver.get("https://space.bilibili.com/16147205");
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         //Thread.sleep(2000);
-        WebElement element = webDriver.findElement(new By.ByClassName("btn-follow"));
+        WebElement element = webDriver.findElement(new By.ByCssSelector(".h-f-btn.h-follow"));
         element.click();
 
         //webDriver2.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);

@@ -5,6 +5,7 @@ spring:
     password: illya0415
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://bootzhong.top:3306/bili?useUnicode=true&charaterEncoding=UTF-8&serverTimezone=UTC
+#    url: jdbc:mysql://localhost:3306/bili?useUnicode=true&charaterEncoding=UTF-8&serverTimezone=UTC
 
 #  datasource:
 #    driver-class-name: com.mysql.cj.jdbc.Driver
@@ -48,7 +49,7 @@ spring:
 
 #服务器配置
 server:
-  port: 8081
+  port: 8082
   servlet:
     context-path: /bili
 
