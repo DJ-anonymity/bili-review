@@ -4,7 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zfg.learn.common.Const;
 import com.zfg.learn.config.BeanContext;
-import com.zfg.learn.model.bo.PublicTask;
+import com.zfg.learn.model.po.Dynamic;
+import com.zfg.learn.model.po.DynamicStat;
 import com.zfg.learn.until.CatchApi;
 import com.zfg.learn.until.DynamicBlockingQueue;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 
 /**
  * type 1:动态转发 2：自己发表的动态 4：自己发表的无图片动态 8：视频投稿 动漫：512
+ * 4308：直播 64：专栏
  * 暂时一次只推送20条
  */
 public class DynamicListener extends Thread{
@@ -48,13 +50,13 @@ public class DynamicListener extends Thread{
         if (cookie == null){
             return;
         }
-        hashMap.put(Const.COOKIE, cookie);
         while (true){
             try {
                 //2s监听一次
                 Thread.sleep(2000);
 
                 Long cursor = (Long) redisTemplate.opsForValue().get("dynamic:cursor");
+                hashMap.put(Const.COOKIE, cookie);
                 json = catchApi.getJsonFromApiByHeader(DYNAMIC_URL, hashMap);
                 JSONObject data = JSONObject.parseObject(json).getJSONObject("data");
                 //如果已经是最新的了 则跳出本次循环
@@ -68,54 +70,94 @@ public class DynamicListener extends Thread{
 
                 JSONArray jsonArray = data.getJSONArray("cards");
                 for (int i = 0;i < jsonArray.size();i++){
-                    PublicTask task = new PublicTask();
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
 
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
                     JSONObject desc = jsonObject.getJSONObject("desc");
+
                     //已经推送过了
                     Long dynamic_id = desc.getLong("dynamic_id");
                     if (dynamic_id.equals(cursor)){
                         break;
                     }
 
+                    Dynamic dynamic = new Dynamic();
                     JSONObject card = jsonObject.getJSONObject("card");
-                    if (desc.getInteger("type") == 2){
-                        task.setPid(desc.getInteger("uid"));
-                        task.setTitle(card.getJSONObject("item").getString("title"));
-                        task.setUname(card.getJSONObject("user").getString("name"));
-                        task.setDescription(card.getJSONObject("item").getString("description"));
-                        task.setUrl("https://t.bilibili.com/"+dynamic_id+"?tab=2");
-                    } else if (desc.getInteger("type") == 4){
-                        task.setPid(desc.getInteger("uid"));
-                        task.setTitle(card.getJSONObject("item").getString("content"));
-                        task.setUname(card.getJSONObject("user").getString("uname"));
-                        //task.setDescription(card.getJSONObject("item").getString("description"));
-                        task.setDescription("");
-                        task.setUrl("https://t.bilibili.com/"+dynamic_id+"?tab=2");
-                    } else if (desc.getInteger("type") == 1){
-                        task.setPid(desc.getInteger("uid"));
-                        task.setTitle(card.getJSONObject("item").getString("content"));
-                        task.setUname(card.getJSONObject("user").getString("uname"));
-                        //task.setDescription(card.getJSONObject("item").getString("description"));
-                        task.setDescription("");
-                        task.setUrl("https://t.bilibili.com/"+dynamic_id+"?tab=2");
-                    } else if (desc.getInteger("type") == 8){
-                        task.setPid(desc.getInteger("uid"));
-                        task.setTitle(card.getJSONObject("stat").getString("title"));
-                        task.setUname(card.getJSONObject("owner").getString("name"));
-                        //task.setDescription(card.getJSONObject("item").getString("description"));
-                        task.setDescription("");
-                        task.setUrl(card.getString("jump_url"));
-                    } else if (desc.getInteger("type") == 512) {
+                    JSONObject userInfo = desc.getJSONObject("user_profile").getJSONObject("info");
+                    if (desc.getInteger("type") == Const.Dynamic.NORMAL){
+                        dynamic.setId(desc.getLong("dynamic_id"));
+                        dynamic.setAuthorId(userInfo.getLong("uid"));
+                        dynamic.setAuthorName(userInfo.getString("uname"));
+                        dynamic.setContent(card.getJSONObject("item").getString("description"));
+                        dynamic.setUrl("https://t.bilibili.com/" + desc.getLong("dynamic_id"));
+                        dynamic.setImg(card.getJSONArray("pictures").getJSONObject(0).getString("img_src"));
+                        dynamic.setType(Const.Dynamic.NORMAL);
+                    } else if (desc.getInteger("type") == Const.Dynamic.NORMAL_NO_IMG){
+                        dynamic.setId(desc.getLong("dynamic_id"));
+                        dynamic.setAuthorId(userInfo.getLong("uid"));
+                        dynamic.setAuthorName(userInfo.getString("uname"));
+                        dynamic.setContent(card.getJSONObject("item").getString("content"));
+                        dynamic.setUrl("https://t.bilibili.com/"+dynamic_id+"?tab=2");
+                        dynamic.setType(Const.Dynamic.NORMAL_NO_IMG);
+                    } else if (desc.getInteger("type") == Const.Dynamic.FORWARD){
+                        dynamic.setId(desc.getLong("dynamic_id"));
+                        dynamic.setAuthorId(userInfo.getLong("uid"));
+                        dynamic.setAuthorName(userInfo.getString("uname"));
+                        dynamic.setContent(card.getJSONObject("item").getString("content"));
+                        dynamic.setUrl("https://t.bilibili.com/" + desc.getLong("dynamic_id"));
+                        dynamic.setType(Const.Dynamic.FORWARD);
+
+                        DynamicStat stat = new DynamicStat();
+                        JSONObject origin = card.getJSONObject("origin");
+                        stat.setDescription(origin.getString("description"));
+                        stat.setImg(origin.getJSONArray("pictures").getJSONObject(0).getString("img_src"));
+                        dynamic.setStat(stat);
+                    } else if (desc.getInteger("type") == Const.Dynamic.VIDEO_UP){
+                        dynamic.setId(desc.getLong("dynamic_id"));
+                        dynamic.setAuthorId(userInfo.getLong("uid"));
+                        dynamic.setAuthorName(userInfo.getString("uname"));
+                        //设置专栏url
+                        dynamic.setContent(card.getString("dynamic"));
+                        dynamic.setUrl("https://www.bilibili.com/video/" + desc.getString("bvid"));
+                        dynamic.setType(Const.Dynamic.VIDEO_UP);
+
+                        DynamicStat stat = new DynamicStat();
+                        stat.setTitle(card.getString("title"));
+                        stat.setDescription(card.getString("desc"));
+                        stat.setImg(card.getString("pic"));
+                        dynamic.setStat(stat);
+                    } else if (desc.getInteger("type") == Const.Dynamic.MEDIA) {
                         //todo 影剧没有media_id o(╥﹏╥)o
-                        task.setTitle(card.getJSONObject("apiSeasonInfo").getString("title"));
-                        //task.setUname(card.getJSONObject("item").getString("name"));
-                        task.setUname("");
-                        task.setDescription(card.getString("new_desc"));
-                        task.setUrl(card.getString("url"));
+                    } else if (desc.getInteger("type") == Const.Dynamic.LIVE) {
+                        JSONObject live_play_info = card.getJSONObject("live_play_info");
+
+                        dynamic.setId(desc.getLong("dynamic_id"));
+                        dynamic.setAuthorId(userInfo.getLong("uid"));
+                        dynamic.setAuthorName(userInfo.getString("uname"));
+                        dynamic.setUrl(live_play_info.getString("link"));
+                        dynamic.setType(4308);
+
+                        DynamicStat stat = new DynamicStat();
+                        stat.setTitle(live_play_info.getString("title"));
+                        //直播的description为直播标签
+                        stat.setDescription(live_play_info.getString("area_name"));
+                        dynamic.setStat(stat);
+                    } else if (desc.getInteger("type") == Const.Dynamic.ARTICLE) {
+                        dynamic.setId(desc.getLong("dynamic_id"));
+                        dynamic.setAuthorId(userInfo.getLong("uid"));
+                        dynamic.setAuthorName(userInfo.getString("uname"));
+                        //设置专栏url
+                        dynamic.setUrl("https://www.bilibili.com/read/cv" + card.getLong("id"));
+                        dynamic.setType(Const.Dynamic.ARTICLE);
+
+                        DynamicStat stat = new DynamicStat();
+                        stat.setTitle(card.getString("title"));
+                        stat.setDescription(card.getString("summary"));
+                        stat.setImg((String) card.getJSONArray("image_urls").get(0));
+                        dynamic.setStat(stat);
                     }
 
-                    dynamicQueue.add(task);
+
+                    dynamicQueue.add(dynamic);
                 }
 
             } catch (IOException e) {

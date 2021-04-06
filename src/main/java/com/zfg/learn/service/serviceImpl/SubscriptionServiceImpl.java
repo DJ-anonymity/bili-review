@@ -1,27 +1,20 @@
 package com.zfg.learn.service.serviceImpl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zfg.learn.common.Const;
 import com.zfg.learn.dao.SubscriptionMapper;
 import com.zfg.learn.exception.SeleniumException;
 import com.zfg.learn.exception.ServiceException;
-import com.zfg.learn.model.bo.PublicTask;
 import com.zfg.learn.model.dto.SubscriptionDto;
 import com.zfg.learn.model.po.Subscription;
-import com.zfg.learn.model.query.SubscriptionQuery;
 import com.zfg.learn.service.SubscriptionService;
-import com.zfg.learn.until.CatchApi;
 import com.zfg.learn.until.SeleniumBiliUntil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 订阅
@@ -92,23 +85,6 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         return subMapper.selectRelation(uid, fid, type);
     }
 
-    @Override
-    public void pushDynamic(PublicTask task) {
-        List<Long> qqList = subMapper.selectFollowerByFid(task.getPid());
-        if (!CollectionUtils.isEmpty(qqList)){
-            task.setRecList(qqList);
-        }
-
-        task.setRecList(qqList);
-
-        CatchApi catchApi = new CatchApi();
-        try {
-            catchApi.request("http://127.0.0.1:8081/robot/push", JSONObject.toJSONString(task));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 
 
 }

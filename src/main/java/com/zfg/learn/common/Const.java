@@ -43,4 +43,14 @@ public class Const {
     public interface Path{
         String CHROME_EXTENSION = "C:\\Users\\zhong\\Desktop\\毕业设计\\毕业设计\\钟房桂\\谷歌插件\\chrome插件.zip";
     }
+
+    public interface Dynamic{
+        int FORWARD = 1; //转发
+        int NORMAL = 2; //自己发表的动态
+        int NORMAL_NO_IMG = 4; //自己发表的没有照片的动态
+        int VIDEO_UP = 8; //视频投稿
+        int MEDIA = 512; //影剧动漫
+        int LIVE = 4308; //直播
+        int ARTICLE = 64; //专栏
+    }
 }
