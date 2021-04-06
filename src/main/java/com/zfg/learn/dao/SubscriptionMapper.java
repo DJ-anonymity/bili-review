@@ -25,7 +25,7 @@ public interface SubscriptionMapper {
      * @param fid
      * @return
      */
-    List<Long> selectFollowerByFid(@Param("fid") Integer fid);
+    List<Long> selectFollowerByFid(@Param("fid") Long fid);
 
     /**
      * 自定义条件查询 不建议经常使用

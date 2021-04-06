@@ -17,6 +17,7 @@ public class SeleniumBiliUntil {
     private Boolean initialized = false;
     private final String INI_URL = "https://www.bilibili.com/";
     private static SeleniumBiliUntil seleniumBiliUntil;
+    private String token;
 
     private SeleniumBiliUntil(){
 
@@ -46,6 +47,9 @@ public class SeleniumBiliUntil {
         //添加cookie
         for (Cookie cookie:cookies){
             webDriver.manage().addCookie(cookie);
+
+            if (cookie.getName().equals("SESSDATA"))
+                token = cookie.getName()+"="+cookie.getValue();
         }
 
         //刷新
@@ -102,6 +106,10 @@ public class SeleniumBiliUntil {
             element = webDriver.findElement(new By.ByCssSelector(".h-f-btn.h-follow"));
         }
         element.click();
+    }
+
+    public boolean isInitialized(){
+        return initialized;
     }
 
     public interface Type{

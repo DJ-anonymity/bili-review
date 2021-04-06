@@ -24,7 +24,7 @@ public class DynamicConsumer extends Thread{
 
     @Override
     public void run() {
-        while (true){
+        while (true) {
             Dynamic dynamic;
             try {
                 dynamic = queue.take();

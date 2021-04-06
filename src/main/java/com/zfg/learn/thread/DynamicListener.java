@@ -19,6 +19,7 @@ import java.util.HashMap;
  * 暂时一次只推送20条
  */
 public class DynamicListener extends Thread{
+    private boolean isStop = false;
     private DynamicBlockingQueue dynamicQueue = DynamicBlockingQueue.getInstance();
     private static DynamicListener dynamicListener;
     private volatile String cookie; //保证内存可见性
@@ -52,6 +53,17 @@ public class DynamicListener extends Thread{
         }
         while (true){
             try {
+                //如果停止工作则进入睡眠状态 等待唤醒
+                if (isStop){
+                    synchronized (this){
+                        try {
+                            wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
                 //2s监听一次
                 Thread.sleep(2000);
 
@@ -84,35 +96,35 @@ public class DynamicListener extends Thread{
                     JSONObject card = jsonObject.getJSONObject("card");
                     JSONObject userInfo = desc.getJSONObject("user_profile").getJSONObject("info");
                     if (desc.getInteger("type") == Const.Dynamic.NORMAL){
-                        dynamic.setId(desc.getLong("dynamic_id"));
+                        dynamic.setId(dynamic_id);
                         dynamic.setAuthorId(userInfo.getLong("uid"));
                         dynamic.setAuthorName(userInfo.getString("uname"));
                         dynamic.setContent(card.getJSONObject("item").getString("description"));
-                        dynamic.setUrl("https://t.bilibili.com/" + desc.getLong("dynamic_id"));
-                        dynamic.setImg(card.getJSONArray("pictures").getJSONObject(0).getString("img_src"));
+                        dynamic.setUrl("https://t.bilibili.com/" + dynamic_id);
+                        dynamic.setImg(card.getJSONObject("item").getJSONArray("pictures").getJSONObject(0).getString("img_src"));
                         dynamic.setType(Const.Dynamic.NORMAL);
                     } else if (desc.getInteger("type") == Const.Dynamic.NORMAL_NO_IMG){
-                        dynamic.setId(desc.getLong("dynamic_id"));
+                        dynamic.setId(dynamic_id);
                         dynamic.setAuthorId(userInfo.getLong("uid"));
                         dynamic.setAuthorName(userInfo.getString("uname"));
                         dynamic.setContent(card.getJSONObject("item").getString("content"));
                         dynamic.setUrl("https://t.bilibili.com/"+dynamic_id+"?tab=2");
                         dynamic.setType(Const.Dynamic.NORMAL_NO_IMG);
                     } else if (desc.getInteger("type") == Const.Dynamic.FORWARD){
-                        dynamic.setId(desc.getLong("dynamic_id"));
+                        dynamic.setId(dynamic_id);
                         dynamic.setAuthorId(userInfo.getLong("uid"));
                         dynamic.setAuthorName(userInfo.getString("uname"));
                         dynamic.setContent(card.getJSONObject("item").getString("content"));
-                        dynamic.setUrl("https://t.bilibili.com/" + desc.getLong("dynamic_id"));
+                        dynamic.setUrl("https://t.bilibili.com/" + dynamic_id);
                         dynamic.setType(Const.Dynamic.FORWARD);
 
                         DynamicStat stat = new DynamicStat();
                         JSONObject origin = card.getJSONObject("origin");
                         stat.setDescription(origin.getString("description"));
-                        stat.setImg(origin.getJSONArray("pictures").getJSONObject(0).getString("img_src"));
+                        stat.setImg(origin.getJSONObject("item").getJSONArray("pictures").getJSONObject(0).getString("img_src"));
                         dynamic.setStat(stat);
                     } else if (desc.getInteger("type") == Const.Dynamic.VIDEO_UP){
-                        dynamic.setId(desc.getLong("dynamic_id"));
+                        dynamic.setId(dynamic_id);
                         dynamic.setAuthorId(userInfo.getLong("uid"));
                         dynamic.setAuthorName(userInfo.getString("uname"));
                         //设置专栏url
@@ -130,7 +142,7 @@ public class DynamicListener extends Thread{
                     } else if (desc.getInteger("type") == Const.Dynamic.LIVE) {
                         JSONObject live_play_info = card.getJSONObject("live_play_info");
 
-                        dynamic.setId(desc.getLong("dynamic_id"));
+                        dynamic.setId(dynamic_id);
                         dynamic.setAuthorId(userInfo.getLong("uid"));
                         dynamic.setAuthorName(userInfo.getString("uname"));
                         dynamic.setUrl(live_play_info.getString("link"));
@@ -142,7 +154,7 @@ public class DynamicListener extends Thread{
                         stat.setDescription(live_play_info.getString("area_name"));
                         dynamic.setStat(stat);
                     } else if (desc.getInteger("type") == Const.Dynamic.ARTICLE) {
-                        dynamic.setId(desc.getLong("dynamic_id"));
+                        dynamic.setId(dynamic_id);
                         dynamic.setAuthorId(userInfo.getLong("uid"));
                         dynamic.setAuthorName(userInfo.getString("uname"));
                         //设置专栏url
@@ -170,9 +182,27 @@ public class DynamicListener extends Thread{
                 e.printStackTrace();
                 System.out.println("注意处理该异常!!!!!");
             }
-
         }
     }
 
+    /**
+     * 继续运行
+     */
+    public void goOn(){
+        synchronized (this){
+            notify();
+        }
+        isStop = false;
+    }
 
+    /**
+     * 停止运行
+     */
+    public void pause(){
+        this.isStop = true;
+    }
+
+    public boolean isStop(){
+        return this.isStop;
+    }
 }
