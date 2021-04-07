@@ -3,6 +3,7 @@ package com.zfg.learn.service.serviceImpl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zfg.learn.common.Const;
+import com.zfg.learn.common.UserEnum;
 import com.zfg.learn.dao.SubscriptionMapper;
 import com.zfg.learn.exception.SeleniumException;
 import com.zfg.learn.exception.ServiceException;
@@ -36,6 +37,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             Subscription originalSub = subMapper.selectRelation(subscription.getUid(), subscription.getFid(), subscription.getType());
 
             if (originalSub == null){
+                //如果是插入操作则设置创建时间
                 subscription.setCtime(subscription.getMtime());
                 subMapper.insert(subscription);
             } else {
@@ -43,13 +45,23 @@ public class SubscriptionServiceImpl implements SubscriptionService {
             }
         }
 
-        //已经关注的怎么处理
-
+        //如果操作是关注 则使用B站Bot账号关注
         if (subscription.getStatus() == Const.Sub.FOLLOW){
-            //同时使用 b站账号关注 关注失败则抛出异常回滚事务 todo 关注不能太过频繁 待处理
+            //先查询Bot是否已经关注过该内容了
+            Subscription sub = subMapper.selectRelation(UserEnum.BOT.getUid(), subscription.getFid(), subscription.getType());
+            if (sub != null){
+                return;
+            }
+
             try {
+                //通过sn操作bot账号去关注内容
                 SeleniumBiliUntil selenium = SeleniumBiliUntil.getInstance();
                 selenium.subscribe(subscription.getFid(), subscription.getType());
+
+                //关注成功后让bot订阅该内容然后插入数据库
+                Subscription botSub = subscription;
+                botSub.setUid(UserEnum.BOT.getUid());
+                subMapper.insert(botSub);
             } catch (SeleniumException e) {
                 e.printStackTrace();
                 throw new ServiceException(e.getMessage());
