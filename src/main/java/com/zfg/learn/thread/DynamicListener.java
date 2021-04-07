@@ -17,6 +17,7 @@ import java.util.HashMap;
  * type 1:动态转发 2：自己发表的动态 4：自己发表的无图片动态 8：视频投稿 动漫：512
  * 4308：直播 64：专栏
  * 暂时一次只推送20条
+ * todo 优化代码优雅度
  */
 public class DynamicListener extends Thread{
     private boolean isStop = false;
@@ -69,6 +70,7 @@ public class DynamicListener extends Thread{
 
                 Long cursor = (Long) redisTemplate.opsForValue().get("dynamic:cursor");
                 hashMap.put(Const.COOKIE, cookie);
+                //请求Api并获取数据
                 json = catchApi.getJsonFromApiByHeader(DYNAMIC_URL, hashMap);
                 JSONObject data = JSONObject.parseObject(json).getJSONObject("data");
                 //如果已经是最新的了 则跳出本次循环
@@ -77,6 +79,7 @@ public class DynamicListener extends Thread{
                     Thread.sleep(5000);
                     continue;
                 } else {
+                    //设置最新页码
                     redisTemplate.opsForValue().set("dynamic:cursor", data.getLong("max_dynamic_id"));
                 }
 
