@@ -1,5 +1,6 @@
 package com.zfg.learn.until;
 
+import com.zfg.learn.common.Path;
 import com.zfg.learn.exception.SeleniumException;
 import com.zfg.learn.exception.ServiceException;
 import org.openqa.selenium.By;
@@ -38,8 +39,14 @@ public class SeleniumBiliUntil {
      * @param cookies
      */
     public void initialized(Set<Cookie> cookies){
-        System.setProperty("webdriver.chrome.driver", "E:/zfg/chromedriver.exe");
-        webDriver = new ChromeDriver();
+        System.setProperty("webdriver.chrome.driver", Path.DRIVER);
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.setHeadless(true);
+        chromeOptions.addArguments("--no-sandbox");//root 权限
+        chromeOptions.addArguments("--disable-gpu");//谷歌文档提到需要加上这个属性来规避bug
+        chromeOptions.addArguments("--disable-dev-shm-usage");//
+
+        webDriver = new ChromeDriver(chromeOptions);
         webDriver.get(INI_URL);
         //与浏览器同步非常重要，必须等待浏览器加载完毕
         webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);

@@ -63,13 +63,13 @@ public class DynamicServiceImpl implements DynamicService {
         if (dynamic.getType() != Const.Dynamic.NORMAL && dynamic.getType() != Const.Dynamic.NORMAL_NO_IMG){
             DynamicStat stat = dynamic.getStat();
 
-            if (dynamic.getType() == Const.Dynamic.NORMAL != StringUtils.isEmpty(dynamic.getImg())){
+            if (!StringUtils.isEmpty(stat.getTitle())){
                 txt+= stat.getTitle()+"\n";
             }
-            if (dynamic.getType() == Const.Dynamic.NORMAL != StringUtils.isEmpty(dynamic.getImg())){
+            if (!StringUtils.isEmpty(stat.getDescription())){
                 txt+= stat.getDescription()+"\n";
             }
-            if (dynamic.getType() == Const.Dynamic.NORMAL != StringUtils.isEmpty(dynamic.getImg())){
+            if (!StringUtils.isEmpty(stat.getImg())){
                 img = stat.getImg();
             }
         }

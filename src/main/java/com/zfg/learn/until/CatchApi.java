@@ -190,7 +190,6 @@ public class CatchApi {
             }
 
             result = sbf.toString();
-            System.out.println(sbf);
         } else {
             System.out.println("link fault");
         }

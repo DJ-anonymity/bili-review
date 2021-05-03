@@ -121,10 +121,20 @@ public class DynamicListener extends Thread{
                         dynamic.setUrl("https://t.bilibili.com/" + dynamic_id);
                         dynamic.setType(Const.Dynamic.FORWARD);
 
+                        //8 即为转发的是视频
                         DynamicStat stat = new DynamicStat();
-                        JSONObject origin = card.getJSONObject("origin");
-                        stat.setDescription(origin.getString("description"));
-                        stat.setImg(origin.getJSONObject("item").getJSONArray("pictures").getJSONObject(0).getString("img_src"));
+                        if (desc.getInteger("orig_type") == 8){
+                            JSONObject origin = card.getJSONObject("origin");
+                            stat.setTitle(origin.getString("title"));
+                            stat.setImg(origin.getString("pic"));
+                        } else {
+                            JSONObject origin = card.getJSONObject("origin");
+                            stat.setDescription(origin.getString("description"));
+                            JSONObject item = origin.getJSONObject("item");
+                            if (item.getJSONArray("pictures") != null && item.getJSONArray("pictures").size() > 0){
+                                stat.setImg(item.getJSONArray("pictures").getJSONObject(0).getString("img_src"));
+                            }
+                        }
                         dynamic.setStat(stat);
                     } else if (desc.getInteger("type") == Const.Dynamic.VIDEO_UP){
                         dynamic.setId(dynamic_id);

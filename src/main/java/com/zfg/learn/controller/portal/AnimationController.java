@@ -33,13 +33,14 @@ public class AnimationController {
         if (animation == null){
             animation = animationService.pullNewAnimation(media_id);
             if (animation == null){
-                return ServerResponse.createBySuccess();
+                return ServerResponse.createByErrorMessage("该影剧不存在");
             }
         }
 
         AnimationDto animationDto = new AnimationDto();
         BeanUtils.copyProperties(animation, animationDto);
 
+        //显示订阅状态
         Object currentUser = session.getAttribute(Const.CURRENT_USER);
         if (currentUser != null){
             User user = (User) currentUser;
