@@ -1,8 +1,10 @@
 package com.zfg.learn.service.serviceImpl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.zfg.learn.common.Const;
 import com.zfg.learn.common.ResponseCode;
+import com.zfg.learn.common.ServerResponse;
 import com.zfg.learn.dao.BiliUserMapper;
 import com.zfg.learn.dao.LongReviewMapper;
 import com.zfg.learn.dao.ShortReviewMapper;
@@ -16,6 +18,7 @@ import com.zfg.learn.model.po.User;
 import com.zfg.learn.service.UserService;
 import com.zfg.learn.until.CatchApi;
 import com.zfg.learn.until.EmailUntil;
+import org.apache.kafka.common.errors.ApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -114,6 +117,32 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 更新
+     */
+    @Override
+    @Transactional
+    public boolean update(UserPara user) {
+        //更新之前先判断改qq是不是已经添加bot为好友
+        Long qq = user.getQq();
+        if (qq != null){
+            try {
+                String result = catchApi.getJsonFromApi("http://127.0.0.1:8081/qqbot/friend/"+qq, "POST");
+                ServerResponse response = JSON.parseObject(result, ServerResponse.class);
+                if (response.getStatus() != ResponseCode.SUCCESS.getCode()){
+                    throw new ServiceException("请先添加我为好友");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new ServiceException("qqbot服务访问失败");
+            }
+        }
+
+        //执行更新操作
+        userMapper.updateMultipleByUid(user);
+        return true;
+    }
+
+    /**
      * 登录
      */
     @Override
@@ -133,12 +162,13 @@ public class UserServiceImpl implements UserService {
     /**
      * 绑定B站账号
      */
+    @Transactional
     @Override
     public boolean bindBiliCount(User user) {
         Integer status = userMapper.bindBiliCount(user);
+        //绑定成功后修改用户权限
         if (status > 0){
-            //更新redis信息 暂时redis没有用
-            //redisTemplate.opsForValue().set(RedisConst.COOKIE + user.getMid(), user.getCookie());
+            userMapper.updateRoleByUid(2, user.getUid());
             return true;
         } else {
             return false;

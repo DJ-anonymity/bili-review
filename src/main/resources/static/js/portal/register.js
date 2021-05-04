@@ -1,5 +1,7 @@
 window.onload = function (){
-    getBiliUser();
+    /*getBiliUser();
+    * 注册不需要token了
+    * */
 
     document.getElementById("btn-yzm").addEventListener("click", function (event){
         getCheckNum();

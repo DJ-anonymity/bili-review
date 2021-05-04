@@ -61,27 +61,11 @@ public class UserController {
 
     //注册
     @PostMapping("/register")
-    public ServerResponse register(@RequestBody @Validated(User.Register.class) UserPara user, HttpSession session) throws IOException {
-        Object cookie = session.getAttribute(Const.COOKIE);
-        if (cookie == null){
-            return ServerResponse.createByErrorMessage("请先打开插件");
-        }
-
+    public ServerResponse register(@RequestBody @Validated(User.Register.class) UserPara user) throws IOException {
         //验证用户名和邮箱是否合法
         boolean result = userService.checkName(user.getUsername());
         Boolean result2 = userService.checkEmail(user.getEmail());
-
         if (result && result2){
-            String loginCookie = cookie.toString();
-
-            //通过cookie去b站获取信息
-            UserInfoBili userInfoBili = userService.getBiliAcountByCookie(loginCookie);
-            if (userInfoBili == null){
-                return ServerResponse.createByErrorMessage("请重新打开插件");
-            }
-
-            user.setCookie(loginCookie);
-            user.setMid(userInfoBili.getMid());
             boolean registerResult = userService.register(user);
 
             if (registerResult){
@@ -92,6 +76,47 @@ public class UserController {
         } else {
             return ServerResponse.createByErrorMessage("用户名称或邮箱已存在");
         }
+    }
+
+    //更新
+    @PostMapping("/update")
+    public ServerResponse updateUserInfo(@RequestBody UserPara user ,HttpSession session) {
+        User userLogin = (User) session.getAttribute(Const.CURRENT_USER);
+        if (!userLogin.getUsername().equals(user.getUsername())){
+            boolean result = userService.checkName(user.getUsername());
+            if (!result){
+                return ServerResponse.createByErrorMessage("用户名称已存在");
+            }
+        }
+
+        user.setUid(userLogin.getUid());
+        userService.update(user);
+        //更新成功则需要重新登录
+        session.removeAttribute(Const.CURRENT_USER);
+        return  ServerResponse.createBySuccess();
+    }
+
+    //绑定B站账号
+    @PostMapping("/bind")
+    public ServerResponse bindBili(HttpSession session) throws IOException {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        Object cookie = session.getAttribute(Const.COOKIE);
+        if (cookie == null){
+            return ServerResponse.createByErrorMessage("请先打开插件");
+        }
+
+        String loginCookie = cookie.toString();
+        //通过cookie去b站获取信息
+        UserInfoBili userInfoBili = userService.getBiliAcountByCookie(loginCookie);
+        if (userInfoBili == null){
+            return ServerResponse.createByErrorMessage("请重新打开插件");
+        }
+
+        user.setCookie(loginCookie);
+        user.setMid(userInfoBili.getMid());
+        //绑定
+        userService.bindBiliCount(user);
+        return ServerResponse.createBySuccess();
     }
 
     //检查用户名是否重复
@@ -121,7 +146,7 @@ public class UserController {
         return ServerResponse.createBySuccess(userIsLogin);
     }
 
-    //绑定B站账号
+    /*//绑定B站账号
     @PostMapping("/bili/bind")
     public ServerResponse bindBiliAccount(HttpSession session){
         User user = (User) session.getAttribute(Const.CURRENT_USER);
@@ -139,6 +164,17 @@ public class UserController {
             return ServerResponse.createByErrorMessage("请先通过插件获取登录权限");
         }
 
+    }*/
+
+    //获取登陆用户的信息
+    @GetMapping("/info")
+    public ServerResponse getLoginInfo(HttpSession session) throws IOException {
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        if (user == null){
+            return ServerResponse.createByErrorMessage("请先登陆");
+        }
+
+        return ServerResponse.createBySuccess(user);
     }
 
     //获取当前用户的好友列表
@@ -191,7 +227,7 @@ public class UserController {
 
     //判断现在用户的cookie是否存在 如果存在则返回用户信息
     @GetMapping("/bili/info")
-    public ServerResponse getLoginStatus(HttpSession session) throws IOException {
+    public ServerResponse getBiliLoginStatus(HttpSession session) throws IOException {
         Object ck = session.getAttribute(Const.COOKIE);
         if (ck == null){
             return ServerResponse.createByErrorMessage("请先使用插件获取权限");

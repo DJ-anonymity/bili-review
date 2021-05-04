@@ -1,6 +1,5 @@
 package com.zfg.learn.until;
 
-import com.alibaba.fastjson.JSONObject;
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -16,9 +15,15 @@ import java.util.Map;
 * */
 @SpringBootTest
 public class CatchApi {
+    public final String METHOD_DEFAULT = "GET";
 
     //获取输入的api的数据
     public String getJsonFromApi(String originalUrl) throws IOException {
+        return getJsonFromApi(METHOD_DEFAULT);
+    }
+
+    //获取输入的api的数据
+    public String getJsonFromApi(String originalUrl, String method) throws IOException {
         String result = "";
         URL url = new URL(originalUrl);
 
@@ -36,7 +41,7 @@ public class CatchApi {
         // 设置重连次数为五次
         /*connection.setChunkedStreamingMode(5);*/
         //请求方式为get
-        connection.setRequestMethod("GET");
+        connection.setRequestMethod(method);
         /*connection.setRequestProperty("Content-Type", "application/json");*/
         // 通过连接对象获取一个输入流，向远程读取
         if (connection.getResponseCode() == 200) {

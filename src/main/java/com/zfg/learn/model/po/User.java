@@ -10,7 +10,6 @@ import javax.validation.constraints.NotBlank;
  * @author bootzhong
  */
 public class User {
-
     @ApiModelProperty(notes = "主键")
     private Integer uid;
 
@@ -29,11 +28,17 @@ public class User {
     @ApiModelProperty(notes = "邮箱")
     private String email;
 
+    @ApiModelProperty(notes = "qq")
+    private Long qq;
+
     @ApiModelProperty(notes = "b站账号id")
     private String mid;
 
     @ApiModelProperty(notes = "b站登陆cookie")
     private String cookie;
+
+    @ApiModelProperty(notes = "权限 1：未绑定b站 2：普通用户 666：管理员")
+    private Integer role;
 
     public interface Register{
 
@@ -79,6 +84,14 @@ public class User {
         this.email = email;
     }
 
+    public Long getQq() {
+        return qq;
+    }
+
+    public void setQq(Long qq) {
+        this.qq = qq;
+    }
+
     public String getMid() {
         return mid;
     }
@@ -93,6 +106,14 @@ public class User {
 
     public void setCookie(String cookie) {
         this.cookie = cookie;
+    }
+
+    public Integer getRole() {
+        return role;
+    }
+
+    public void setRole(Integer role) {
+        this.role = role;
     }
 
     @Override

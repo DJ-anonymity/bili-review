@@ -43,6 +43,12 @@ public interface UserService {
     public boolean register(UserPara user);
 
     /**
+     * 更新
+     * @return
+     */
+    public boolean update(UserPara user);
+
+    /**
      * 登录
      * @return
      */

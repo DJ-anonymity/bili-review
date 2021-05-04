@@ -7,6 +7,8 @@ const TYPE_USER = 1;
 const TYPE_MEDIA = 0;
 const SUB_FOLLOW = 1;
 const SUB_CANCEL = 0;
+let user = getLoginUser();
+checkQQ();
 
 $(document).ready(function(){
     //给导航栏绑定点击事件
@@ -26,6 +28,17 @@ $(document).ready(function(){
     //获取内容列表
     getSubList();
 });
+
+/**
+ * 检查该账号是否已经绑定qq
+ */
+function checkQQ() {
+    console.log(user);
+    if (user.qq == null || user.qq == ''){
+        alert("不绑定QQ无法使用该功能");
+        window.location.href = 'userUpdate.html';
+    }
+}
 
 /**
  * 获取订阅内容

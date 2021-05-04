@@ -28,9 +28,28 @@
         where uid = #{uid}
     </update>
 
+    <update id="updateRoleByUid">
+        update user
+        set role = #{role}
+        where uid = #{uid}
+    </update>
+
+    <update id="updateMultipleByUid" parameterType="com.zfg.learn.model.para.UserPara">
+        update user
+        <set>
+            <if test="qq != null">
+                qq = #{qq},
+            </if>
+            <if test="qq != null">
+                username = #{username},
+            </if>
+        </set>
+        where uid = #{uid}
+    </update>
+
     <insert id="insert" parameterType="com.zfg.learn.model.po.User">
         insert into user
-        (username, password, email, mid, cookie)
-        values (#{username}, #{password}, #{email}, #{mid}, #{cookie})
+        (username, password, email)
+        values (#{username}, #{password}, #{email})
     </insert>
 </mapper>
