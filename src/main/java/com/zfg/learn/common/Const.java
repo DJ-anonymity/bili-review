@@ -38,6 +38,8 @@ public class Const {
      */
     public interface Url{
         String USER_INFO = "https://api.bilibili.com/x/web-interface/nav";
+        String USER_UNREAD = "https://api.bilibili.com/x/msgfeed/unread?mobi_app=web"; //未读消息
+        String REPLY = "https://member.bilibili.com/x/web/replies?order=ctime&filter=-1&is_hidden=0&type=1";//回复
     }
 
     public interface Path{

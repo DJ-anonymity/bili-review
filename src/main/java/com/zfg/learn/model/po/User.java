@@ -32,7 +32,7 @@ public class User {
     private Long qq;
 
     @ApiModelProperty(notes = "b站账号id")
-    private String mid;
+    private Integer mid;
 
     @ApiModelProperty(notes = "b站登陆cookie")
     private String cookie;
@@ -92,11 +92,11 @@ public class User {
         this.qq = qq;
     }
 
-    public String getMid() {
+    public Integer getMid() {
         return mid;
     }
 
-    public void setMid(String mid) {
+    public void setMid(Integer mid) {
         this.mid = mid;
     }
 

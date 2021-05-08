@@ -9,7 +9,7 @@ public class UserInfoBili {
 
     private String face;
 
-    private String mid;
+    private Integer mid;
 
     public Boolean getIsLogin() {
         return isLogin;
@@ -27,11 +27,11 @@ public class UserInfoBili {
         this.face = face;
     }
 
-    public String getMid() {
+    public Integer getMid() {
         return mid;
     }
 
-    public void setMid(String mid) {
+    public void setMid(Integer mid) {
         this.mid = mid;
     }
 }

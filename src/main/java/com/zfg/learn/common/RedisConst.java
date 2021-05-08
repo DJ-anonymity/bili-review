@@ -10,6 +10,7 @@ public class RedisConst {
     public static final String PAGE_SIZE = "pageSize:";
     public static final String MID = "mid:";
     public static final String COOKIE = "cookie:";
+    public static final String UNREAD_COMMENT = "unread_comment:mid:";
 
     public static String key(Integer media_id){
         String key = SHORT_REVIEW;
