@@ -19,7 +19,7 @@ public class CatchApi {
 
     //获取输入的api的数据
     public String getJsonFromApi(String originalUrl) throws IOException {
-        return getJsonFromApi(METHOD_DEFAULT);
+        return getJsonFromApi(originalUrl, METHOD_DEFAULT);
     }
 
     //获取输入的api的数据

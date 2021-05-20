@@ -9,6 +9,7 @@ import com.zfg.learn.model.po.DynamicStat;
 import com.zfg.learn.until.CatchApi;
 import com.zfg.learn.until.DynamicBlockingQueue;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -68,10 +69,11 @@ public class DynamicListener extends Thread{
                 //2s监听一次
                 Thread.sleep(2000);
 
-                Long cursor = (Long) redisTemplate.opsForValue().get("dynamic:cursor");
-                hashMap.put(Const.COOKIE, cookie);
                 //请求Api并获取数据
+                hashMap.put(Const.COOKIE, cookie);
                 json = catchApi.getJsonFromApiByHeader(DYNAMIC_URL, hashMap);
+                //获取最新页码
+                Long cursor = (Long) redisTemplate.opsForValue().get("dynamic:cursor");
                 JSONObject data = JSONObject.parseObject(json).getJSONObject("data");
                 //如果已经是最新的了 则跳出本次循环
                 if (data.getLong("max_dynamic_id").equals(cursor)){
@@ -83,108 +85,33 @@ public class DynamicListener extends Thread{
                     redisTemplate.opsForValue().set("dynamic:cursor", data.getLong("max_dynamic_id"));
                 }
 
+                //获取最新动态的时间
+                Integer latestTime = (Integer) redisTemplate.opsForValue().get("dynamic:latest:time");
+                if (latestTime == null){
+                    latestTime = 0;
+                }
                 JSONArray jsonArray = data.getJSONArray("cards");
+                //for循环处理动态数据
                 for (int i = 0;i < jsonArray.size();i++){
-
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     JSONObject desc = jsonObject.getJSONObject("desc");
 
-                    //已经推送过了
+                    //通过最新标签id判断是否推送过了  tip:增加时间辅助判断 防止出现用户删除动态导致最新id丢失问题
+                    Integer timestamp = desc.getInteger("timestamp");
                     Long dynamic_id = desc.getLong("dynamic_id");
-                    if (dynamic_id.equals(cursor)){
+                    //todo nullpointException????
+                    if (dynamic_id.equals(cursor) || timestamp < latestTime){
                         break;
                     }
 
-                    Dynamic dynamic = new Dynamic();
-                    JSONObject card = jsonObject.getJSONObject("card");
-                    JSONObject userInfo = desc.getJSONObject("user_profile").getJSONObject("info");
-                    if (desc.getInteger("type") == Const.Dynamic.NORMAL){
-                        dynamic.setId(dynamic_id);
-                        dynamic.setAuthorId(userInfo.getLong("uid"));
-                        dynamic.setAuthorName(userInfo.getString("uname"));
-                        dynamic.setContent(card.getJSONObject("item").getString("description"));
-                        dynamic.setUrl("https://t.bilibili.com/" + dynamic_id);
-                        dynamic.setImg(card.getJSONObject("item").getJSONArray("pictures").getJSONObject(0).getString("img_src"));
-                        dynamic.setType(Const.Dynamic.NORMAL);
-                    } else if (desc.getInteger("type") == Const.Dynamic.NORMAL_NO_IMG){
-                        dynamic.setId(dynamic_id);
-                        dynamic.setAuthorId(userInfo.getLong("uid"));
-                        dynamic.setAuthorName(userInfo.getString("uname"));
-                        dynamic.setContent(card.getJSONObject("item").getString("content"));
-                        dynamic.setUrl("https://t.bilibili.com/"+dynamic_id+"?tab=2");
-                        dynamic.setType(Const.Dynamic.NORMAL_NO_IMG);
-                    } else if (desc.getInteger("type") == Const.Dynamic.FORWARD){
-                        dynamic.setId(dynamic_id);
-                        dynamic.setAuthorId(userInfo.getLong("uid"));
-                        dynamic.setAuthorName(userInfo.getString("uname"));
-                        dynamic.setContent(card.getJSONObject("item").getString("content"));
-                        dynamic.setUrl("https://t.bilibili.com/" + dynamic_id);
-                        dynamic.setType(Const.Dynamic.FORWARD);
-
-                        //8 即为转发的是视频
-                        DynamicStat stat = new DynamicStat();
-                        if (desc.getInteger("orig_type") == 8){
-                            JSONObject origin = card.getJSONObject("origin");
-                            stat.setTitle(origin.getString("title"));
-                            stat.setImg(origin.getString("pic"));
-                        } else {
-                            JSONObject origin = card.getJSONObject("origin");
-                            stat.setDescription(origin.getString("description"));
-                            JSONObject item = origin.getJSONObject("item");
-                            if (item.getJSONArray("pictures") != null && item.getJSONArray("pictures").size() > 0){
-                                stat.setImg(item.getJSONArray("pictures").getJSONObject(0).getString("img_src"));
-                            }
-                        }
-                        dynamic.setStat(stat);
-                    } else if (desc.getInteger("type") == Const.Dynamic.VIDEO_UP){
-                        dynamic.setId(dynamic_id);
-                        dynamic.setAuthorId(userInfo.getLong("uid"));
-                        dynamic.setAuthorName(userInfo.getString("uname"));
-                        //设置专栏url
-                        dynamic.setContent(card.getString("dynamic"));
-                        dynamic.setUrl("https://www.bilibili.com/video/" + desc.getString("bvid"));
-                        dynamic.setType(Const.Dynamic.VIDEO_UP);
-
-                        DynamicStat stat = new DynamicStat();
-                        stat.setTitle(card.getString("title"));
-                        stat.setDescription(card.getString("desc"));
-                        stat.setImg(card.getString("pic"));
-                        dynamic.setStat(stat);
-                    } else if (desc.getInteger("type") == Const.Dynamic.MEDIA) {
-                        //todo 影剧没有media_id o(╥﹏╥)o
-                    } else if (desc.getInteger("type") == Const.Dynamic.LIVE) {
-                        JSONObject live_play_info = card.getJSONObject("live_play_info");
-
-                        dynamic.setId(dynamic_id);
-                        dynamic.setAuthorId(userInfo.getLong("uid"));
-                        dynamic.setAuthorName(userInfo.getString("uname"));
-                        dynamic.setUrl(live_play_info.getString("link"));
-                        dynamic.setType(4308);
-
-                        DynamicStat stat = new DynamicStat();
-                        stat.setTitle(live_play_info.getString("title"));
-                        //直播的description为直播标签
-                        stat.setDescription(live_play_info.getString("area_name"));
-                        dynamic.setStat(stat);
-                    } else if (desc.getInteger("type") == Const.Dynamic.ARTICLE) {
-                        dynamic.setId(dynamic_id);
-                        dynamic.setAuthorId(userInfo.getLong("uid"));
-                        dynamic.setAuthorName(userInfo.getString("uname"));
-                        //设置专栏url
-                        dynamic.setUrl("https://www.bilibili.com/read/cv" + card.getLong("id"));
-                        dynamic.setType(Const.Dynamic.ARTICLE);
-
-                        DynamicStat stat = new DynamicStat();
-                        stat.setTitle(card.getString("title"));
-                        stat.setDescription(card.getString("summary"));
-                        stat.setImg((String) card.getJSONArray("image_urls").get(0));
-                        dynamic.setStat(stat);
-                    }
-
-
+                    //解析dynamic
+                    Dynamic dynamic = analysis(jsonObject);
                     dynamicQueue.add(dynamic);
                 }
 
+                //每次把最新页码的时间戳存到redis里面
+                Integer newTime = jsonArray.getJSONObject(0).getJSONObject("desc").getInteger("timestamp");
+                redisTemplate.opsForValue().set("dynamic:latest:time", newTime);
             } catch (IOException e) {
                 e.printStackTrace();
                 System.out.println("出现问题");
@@ -197,6 +124,96 @@ public class DynamicListener extends Thread{
             }
         }
     }
+
+    /**
+     * 解析动态
+     * @param jsonObject
+     * @return
+     */
+    private Dynamic analysis(JSONObject jsonObject){
+        Dynamic dynamic = new Dynamic();
+        JSONObject card = jsonObject.getJSONObject("card");
+        JSONObject desc = jsonObject.getJSONObject("desc");
+        Long dynamic_id = desc.getLong("dynamic_id");
+        Integer type = desc.getInteger("type");
+
+        // 开始解析
+        dynamic.setId(dynamic_id);
+        dynamic.setType(type);
+        //番剧类型单独处理
+        if (type == Const.Dynamic.MEDIA){
+            JSONObject apiSeasonInfo = card.getJSONObject("apiSeasonInfo");
+            //todo 把sessionId转换成mediaId
+            dynamic.setAuthorId(apiSeasonInfo.getLong("season_id"));
+            dynamic.setAuthorName(apiSeasonInfo.getString("title"));
+            dynamic.setUrl(card.getString("url"));
+
+            DynamicStat stat = new DynamicStat();
+            stat.setTitle(card.getString("new_desc"));
+            stat.setImg(card.getString("cover"));
+            dynamic.setStat(stat);
+        } else {
+            JSONObject userInfo = desc.getJSONObject("user_profile").getJSONObject("info");
+            dynamic.setAuthorId(userInfo.getLong("uid"));
+            dynamic.setAuthorName(userInfo.getString("uname"));
+            if (type == Const.Dynamic.NORMAL){
+                dynamic.setContent(card.getJSONObject("item").getString("description"));
+                dynamic.setUrl("https://t.bilibili.com/" + dynamic_id);
+                dynamic.setImg(card.getJSONObject("item").getJSONArray("pictures").getJSONObject(0).getString("img_src"));
+            } else if (type == Const.Dynamic.NORMAL_NO_IMG){
+                dynamic.setContent(card.getJSONObject("item").getString("content"));
+                dynamic.setUrl("https://t.bilibili.com/"+dynamic_id+"?tab=2");
+            } else if (type == Const.Dynamic.FORWARD){
+                dynamic.setContent(card.getJSONObject("item").getString("content"));
+                dynamic.setUrl("https://t.bilibili.com/" + dynamic_id);
+
+                //8 即为转发的是视频
+                DynamicStat stat = new DynamicStat();
+                JSONObject origin = card.getJSONObject("origin");
+                if (desc.getInteger("orig_type") == 8){
+                    stat.setTitle(origin.getString("title"));
+                    stat.setImg(origin.getString("pic"));
+                } else {
+                    stat.setDescription(origin.getString("description"));
+                    JSONObject item = origin.getJSONObject("item");
+                    if (item.getJSONArray("pictures") != null && item.getJSONArray("pictures").size() > 0){
+                        stat.setImg(item.getJSONArray("pictures").getJSONObject(0).getString("img_src"));
+                    }
+                }
+                dynamic.setStat(stat);
+            } else if (type == Const.Dynamic.VIDEO_UP){
+                //设置专栏url
+                dynamic.setContent(card.getString("dynamic"));
+                dynamic.setUrl("https://www.bilibili.com/video/" + desc.getString("bvid"));
+
+                DynamicStat stat = new DynamicStat();
+                stat.setTitle(card.getString("title"));
+                stat.setDescription(card.getString("desc"));
+                stat.setImg(card.getString("pic"));
+                dynamic.setStat(stat);
+            } else if (type == Const.Dynamic.LIVE){
+                JSONObject live_play_info = card.getJSONObject("live_play_info");
+                dynamic.setUrl(live_play_info.getString("link"));
+                dynamic.setType(4308);
+
+                DynamicStat stat = new DynamicStat();
+                stat.setTitle(live_play_info.getString("title"));
+                //直播的description为直播标签
+                stat.setDescription(live_play_info.getString("area_name"));
+                dynamic.setStat(stat);
+            } else if (type == Const.Dynamic.ARTICLE){
+                //设置专栏url
+                DynamicStat stat = new DynamicStat();
+                stat.setTitle(card.getString("title"));
+                stat.setDescription(card.getString("summary"));
+                stat.setImg((String) card.getJSONArray("image_urls").get(0));
+                dynamic.setStat(stat);
+            }
+        }
+
+        return dynamic;
+    }
+
 
     /**
      * 继续运行
@@ -218,4 +235,5 @@ public class DynamicListener extends Thread{
     public boolean isStop(){
         return this.isStop;
     }
+
 }
