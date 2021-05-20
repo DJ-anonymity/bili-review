@@ -88,6 +88,7 @@ public class UnreadCommentServiceImpl implements UnreadCommentService {
         List<Comment> commentList = new ArrayList<>();
 
         try {
+            //获取未读消息数
             String response = catchApi.getJsonFromApiByCook(Const.Url.USER_UNREAD, curUser.getCookie());
             replyNum = JSONObject.parseObject(response).getJSONObject("data").getLong("reply");
         } catch (IOException e) {

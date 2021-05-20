@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * todo  学习bean的注入原理
+ */
 @Configuration
 public class MvcConfig implements WebMvcConfigurer {
     

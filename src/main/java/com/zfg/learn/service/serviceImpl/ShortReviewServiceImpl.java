@@ -86,9 +86,6 @@ public class ShortReviewServiceImpl implements ShortReviewService {
             }
             //设置下一页的页码
             cursor = reviewPageInfo.getNext();
-            /*因为使用了事务管理，一次提交3W+评论，所以在获取3W+评论后才加入缓存
-            //并加入缓存中
-            redisTemplate.opsForValue().set("shortReviewCursor",cursor);*/
             i++;
             //获取数据超过3w时停止获取
             if (i > 1000) {

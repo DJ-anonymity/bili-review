@@ -12,11 +12,13 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * type 1:动态转发 2：自己发表的动态 4：自己发表的无图片动态 8：视频投稿 动漫：512
- * 4308：直播 64：专栏
+ * 4308：直播 64：专栏  4099:综艺
  * 暂时一次只推送20条
  * todo 优化代码优雅度
  */
@@ -141,7 +143,7 @@ public class DynamicListener extends Thread{
         dynamic.setId(dynamic_id);
         dynamic.setType(type);
         //番剧类型单独处理
-        if (type == Const.Dynamic.MEDIA){
+        if (type == Const.Dynamic.MEDIA || type == Const.Dynamic.TV_SHOW){
             JSONObject apiSeasonInfo = card.getJSONObject("apiSeasonInfo");
             //todo 把sessionId转换成mediaId
             dynamic.setAuthorId(apiSeasonInfo.getLong("season_id"));
@@ -214,6 +216,28 @@ public class DynamicListener extends Thread{
         return dynamic;
     }
 
+    /*public static void main(String[] args) throws IOException {
+        String url = "https://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/dynamic_new?uid=20736117&type_list=512,4097,4098,4099,4100,4101&from=&platform=web";
+        HashMap map = new HashMap();
+
+        map.put(Const.COOKIE, "SESSDATA=faeb17d5%2C1636040466%2C3e96b%2A51;");
+        CatchApi catchApi = new CatchApi();
+        String json = catchApi.getJsonFromApiByHeader(url, map);
+        JSONObject data = JSONObject.parseObject(json).getJSONObject("data");
+        JSONArray jsonArray = data.getJSONArray("cards");
+        List<Dynamic> d = new ArrayList<>();
+
+        //for循环处理动态数据
+        for (int i = 0;i < jsonArray.size();i++){
+            JSONObject jsonObject = jsonArray.getJSONObject(i);
+            JSONObject desc = jsonObject.getJSONObject("desc");
+            //解析dynamic
+            Dynamic dynamic = analysis(jsonObject);
+            d.add(dynamic);
+        }
+
+        System.out.println("ok");
+    }*/
 
     /**
      * 继续运行

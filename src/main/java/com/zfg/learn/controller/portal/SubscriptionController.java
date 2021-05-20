@@ -30,6 +30,7 @@ public class SubscriptionController {
      * @param subPara
      * @param session
      * @return
+     * todo 取订完善
      */
     @PostMapping("/modify")
     public ServerResponse modify(@RequestBody @Validated SubPara subPara, HttpSession session){

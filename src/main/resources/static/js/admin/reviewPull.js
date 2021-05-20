@@ -12,6 +12,7 @@ $(document).ready(function () {
 var media_id = getQueryString("media_id");
 //获取该剧的详细情况
 function getAnimationDetail() {
+
     $.ajax({
         url: "/bili/portal/animation/"+media_id,
         type: "get",

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .content{
+            width: 600px;
+            height: 400px;
+            margin: 100px auto;
+            background-color: cyan;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .topic{
+            margin-top: 120px;
+            font-size: 25px;
+            color: black;
+            height: 100px;
+
+        }
+        .countdown{
+            font-size: 20px;
+            color: black;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div class="content">
+            <div class="topic" id="topic">
+
+            </div>
+            <div class="countdown">
+                <div id="time">
+
+                </div>
+                <div id="tip">
+
+                </div>
+            </div>
+            <div class="operate">
+                <div>
+                    <button type="button" id="start">start</button>
+                </div>
+                <div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let keyword = ["vocation","travel","fire","game","playground","airport","resort","flood","hotel","ticket","confuse"];
+
+        document.getElementById("start").addEventListener('click', function () {
+            let index = Math.floor((Math.random()*keyword.length));
+            document.getElementById("topic").innerHTML = keyword[index];
+            document.getElementById("time").innerHTML = "你有15S的准备时间";
+
+            window.setTimeout(function () {
+                let time = 14;
+                let intervalReady = window.setInterval(function () {
+                    document.getElementById("time").innerHTML = time;
+                    time--;
+                }, 1000);
+
+                window.setTimeout(function () {
+                    window.clearInterval(intervalReady);
+                    document.getElementById("tip").innerHTML = "马上开始答题，答题时间30s";
+                    document.getElementById("time").innerHTML = "";
+                    window.setTimeout(function (){
+                        document.getElementById("tip").innerHTML = "";
+                        start();
+                    }, 2*1000);
+                }, 15*1000);
+            }, 1*1000);
+        });
+
+        function start() {
+            let startTime = 29;
+            let intervalStart = window.setInterval(function () {
+                document.getElementById("time").innerHTML = startTime;
+                startTime--;
+            }, 1000);
+
+            window.setTimeout(function () {
+                //document.getElementById("tip").innerHTML = "end";
+                document.getElementById("time").innerHTML = "end";
+                window.clearInterval(intervalStart);
+            }, 30*1000);
+        }
+    </script>
+
+    <script>
+        function tipAliveTime(tip, timeout){
+            document.getElementById("tip").innerHTML = tip;
+            window.setTimeout(function () {
+                document.getElementById("tip").innerHTML = "";
+            }, timeout);
+        }
+    </script>
+</body>
+
+
+</html>

@@ -50,6 +50,7 @@ public class UserController {
             return ServerResponse.createByErrorMessage("该邮箱已存在账号");
         }
 
+        //todo 邮箱验证码校验60S
         try {
             userService.sendCheckNum(email);
             return ServerResponse.createBySuccess();

@@ -19,6 +19,5 @@ public class MyListener implements ServletContextListener {
         redisTemplate.opsForValue().set("pullAllLongReview", Const.IS_FREE);
         redisTemplate.opsForValue().set("pullAllShortReview",Const.IS_FREE);
         redisTemplate.opsForValue().set("pullNewShortReview",Const.IS_FREE);
-
     }
 }
