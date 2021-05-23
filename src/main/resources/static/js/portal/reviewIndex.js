@@ -1,3 +1,5 @@
+let loginUser = getLoginUser();
+
 $(document).ready(function () {
     getAnimationList();
     getSearchTrend();
@@ -43,15 +45,15 @@ function getAnimationList() {
 //分页信息
 function next() {
     pageNum = parseInt(pageNum)+1;
-    window.location.href = "index.html?pageNum="+pageNum;
+    window.location.href = "reviewIndex.html?pageNum="+pageNum;
 }
 function change(e) {
     pageNum = e.innerHTML;
-    window.location.href = "index.html?pageNum="+pageNum;
+    window.location.href = "reviewIndex.html?pageNum="+pageNum;
 }
 function back() {
     pageNum = parseInt(pageNum)-1;
-    window.location.href = "index.html?pageNum="+pageNum;
+    window.location.href = "reviewIndex.html?pageNum="+pageNum;
 }
 function setAnimationContent(list) {
     var animationContent = '';
@@ -102,6 +104,11 @@ function getSearchTrend() {
         }
     })
 }
+
+function showSelfReview(){
+    window.location.href = "reviewSearch.html?mid="+loginUser.mid;
+}
+
 //跳过mid获取粉丝
 function getFollowers(){
     var mid = $("#mid").val();

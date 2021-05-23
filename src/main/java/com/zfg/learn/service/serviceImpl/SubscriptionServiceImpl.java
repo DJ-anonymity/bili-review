@@ -33,9 +33,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     @Transactional
     public void modify(Subscription subscription) {
         //同步锁 防止多线程同时查询出无订阅记录  导致重复插入
+        // todo 同步锁失效
         synchronized (this){
             Subscription originalSub = subMapper.selectRelation(subscription.getUid(), subscription.getFid(), subscription.getType());
-
             if (originalSub == null){
                 //如果是插入操作则设置创建时间
                 subscription.setCtime(subscription.getMtime());
@@ -97,6 +97,10 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         return subMapper.selectRelation(uid, fid, type);
     }
 
+    @Override
+    public Integer getSubNum(Integer uid) {
+        return subMapper.selectSubNum(uid);
+    }
 
 
 }

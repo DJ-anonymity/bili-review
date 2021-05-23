@@ -10,9 +10,13 @@ import com.zfg.learn.until.CatchApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UnreadCommentServiceImpl implements UnreadCommentService {
@@ -22,7 +26,9 @@ public class UnreadCommentServiceImpl implements UnreadCommentService {
     private static final int DEFAULT = 0;//全部
     private static final int IS_SUB = 1;//已关注
     private static final int ROOT = 0;//已充电
-
+    private static final int SORT_TIME_DESC = 0; //最近发布
+    private static final int SORT_LIKE_DESC = 1; //点赞最多
+    private static final int SORT_REPLY_DESC = 2; //回复最多
 
     /**
      * 查找出未读消息列表  max=999
@@ -34,7 +40,7 @@ public class UnreadCommentServiceImpl implements UnreadCommentService {
      * @return
      */
     @Override
-    public List<Comment> list(Integer sort, Integer is_elec, Integer relation, User curUser) {
+    public List<Comment> list(String keyword, Integer sort, Integer is_elec, Integer relation, User curUser) {
         //先从缓存中获取
         List<Comment> commentList;
         if (redisTemplate.opsForValue().get(RedisConst.UNREAD_COMMENT + curUser.getMid()) != null){
@@ -48,7 +54,7 @@ public class UnreadCommentServiceImpl implements UnreadCommentService {
         for (Comment comment:commentList){
             //设置前往该评论的url
             Long replyId = comment.getParent() == ROOT ? comment.getId() : comment.getParent();
-            comment.setUrl("https://www.bilibili.com/video/"+comment.getBVId()+"#reply"+replyId);
+            comment.setUrl("https://www.bilibili.com/video/"+comment.getBvid()+"#reply"+replyId);
 
             //根据是否充电来过滤
             if (is_elec != null){
@@ -62,17 +68,30 @@ public class UnreadCommentServiceImpl implements UnreadCommentService {
                     continue;
                 }
             }
+            //根据keyword过滤
+            if (!StringUtils.isEmpty(keyword))
+                if (!comment.getMessage().contains(keyword))
+                    continue;
 
             resultList.add(comment);
+        }
+
+        if (resultList.size() > 0){
+            if (sort == SORT_LIKE_DESC){
+                resultList = resultList.stream()
+                        .sorted(Comparator.comparingLong(Comment::getLike).reversed())
+                        .collect(Collectors.toList());
+            }else if (sort == SORT_REPLY_DESC){
+                resultList = resultList.stream()
+                        .sorted(Comparator.comparingLong(Comment::getCount).reversed())
+                        .collect(Collectors.toList());
+            }
         }
 
         return resultList;
     }
 
-    @Override
-    public List<Comment> search(String keyword, Integer sort, Integer condition, User curUser) {
-        return null;
-    }
+
 
     /**
      * 获取当前用户的未读评论
@@ -95,8 +114,8 @@ public class UnreadCommentServiceImpl implements UnreadCommentService {
             e.printStackTrace();
         }
 
-        //未读消息读取完就结束
-        while (replyNum >= count){
+        //未读消息读取完就结束 todo 自己的发的消息怎么过滤呢
+        while (replyNum >= count && replyNum != 0){
             try {
                 String response = catchApi.getJsonFromApiByCook(Const.Url.REPLY + "&ps=100&pn=" + pn, curUser.getCookie());
                 List<Comment> cl = JSONObject.parseObject(response).getJSONArray("data").toJavaList(Comment.class);

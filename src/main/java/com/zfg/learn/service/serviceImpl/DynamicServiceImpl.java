@@ -25,7 +25,6 @@ public class DynamicServiceImpl implements DynamicService {
     @Autowired
     SubscriptionMapper subMapper;
 
-
     @Override
     public void pushDynamic(Dynamic dynamic) {
         List<Long> qqList = subMapper.selectFollowerByFid(dynamic.getAuthorId());

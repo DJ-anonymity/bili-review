@@ -60,4 +60,11 @@ public interface SubscriptionMapper {
      * @param uid
      */
     List<SubscriptionDto> selectUpFollows(Integer uid);
+
+    /**
+     * 查询用户订阅的用户总数
+     * @param uid
+     * @return
+     */
+    Integer selectSubNum(Integer uid);
 }

@@ -62,6 +62,18 @@ public class SubscriptionController {
     }
 
     /**
+     * 订阅总数
+     * @param session
+     * @return
+     */
+    @GetMapping("/num")
+    public ServerResponse getNum(HttpSession session){
+        User user = (User) session.getAttribute(Const.CURRENT_USER);
+        Integer num = subscriptionService.getSubNum(user.getUid());
+        return ServerResponse.createBySuccess(num);
+    }
+
+    /**
      * 推送任务开始
      */
     @GetMapping("/listener/start")

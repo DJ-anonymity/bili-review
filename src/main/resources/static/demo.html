@@ -6,46 +6,48 @@
     <meta name="keywords" content="keyword1,keyword2,keyword3">
     <meta name="description" content="this is my page">
     <meta name="content-type" content="text/html; charset=UTF-8">
-    <script type="text/javascript">
-        var audioCtx;
-        try
-        {
-            audioCtx=new (window.AudioContext || window.webkitAudioContext)();
+    <style>
+        .a:hover + .b {
+            display: block;
         }
-        catch(e)
-        {
-            console.log("Your browser does not support AudioContext!");
+        .b {
+            display: none;
         }
-        navigator.getUserMedia=(navigator.getUserMedia || navigator.webkitGetUserMedia ||
-            navigator.mozGetUserMedia || navigator.msGetUserMedia);
-        if(navigator.getUserMedia)
-        {
-            navigator.getUserMedia(
-                {
-                    audio:true
-                },
-                function(stream)
-                {
-                    var source=audioCtx.createMediaStreamSource(stream);
-                    var biquadFilter=audioCtx.createBiquadFilter();
-                    biquadFilter.type="lowshelf";
-                    biquadFilter.frequency.value=1000;
-                    biquadFilter.gain.value=25;
-                    source.connect(biquadFilter);
-                    biquadFilter.connect(audioCtx.destination);
-                },
-                function(err)
-                {
-                    console.log("The following gUM error occured: "+err);
-                });
-        }
-        else
-        {
-            console.log("getUserMedia not supported on your browser!");
-        }
-    </script>
+    </style>
 </head>
 <body>
-This is my HTML page. <br>
+<div data-v-76b62926="" class="comment-list-item">
+    <a href="//space.bilibili.com/43831779" mid="43831779" target="_blank" card="键神不请自来" class="user-avatar" data-reporter-id="171">
+        <img src="//i0.hdslb.com/bfs/face/b2c4d4cf89f764476b979bed047240a573ca2d45.jpg@96w_96h">
+    </a>
+    <div class="article-wrap">
+        <a href="//www.bilibili.com/video/BV1PU4y187zZ" target="_blank" class="pic" data-reporter-id="172">
+            <img src="//i0.hdslb.com/bfs/archive/c8096cfdcf7890139d92dc6dd258521f44774efe.png@200w_120h">
+        </a>
+        <a href="" class="title ellipsis">
+            <span class="name">荧妹满星1.5深渊达成 旅行者的道路继续前行</span>
+            <span class="show-all">该视频全部评论</span></a>
+    </div>
+    <div class="ci-title">
+        <span class="relation-label" style="display: none;">已充电</span>
+        <span class="relation-label" style="display: none;"></span>
+        <a href="//space.bilibili.com/43831779" mid="43831779" card="键神不请自来" target="_blank">键神不请自来</a>
+    </div>
+    <a href="//www.bilibili.com/video/BV1PU4y187zZ" target="_blank">
+        <div class="ci-content">我觉得主角挺好用的。我没有阿贝多，双岩要靠岩主。主角卡着位，然后猥琐输出就是了，可以打满星，但是嫌累[给心心]</div>
+    </a>
+    <div class="ci-action">
+        <span class="date">2021-05-20 20:07</span>
+        <span class="like action">
+                                    <a data-reporter-id="173" style="color: rgb(0, 161, 214);">
+                                        <i class="bcc-iconfont bcc-icon-icon_action_recommend_line_n_"></i>
+                                        <span class="num">1</span>
+                                    </a>
+        </span>
+        <span class="reply action"><a data-reporter-id="174">回复</a></span>
+        <span class="report action"><a data-reporter-id="175">举报</a></span>
+        <span class="delete action"><a data-reporter-id="176">删除</a></span>
+    </div>
+</div>
 </body>
 </html>

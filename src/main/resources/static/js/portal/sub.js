@@ -27,6 +27,8 @@ $(document).ready(function(){
     });
     //获取内容列表
     getSubList();
+    //获取关注数
+    getSubCount();
 });
 
 /**
@@ -38,6 +40,25 @@ function checkQQ() {
         alert("不绑定QQ无法使用该功能");
         window.location.href = 'userUpdate.html';
     }
+}
+
+//获取关注用户数
+function getSubCount() {
+    $.ajax ({
+        url: "/bili/sub/num",
+        type: "get",
+        //发送的数据
+        data: "",
+        contentType: "application/json;charset=UTF-8",
+        dataType: "json",
+        success: function (data) {
+            if (data.status != 0){
+                alert(data.msg);
+            }
+
+            $("#sub-count").html(data.data);
+        }
+    })
 }
 
 /**

@@ -43,7 +43,8 @@ public class Const {
     }
 
     public interface Path{
-        String CHROME_EXTENSION = "C:\\Users\\zhong\\Desktop\\毕业设计\\毕业设计\\钟房桂\\谷歌插件\\chrome插件.zip";
+        //String CHROME_EXTENSION = "C:\\Users\\zhong\\Desktop\\毕业设计\\毕业设计\\钟房桂\\谷歌插件\\chrome插件.zip";
+        String CHROME_EXTENSION = "/usr/local/springboot/bili/插件/chrome插件.zip";
     }
 
     public interface Dynamic{
@@ -54,5 +55,6 @@ public class Const {
         int MEDIA = 512; //影剧动漫
         int LIVE = 4308; //直播
         int ARTICLE = 64; //专栏
+        int TV_SHOW =  4099; //综艺
     }
 }

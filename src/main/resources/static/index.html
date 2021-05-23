@@ -2,105 +2,117 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="referrer" content="no-referrer" />
-    <title>B站评价区辅助——BOOTZ</title>
-    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <script src="js/jquery-2.1.1.js"></script>
-    <!--本页的css-->
-    <link rel="stylesheet" href="css/portal/index.css">
+    <title>主页</title>
+    <script src="js/common/user.js"></script>
+    <script src="js/common/const.js"></script>
+    <script>
+        getLoginUser();
+    </script>
     <style>
-
+        * {
+            margin: 0;
+            padding: 0;
+            background: #fafafa;
+            font-family: "PingFang SC,Hiragino Sans GB,Microsoft YaHei,sans-serif";
+            -webkit-tap-highlight-color: rgba(255,255,255,0);
+        }
+        a {
+            text-decoration: none;
+        }
+        .header {
+            padding: 15px;
+            width: 100%;
+            height: 56px;
+            background-color: #fff;
+            box-sizing: border-box;
+            box-shadow: 0 2px 4px 0 rgb(0 0 0 / 8%);
+        }
+        .nav-left {
+            float: left;
+            margin-left: 70px;
+        }
+        .nav-right {
+            float: right;
+            margin-right: 100px;
+        }
+        .content {
+            margin: 20px auto;
+            width: 900px;
+        }
+        .tool-item {
+            padding: 20px 15px;
+            margin-bottom: 15px;
+            background: #fff !important;
+            align-items: center!important;
+            box-shadow: 2px 2px 2px rgb(0 0 0 / 10%), -1px 0 2px rgb(0 0 0 / 5%);
+            font-size: 14px;
+            color: #000;
+        }
+        .tool-item:hover{
+            background-color: lightskyblue !important;
+        }
+        .foot{
+            position: fixed;
+            height: 100px;
+            width: 100%;
+            bottom: 0px;
+            background-color: darkorange;
+        }
+        .btn {
+            color: #555;
+            display: inline-block;
+            height: 36px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            width: 150px;
+            line-height: 38px;
+            font-size: 14px;
+            text-align: center;
+            cursor: pointer;
+            -webkit-transition: all .3s;
+            -o-transition: all .3s;
+            -moz-transition: all .3s;
+            transition: all .3s;
+        }
     </style>
 </head>
 <body>
-    <div class="animation-container">
-        <!--导航栏-->
-       <!-- <div class="animation-nav">
-            123
-        </div>-->
-        <div class="animation-list-wrap">
-            <div class="animation-list-box" id="animation-list">
-                <div class="animation-card">
-                    <img src="http://i0.hdslb.com/bfs/bangumi/451037aabcdce0379752e087720673609894161a.png">
-                    <div> 辉夜大小姐想让我告白aaa</div>
+    <div>
+        <div class="container">
+            <div class="header">
+                <div class="nav-left">
+                    <a href="index.html">主页</a>
                 </div>
-                <div class="animation-card">
-                    <img src="http://i0.hdslb.com/bfs/bangumi/451037aabcdce0379752e087720673609894161a.png">
-                    <div> 辉夜大小姐想让我告白aaa</div>
-                </div>
-                <div class="animation-card">
-                    <img src="http://i0.hdslb.com/bfs/bangumi/451037aabcdce0379752e087720673609894161a.png">
-                    <div> 辉夜大小姐想让我告白aaa</div>
-                </div>
-                <div class="animation-card">
-                    <img src="http://i0.hdslb.com/bfs/bangumi/451037aabcdce0379752e087720673609894161a.png">
-                    <div> 辉夜大小姐想让我告白aaa</div>
-                </div>
-                <div class="animation-card">
-                    <img src="http://i0.hdslb.com/bfs/bangumi/451037aabcdce0379752e087720673609894161a.png">
-                    <div> 辉夜大小姐想让我告白aaa</div>
+                <div class="nav-right">
+                    <a href="userUpdate.html">个人信息</a>
+                    <a href="/bili/Download/chromeExtend">下载插件</a>
                 </div>
             </div>
-            <div class="page-info">
-                <ul id="page-info-list">
-                    <li onclick="change(this)">上一页</li>
-                    <li class="on" onclick="change(this)">1</li>
-                    <li onclick="change(this)">2</li>
-                    <li onclick="change(this)">下一页</li>
-                </ul>
-            </div>
-        </div>
-        <div class="operate-container">
-            <div class="review-search">
-                <div>
-                    <input type="text" id="review-search-keyword" placeholder="通过uid搜索某用户的评价">
-                    <label for="review-search-keyword"><button id="btn-review-search">搜索</button></label>
-                </div>
-                <div style="visibility: hidden"><!--暂时不用改功能-->
-                    <label>
-                        <input type="radio" name="search-type" value="1" class="review-search-type" checked> uid
-                    </label>
-                    <label>
-                        <input type="radio" name="search-type" value="2" class="review-search-type" disabled> 用户名
-                    </label>
-                </div>
-            </div>
-            <div class="rank-list">
-                <header class="rank-header">
-                    <span class="name">排行榜</span>
-                </header>
-                <div id="rank-wrap">
-                    <div class="rank-wrap">
-                        <span class="number on">1</span>
-                        <a href="//www.bilibili.com/video/BV1Yt4y1i7hH" target="_blank" class="link">
-                            <p title="20736117" class="title">
-                                20736117
-                            </p>
-                        </a>
-                        <!-- <span>综合得分：165.8万</span>-->
+            <div class="content">
+                <div class="tool-wrap">
+                    <div class="tool-list">
+                        <div class="tool-item" onclick="window.open('reviewIndex.html')">
+                            评价区辅助工具
+                        </div>
+                        <div class="tool-item" onclick="window.open('sub.html')">
+                            订阅功能
+                        </div>
+                        <div class="tool-item" onclick="window.open('comment.html')">
+                            消息管理
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="left-nav" style="margin-top: 50px;font-size: 20px;">
-                <div>
-                    <a href="https://space.bilibili.com/" target="_blank">获取自己的uid</a>
-                </div>
-                <div>
-                    <label for="mid">
-                        <input id="mid" type="text">
-                        <button id="btn-get-followers">获取</button>
-                    </label>
-                </div>
-            </div>
-            <div class="left-nav" style="margin-top: 250px;font-size: 20px;">
-                <div>
-                    <a href="admin/animationManage.html">后台管理</a>
                 </div>
             </div>
         </div>
     </div>
+    <div class="foot">
+        <div style="margin-top: 10px;margin-right: 20px; background-color: darkorange;float: right;">
+            <input class="btn" type="button" id="contact-us" value="反馈">
+        </div>
+        <div style="margin: 10px auto;clear:both;background-color: darkorange;width: 200px;font-family: 'Merriweather', serif;color: #555;">
+            ALL RIGHT RESERVED
+        </div>
+    </div>
 </body>
 
-<script src="js/common/until.js"></script>
-<script src="js/portal/index.js"></script>
 </html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="referrer" content="no-referrer" />
+    <title>B站评价区辅助——BOOTZ</title>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="js/jquery-2.1.1.js"></script>
+    <!--本页的css-->
+    <link rel="stylesheet" href="css/portal/index.css">
+    <style>
+
+    </style>
+</head>
+<body>
+    <div class="animation-container">
+        <!--导航栏-->
+       <!-- <div class="animation-nav">
+            123
+        </div>-->
+        <div class="animation-list-wrap">
+            <div class="animation-list-box" id="animation-list">
+                <div class="animation-card">
+                    <img src="http://i0.hdslb.com/bfs/bangumi/451037aabcdce0379752e087720673609894161a.png">
+                    <div> 辉夜大小姐想让我告白aaa</div>
+                </div>
+                <div class="animation-card">
+                    <img src="http://i0.hdslb.com/bfs/bangumi/451037aabcdce0379752e087720673609894161a.png">
+                    <div> 辉夜大小姐想让我告白aaa</div>
+                </div>
+                <div class="animation-card">
+                    <img src="http://i0.hdslb.com/bfs/bangumi/451037aabcdce0379752e087720673609894161a.png">
+                    <div> 辉夜大小姐想让我告白aaa</div>
+                </div>
+                <div class="animation-card">
+                    <img src="http://i0.hdslb.com/bfs/bangumi/451037aabcdce0379752e087720673609894161a.png">
+                    <div> 辉夜大小姐想让我告白aaa</div>
+                </div>
+                <div class="animation-card">
+                    <img src="http://i0.hdslb.com/bfs/bangumi/451037aabcdce0379752e087720673609894161a.png">
+                    <div> 辉夜大小姐想让我告白aaa</div>
+                </div>
+            </div>
+            <div class="page-info">
+                <ul id="page-info-list">
+                    <li onclick="change(this)">上一页</li>
+                    <li class="on" onclick="change(this)">1</li>
+                    <li onclick="change(this)">2</li>
+                    <li onclick="change(this)">下一页</li>
+                </ul>
+            </div>
+        </div>
+        <div class="operate-container">
+            <div class="review-search">
+                <div>
+                    <input type="text" id="review-search-keyword" placeholder="通过uid搜索某用户的评价">
+                    <label for="review-search-keyword"><button id="btn-review-search">搜索</button></label>
+                </div>
+                <div style="visibility: hidden"><!--暂时不用改功能-->
+                    <label>
+                        <input type="radio" name="search-type" value="1" class="review-search-type" checked> uid
+                    </label>
+                    <label>
+                        <input type="radio" name="search-type" value="2" class="review-search-type" disabled> 用户名
+                    </label>
+                </div>
+            </div>
+            <div class="rank-list">
+                <header class="rank-header">
+                    <span class="name">排行榜</span>
+                </header>
+                <div id="rank-wrap">
+                    <div class="rank-wrap">
+                        <span class="number on">1</span>
+                        <a href="//www.bilibili.com/video/BV1Yt4y1i7hH" target="_blank" class="link">
+                            <p title="20736117" class="title">
+                                20736117
+                            </p>
+                        </a>
+                        <!-- <span>综合得分：165.8万</span>-->
+                    </div>
+                </div>
+            </div>
+            <div class="left-nav" style="margin-top: 50px;font-size: 20px;">
+                <div>
+                    <a target="_blank" onclick="showSelfReview()">查看自己的</a>
+                </div>
+            </div>
+            <div class="left-nav" style="margin-top: 250px;font-size: 20px;">
+                <div>
+                    <a href="admin/animationManage.html">后台管理</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="js/common/user.js"></script>
+<script src="js/common/const.js"></script>
+<script src="js/common/until.js"></script>
+<script src="js/portal/reviewIndex.js"></script>
+</html>

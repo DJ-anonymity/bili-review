@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>加载效果demo</title>
+    <title>订阅</title>
     <!--引入jQuery-->
     <meta name="referrer" content="no-referrer"/>
     <script src="http://apps.bdimg.com/libs/jquery/1.8.3/jquery.js"></script>
@@ -16,6 +16,23 @@
         .sub-content {
             width: 1160px;
             margin: 60px auto;
+        }
+        .btn {
+            background-color: #00a1d6;
+            color: #fff;
+            display: inline-block;
+            height: 36px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            width: 100px;
+            line-height: 38px;
+            font-size: 14px;
+            text-align: center;
+            cursor: pointer;
+            -webkit-transition: all .3s;
+            -o-transition: all .3s;
+            -moz-transition: all .3s;
+            transition: all .3s;
         }
     </style>
 </head>
@@ -55,9 +72,9 @@
             <article data-v-da17fbc8="" data-v-6f3fff2a="">
                 <div data-v-2f0b1a0e="" data-v-da17fbc8="" role="heading" class="page-title">
                     <span data-v-2f0b1a0e="" class="v-middle">我的关注</span>
-                    <span data-v-2f0b1a0e="" class="count v-middle">164</span>
+                    <span data-v-2f0b1a0e="" class="count v-middle" id="sub-count">164</span>
                     <div style="float:right">
-                        <input type="button" class="z-button-modal" data-target="add-subscribe" value="查看">
+                        <input type="button" class="z-button-modal btn" data-target="add-subscribe" value="新增">
                     </div>
                     <!--弹出层  订阅内容-->
                     <div class="z-modal-box add-subscribe-modal" id="add-subscribe">
@@ -434,12 +451,12 @@
                                 <ul data-v-461ef7c9="" class="link-panigation dp-i-block">
                                     <li data-v-461ef7c9="" class="panigation ts-dot-4" style="display: none;">上一页</li>
                                     <li data-v-461ef7c9="" class="panigation ts-dot-4 selected">1</li>
-                                    <li data-v-461ef7c9="" class="panigation ts-dot-4">2</li>
+                                    <!--<li data-v-461ef7c9="" class="panigation ts-dot-4">2</li>
                                     <li data-v-461ef7c9="" class="panigation ts-dot-4">3</li>
                                     <li data-v-461ef7c9="" class="panigation ts-dot-4">4</li>
                                     <li data-v-461ef7c9="" class="panigation ts-dot-4 unavailable">...</li>
                                     <li data-v-461ef7c9="" class="panigation ts-dot-4">19</li>
-                                    <li data-v-461ef7c9="" class="panigation ts-dot-4">下一页</li>
+                                    <li data-v-461ef7c9="" class="panigation ts-dot-4">下一页</li>-->
                                 </ul>
                                 <div data-v-461ef7c9="" class="jumping-ctnr dp-i-block"><span
                                         data-v-461ef7c9="">跳至</span><input data-v-461ef7c9="" type="text"

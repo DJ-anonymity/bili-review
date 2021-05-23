@@ -17,10 +17,15 @@
         }
 
         .header {
+            padding: 15px;
             width: 100%;
             height: 56px;
+            box-sizing: border-box;
         }
-
+        .nav-left {
+            float: left;
+            margin-left: 70px;
+        }
         .nav-right {
             float: right;
             margin-right: 100px;
@@ -181,10 +186,11 @@
     <div>
         <div class="container">
             <div class="header">
-                <div class="top-banner">
-                    1230
+                <div class="nav-left">
+                    <a href="index.html">主页</a>
                 </div>
                 <div class="nav-right">
+                    <a href="userUpdate.html">个人信息</a>
                     <a href="/bili/Download/chromeExtend">下载插件</a>
                 </div>
             </div>
@@ -194,7 +200,7 @@
             <div class="login-box">
                 <div class="login-input-box">
                     <div class="item username status-box" style="position: relative">
-                        <input type="text" placeholder="用户名" id="update-username" class="">
+                        <input type="text" placeholder="用户名" id="update-username" class="" disabled>
                         <p class="error-message" id="name-check-tip" style="position: absolute;right: -80px;top: 12px;color: #f45d90;font-size: 14px;display: none">昵称已存在</p>
                         <span class="status"></span>
                         <div class="text clearfix">
@@ -246,6 +252,5 @@
     <script src="js/common/user.js"></script>
     <script src="js/common/component.js"></script>
     <script src="js/portal/userUpdate.js"></script>
-
 </body>
 </html>

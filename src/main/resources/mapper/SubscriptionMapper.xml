@@ -80,6 +80,13 @@
         </if>
     </select>
 
+    <select id="selectSubNum" resultType="Integer">
+        select count(id)
+        from subscription
+        where status = 1
+        and uid = #{uid}
+    </select>
+
     <insert id="insert" parameterType="com.zfg.learn.model.po.Subscription">
        insert into subscription
        (uid, fid, type, mtime, ctime)

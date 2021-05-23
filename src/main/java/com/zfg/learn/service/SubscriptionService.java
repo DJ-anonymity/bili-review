@@ -14,4 +14,6 @@ public interface SubscriptionService {
     PageInfo<SubscriptionDto> list(Integer uid, Integer type, Integer pageNum, Integer pageSize);
 
     Subscription getRelation(Integer uid, Integer fid, Integer type);
+
+    Integer getSubNum(Integer uid);
 }

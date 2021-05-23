@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="referrer" content="no-referrer">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/portal/comment.css" rel="stylesheet">
+</head>
+<body>
+<div>
+    <div class="container">
+        <div class="header">
+            <div class="top-banner">
+                1230
+            </div>
+            <div class="nav-right">
+                <a href="/bili/Download/chromeExtend">下载插件</a>
+            </div>
+        </div>
+        <div class="comment-box">
+            <div data-v-76b62926="" class="comment_wrap cc-content-body">
+                <div data-v-76b62926="" class="new-link-top-wrap">
+                    <div id="tab-container" class="new-link-top-container">
+                        <a href="/platform/comment/article" class="link-top-item router-link-exact-active"><!--增加 active类名可以变蓝-->
+                            <span>视频评论</span>
+                        </a>
+                        <!--<a href="/platform/comment/text?type=12&amp;is_hidden=0" class="link-top-item">
+                            <span>专栏评论</span>
+                        </a>
+                        <a href="/platform/comment/song?type=14&amp;is_hidden=0" class="link-top-item">
+                            <span>音频评论</span>
+                        </a>-->
+                    </div>
+                </div>
+                <div data-v-76b62926="" class="comment_content">
+                    <div data-v-76b62926="" class="bar-search_wrap">
+                        <div data-v-76b62926="" class="bcc-input  ">
+                            <input placeholder="搜索视频评论" spellcheck="false" id="search-keyword"
+                                   maxlength="999" minlength="0" type="text" class="bcc-input-inner input">
+                        </div>
+                        <i data-v-76b62926="" class="fa fa-search search" data-reporter-id="63" id="search"></i>
+                    </div>
+                    <header data-v-76b62926="" class="commet_header">
+                        <div data-v-76b62926="" class="title_wrap">
+                            <span data-v-76b62926="" class="title-txt">全部评论</span>
+                           <!-- <span data-v-76b62926="" class="num">(1990)</span>  todo 有空就要做了-->
+                        </div>
+                        <div data-v-76b62926="" class="select_wrap">
+                            <div data-v-76b62926="" class="bcc-select" style="width: 112px;">
+                                <div class="bcc-select-input-wrap">
+                                    <input type="text" readonly="readonly" placeholder="全部" class="bcc-select-input-inner" id="relation">
+                                    <i class="bcc-iconfont bcc-icon-ic_drop-down"></i>
+                                </div>
+                                <div class="bcc-select-list-wrap" style="display: none;" id="select-relation">
+                                    <ul class="bcc-select-option-list">
+                                        <li data-v-76b62926="" class="bcc-option selected" data-reporter-id="64">
+                                            <span>全部</span>
+                                            <i class="bcc-iconfont bcc-icon-ic_MenuButton-tick"></i>
+                                        </li>
+                                        <li data-v-76b62926="" class="bcc-option" data-reporter-id="65">
+                                            <span>仅看粉丝</span>
+                                            <i class="bcc-iconfont bcc-icon-ic_MenuButton-tick"></i>
+                                        </li>
+                                        <li data-v-76b62926="" class="bcc-option" data-reporter-id="66">
+                                            <span>仅看已充电</span>
+                                            <i class="bcc-iconfont bcc-icon-ic_MenuButton-tick"></i>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!--这一行是选择视频的 不需要-->
+                            <!--<div data-v-76b62926="" class="bcc-select" style="width: 208px;">
+                                <div class="bcc-select-input-wrap">
+                                    <input type="text" readonly="readonly" placeholder="请选择内容" class="bcc-select-input-inner">
+                                    <i class="bcc-iconfont bcc-icon-ic_drop-down"></i>
+                                </div>
+                                <div class="bcc-select-list-wrap" style="display: none;">
+                                    <ul class="bcc-select-option-list">
+                                        <div data-v-76b62926="" class="search-input" style="">
+                                            <div data-v-76b62926="" class="bcc-input  ">
+                                                <input placeholder="输入视频搜索关键字" spellcheck="false" maxlength="999" minlength="0" type="text" class="bcc-input-inner input">
+                                            </div>
+                                            <i data-v-76b62926="" class="bcc-iconfont bcc-icon-ic_search_ search"></i>
+                                        </div>
+                                        <div data-v-76b62926="" callback="function () { [native code] }" class="article-list">
+                                            <div data-v-76b62926="" style="overflow: hidden;">
+                                                <div data-v-76b62926="" data-simplebar="init">
+                                                    <div class="simplebar-wrapper" style="margin: 0px;">
+                                                        <div class="simplebar-height-auto-observer-wrapper">
+                                                            <div class="simplebar-height-auto-observer"></div>
+                                                        </div>
+                                                        <div class="simplebar-mask">
+                                                            <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                                                <div class="simplebar-content-wrapper" style="height: auto; overflow: hidden;">
+                                                                    <div class="simplebar-content" style="padding: 0px;">
+                                                                        <li data-v-76b62926="" class="bcc-option selected bz">
+                                                                            <div data-v-76b62926="" class="ellipsis select-article_wrap" data-reporter-id="70">
+                                                                                <div data-v-76b62926="" class="ac-link ellipsis no-active active-item">
+                                                                                    全部视频
+                                                                                </div>
+                                                                            </div>
+                                                                            <i class="bcc-iconfont bcc-icon-ic_MenuButton-tick"></i>
+                                                                        </li>
+                                                                        <li data-v-76b62926="" class="bcc-option">
+                                                                            <div data-v-76b62926="" class="ellipsis select-article_wrap" data-reporter-id="151">
+                                                                                <div data-v-76b62926="" class="ac-link ellipsis no-active">
+                                                                                    【__Apologize__的许愿之旅】来把好运打在公屏上！
+                                                                                </div>
+                                                                            </div>
+                                                                            <i class="bcc-iconfont bcc-icon-ic_MenuButton-tick"></i>
+                                                                        </li>
+                                                                        <li data-v-76b62926="" class="bcc-option">
+                                                                            <div data-v-76b62926=""
+                                                                                 class="ellipsis select-article_wrap"
+                                                                                 data-reporter-id="152">
+                                                                                <div data-v-76b62926=""
+                                                                                     class="ac-link ellipsis no-active">
+                                                                                    荧妹满星1.5深渊达成 旅行者的道路继续前行
+                                                                                </div>
+                                                                            </div>
+                                                                            <i class="bcc-iconfont bcc-icon-ic_MenuButton-tick"></i>
+                                                                        </li>
+                                                                        <li data-v-76b62926="" class="bcc-option"></li>
+                                                                        <li data-v-76b62926="" class="bcc-option"></li>
+                                                                        <li data-v-76b62926="" class="bcc-option"></li>
+                                                                        <li data-v-76b62926="" class="bcc-option"></li>
+                                                                        <li data-v-76b62926="" class="bcc-option"></li>
+                                                                        <li data-v-76b62926="" class="bcc-option"></li>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="simplebar-placeholder" style="width: 0px; height: 0px;"></div>
+                                                    </div>
+                                                    <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+                                                        <div class="simplebar-scrollbar" style="width: 0px; display: none;"></div>
+                                                    </div>
+                                                    <div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
+                                                        <div class="simplebar-scrollbar" style="height: 0px; display: none;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>-->
+                        </div>
+                    </header>
+                    <div data-v-76b62926="" class="operate_wrap">
+                        <!--暂时不使用  待开发-->
+                        <div data-v-76b62926="" class="operate_left"><!--
+                            <label data-v-76b62926="" class="bcc-checkbox">
+                                <span class="bcc-checkbox-checkbox">
+                                    <i class="bcc-iconfont bcc-icon-ic_MenuButton-tick"></i>
+                                    <input type="checkbox" name="默认" aria-hidden="true" value="false">
+                                </span>
+                                <span class="bcc-checkbox-label">全选</span>
+                            </label>
+                            <button data-v-76b62926="" class="bcc-button bcc-button&#45;&#45;default is-disabled large"
+                                    data-reporter-id="68" disabled="disabled">
+                                <span>举报</span>
+                            </button>
+                            <button data-v-76b62926="" class="bcc-button del bcc-button&#45;&#45;default is-disabled large"
+                                    data-reporter-id="69" disabled="disabled">
+                                <span>删除</span>
+                            </button>
+                        --></div>
+                        <div data-v-76b62926="" class="operate_right">
+                            <div data-v-76b62926="" class="operate-txt active" data-sort-type-id="0">最近发布</div>
+                            <div data-v-76b62926="" class="operate-txt" data-sort-type-id="1">点赞最多</div>
+                            <div data-v-76b62926="" class="operate-txt" data-sort-type-id="2">回复最多</div>
+                        </div>
+                    </div>
+                    <section data-v-76b62926="" class="section-list_wrap" id="comment-list">
+                        <div data-v-76b62926="" class="comment-list-item">
+                            <a href="//space.bilibili.com/43831779" mid="43831779" target="_blank" card="键神不请自来" class="user-avatar" data-reporter-id="171">
+                                <img src="//i0.hdslb.com/bfs/face/b2c4d4cf89f764476b979bed047240a573ca2d45.jpg@96w_96h">
+                            </a>
+                            <div class="article-wrap">
+                                <a href="//www.bilibili.com/video/BV1PU4y187zZ" target="_blank" class="pic" data-reporter-id="172">
+                                    <img src="//i0.hdslb.com/bfs/archive/c8096cfdcf7890139d92dc6dd258521f44774efe.png@200w_120h">
+                                </a>
+                                <a href="" class="title ellipsis">
+                                    <span class="name">荧妹满星1.5深渊达成 旅行者的道路继续前行</span>
+                                    <span class="show-all">该视频全部评论</span></a>
+                            </div>
+                            <div class="ci-title">
+                                <span class="relation-label" style="display: none;">已充电</span>
+                                <span class="relation-label" style="display: none;"></span>
+                                <a href="//space.bilibili.com/43831779" mid="43831779" card="键神不请自来" target="_blank">键神不请自来</a>
+                            </div>
+                            <a href="//www.bilibili.com/video/BV1PU4y187zZ" target="_blank">
+                                <div class="ci-content">我觉得主角挺好用的。我没有阿贝多，双岩要靠岩主。主角卡着位，然后猥琐输出就是了，可以打满星，但是嫌累[给心心]</div>
+                            </a>
+                            <div class="ci-action">
+                                <span class="date">2021-05-20 20:07</span>
+                                <span class="like action">
+                                    <a data-reporter-id="173" style="color: rgb(0, 161, 214);">
+                                        <i class="fa fa-thumbs-up"></i>
+                                        <span class="num">1</span>
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                        <div data-v-76b62926="" class="comment-list-item">
+                            <a href="//space.bilibili.com/43831779" mid="43831779" target="_blank" card="键神不请自来"
+                               class="user-avatar" data-reporter-id="171">
+                                <img src="//i0.hdslb.com/bfs/face/b2c4d4cf89f764476b979bed047240a573ca2d45.jpg@96w_96h">
+                            </a>
+                            <div class="article-wrap">
+                                <a href="//www.bilibili.com/video/BV1PU4y187zZ" target="_blank" class="pic" data-reporter-id="172">
+                                    <img src="//i0.hdslb.com/bfs/archive/c8096cfdcf7890139d92dc6dd258521f44774efe.png@200w_120h">
+                                </a>
+                                <a href="" class="title ellipsis">
+                                    <span class="name">荧妹满星1.5深渊达成 旅行者的道路继续前行</span>
+                                    <span class="show-all">该视频全部评论</span></a>
+                            </div>
+                            <div class="ci-title">
+                                <span class="relation-label" style="display: none;">已充电</span>
+                                <span class="relation-label" style="display: none;"></span>
+                                <a href="//space.bilibili.com/43831779" mid="43831779" card="键神不请自来" target="_blank">键神不请自来</a>
+                            </div>
+                            <a href="//www.bilibili.com/video/BV1PU4y187zZ" target="_blank">
+                                <div class="ci-content">我觉得主角挺好用的。我没有阿贝多，双岩要靠岩主。主角卡着位，然后猥琐输出就是了，可以打满星，但是嫌累[给心心]</div>
+                            </a>
+                            <div class="ci-action">
+                                <span class="date">2021-05-20 20:07</span>
+                                <span class="like action">
+                                    <a data-reporter-id="173" style="color: rgb(0, 161, 214);">
+                                        <i class="bcc-iconfont bcc-icon-icon_action_recommend_line_n_"></i>
+                                        <span class="num">1</span>
+                                    </a>
+                                </span>
+                                <span class="reply action"><a data-reporter-id="174">回复</a></span>
+                                <span class="report action"><a data-reporter-id="175">举报</a></span>
+                                <span class="delete action"><a data-reporter-id="176">删除</a></span>
+                            </div>
+
+                        </div>
+                        <div data-v-76b62926="" class="comment-list-item">
+                            <div class="check-box">
+                                <i class="bcc-iconfont bcc-icon-ic_MenuButton-tick"></i>
+                            </div>
+                            <a href="//space.bilibili.com/20736117" mid="20736117" target="_blank" card="__Apologize__" class="user-avatar" data-reporter-id="108">
+                                <img src="//i0.hdslb.com/bfs/face/5fd52d25dc2eaf825e418634fe088b812c9e8d22.jpg@96w_96h">
+                            </a>
+                            <div class="article-wrap">
+                                <a href="//www.bilibili.com/video/BV1PU4y187zZ" target="_blank" class="pic" data-reporter-id="109">
+                                    <img src="//i0.hdslb.com/bfs/archive/c8096cfdcf7890139d92dc6dd258521f44774efe.png@200w_120h">
+                                </a>
+                                <a href="" class="title ellipsis router-link-exact-active active">
+                                    <span class="name">荧妹满星1.5深渊达成 旅行者的道路继续前行</span>
+                                    <span class="show-all">该视频全部评论</span>
+                                </a>
+                            </div>
+                            <div class="ci-title">
+                                <span class="relation-label">已充电</span>
+                                <span class="relation-label" style="display: none;"></span>
+                                <a href="//space.bilibili.com/20736117" mid="20736117" card="__Apologize__" target="_blank">__Apologize__</a>
+                                <span class="ci-title-split">回复</span>
+                                <a href="//space.bilibili.com/67990574" target="_blank" card="培训部的首脑Hod" mid="67990574" class="parent-user">@培训部的首脑Hod</a>
+                                <span>在#92的评论</span>
+                            </div>
+                            <a href="//www.bilibili.com/video/BV1PU4y187zZ" target="_blank">
+                                <div class="ci-content">大史莱姆都会掉下来o(╥﹏╥)o</div>
+                            </a>
+                            <div class="ci-action">
+                                <span class="date">2021-05-17 10:09</span>
+                                <span class="like action"><a data-reporter-id="110">
+                                    <i class="bcc-iconfont bcc-icon-icon_action_recommend_line_n_"></i>
+                                    <span class="num">1</span></a></span>
+                                <span class="reply action">
+                                    <a data-reporter-id="111">回复</a>
+                                </span>
+                                <span class="report action" style="display: none;">
+                                    <a data-reporter-id="112">举报</a>
+                                </span>
+                                <span class="delete action">
+                                    <a data-reporter-id="113">删除</a>
+                                </span>
+                            </div>
+                        </div>
+                        <div data-v-76b62926="" class="comment-list-item"></div>
+                        <div data-v-76b62926="" class="comment-list-item"></div>
+                        <div data-v-76b62926="" class="comment-list-item"></div>
+                        <div data-v-76b62926="" class="comment-list-item"></div>
+                        <div data-v-76b62926="" class="comment-list-item"></div>
+                        <div data-v-76b62926="" class="comment-list-item"></div>
+                        <div data-v-76b62926="" class="comment-list-item"></div> <!---->
+                    </section>
+                    <div data-v-76b62926="" class="tips">
+                        仅展示最近的50000条评论
+                    </div>
+                    <div data-v-76b62926="" class="bcc-pagination-container bcc-pagination">
+                        <ul class="bcc-pagination"><!---->
+                            <li class="bcc-pagination-item selected"><a>1</a></li>
+                            <!--<li class="bcc-pagination-item"><a>2</a></li>
+                            <li class="bcc-pagination-item"><a>3</a></li>
+                            <li class="bcc-pagination-ellipsis"><a>⋯</a></li>
+                            <li class="bcc-pagination-item"><a>199</a></li>
+                            <li class="bcc-pagination-item bcc-pagination-next">下一页</li>
+                            <li class="bcc-pagination-extra">
+                                <div class="bcc-pagination-total"> 共199页 / 1990个</div>
+                            </li>-->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="js/jquery-2.1.1.js"></script>
+<script src="js/common/const.js"></script>
+<script src="js/common/user.js"></script>
+<script src="js/portal/comment.js"></script>
+
+</body>
+</html>
