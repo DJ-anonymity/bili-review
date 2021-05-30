@@ -251,7 +251,7 @@ public class UserController {
 
             User user = (User) session.getAttribute(Const.CURRENT_USER);
             Subscription relation = subService.getRelation(user.getUid(), mid, Const.Sub.TYPE_UP);
-            if (relation == null){
+            if (relation == null || relation.getStatus() == Const.Sub.CANCEL){
                 bIliUserDto.setIs_follow(false);
             } else {
                 bIliUserDto.setIs_follow(true);

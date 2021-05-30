@@ -45,11 +45,11 @@ public class AnimationController {
         if (currentUser != null){
             User user = (User) currentUser;
             Subscription relation = subService.getRelation(user.getUid(), media_id, Const.Sub.TYPE_MEDIA);
-            if (relation != null){
+            if (relation != null && relation.getStatus() == Const.Sub.FOLLOW){
                 animationDto.setIs_follow(true);
+            } else {
+                animationDto.setIs_follow(false);
             }
-        } else {
-            animationDto.setIs_follow(false);
         }
 
         return ServerResponse.createBySuccess(animationDto);

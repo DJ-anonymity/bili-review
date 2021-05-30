@@ -35,8 +35,13 @@ public class DynamicServiceImpl implements DynamicService {
         QQTask task = toQQTask(dynamic);
         task.setRecList(qqList);
         CatchApi catchApi = new CatchApi();
+
+        //设置发送两次 todo 连续失败两次后  就把保存日志存在数据库中
+        String result = "";
+        Integer ReSendTimes = 2;
         try {
             catchApi.request("http://127.0.0.1:8081/qqbot/push", JSONObject.toJSONString(task));
+            //推送失败的日志
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -46,6 +51,8 @@ public class DynamicServiceImpl implements DynamicService {
         QQTask task = new QQTask();
         String img = null;
         String txt = "";
+        //设置id 用来去重
+        task.setId(dynamic.getId());
         //设置内容标题
         txt+= dynamic.getAuthorName()+"\n";
 

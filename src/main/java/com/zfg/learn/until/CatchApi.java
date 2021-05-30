@@ -247,8 +247,10 @@ public class CatchApi {
 
             result = sbf.toString();
             System.out.println(sbf);
+        } else if (connection.getResponseCode() == 500){
+            System.out.println("server error, to check server's log to find reason");
         } else {
-            System.out.println("link fault");
+            System.out.println("失败,响应码为" + connection.getResponseCode());
         }
 
         return result;

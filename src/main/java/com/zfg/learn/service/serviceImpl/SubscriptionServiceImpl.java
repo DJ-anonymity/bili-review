@@ -47,24 +47,26 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
         //如果操作是关注 则使用B站Bot账号关注
         if (subscription.getStatus() == Const.Sub.FOLLOW){
-            //先查询Bot是否已经关注过该内容了
-            Subscription sub = subMapper.selectRelation(UserEnum.BOT.getUid(), subscription.getFid(), subscription.getType());
-            if (sub != null){
-                return;
-            }
+            synchronized (this){
+                //先查询Bot是否已经关注过该内容了 tip:这里默认空就是不订阅 以后拓展要修改
+                Subscription sub = subMapper.selectRelation(UserEnum.BOT.getUid(), subscription.getFid(), subscription.getType());
+                if (sub != null){
+                    return;
+                }
 
-            try {
-                //通过sn操作bot账号去关注内容
-                SeleniumBiliUntil selenium = SeleniumBiliUntil.getInstance();
-                selenium.subscribe(subscription.getFid(), subscription.getType());
+                try {
+                    //通过sn操作bot账号去关注内容
+                    SeleniumBiliUntil selenium = SeleniumBiliUntil.getInstance();
+                    selenium.subscribe(subscription.getFid(), subscription.getType());
 
-                //关注成功后让bot订阅该内容然后插入数据库
-                Subscription botSub = subscription;
-                botSub.setUid(UserEnum.BOT.getUid());
-                subMapper.insert(botSub);
-            } catch (SeleniumException e) {
-                e.printStackTrace();
-                throw new ServiceException(e.getMessage());
+                    //关注成功后让bot订阅该内容然后插入数据库
+                    Subscription botSub = subscription;
+                    botSub.setUid(UserEnum.BOT.getUid());
+                    subMapper.insert(botSub);
+                } catch (SeleniumException e) {
+                    e.printStackTrace();
+                    throw new ServiceException(e.getMessage());
+                }
             }
         }
     }
