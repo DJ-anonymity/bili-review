@@ -55,7 +55,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
                 }
 
                 try {
-                    //通过sn操作bot账号去关注内容
+                    //通过sn操作bot账号去关注内容 todo zmark
                     SeleniumBiliUntil selenium = SeleniumBiliUntil.getInstance();
                     selenium.subscribe(subscription.getFid(), subscription.getType());
 

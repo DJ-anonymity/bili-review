@@ -20,7 +20,9 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 获取机器人的cookie
+ * @apiNote 暂时不使用了 使用直接调用接口的方式代替机器人
  */
+@Deprecated
 @RestController
 public class SeleniumController {
     @Autowired

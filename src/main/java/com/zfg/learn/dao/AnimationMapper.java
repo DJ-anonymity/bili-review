@@ -23,4 +23,6 @@ public interface AnimationMapper {
     public Integer updateShortReviewPersistenceMarkByMedia_id(@Param("persistenceMark") Integer persistenceMark, Integer media_id);
 
     public Integer insertAnimation(Animation animation);
+
+    Animation selectBySeasonId(@Param("season_id") Long season_id);
 }

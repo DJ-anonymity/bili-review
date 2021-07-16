@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zfg.learn.common.Const;
 import com.zfg.learn.config.BeanContext;
+import com.zfg.learn.dao.AnimationMapper;
+import com.zfg.learn.model.po.Animation;
 import com.zfg.learn.model.po.Dynamic;
 import com.zfg.learn.model.po.DynamicStat;
 import com.zfg.learn.until.CatchApi;
@@ -127,6 +129,8 @@ public class DynamicListener extends Thread{
         }
     }
 
+    /** 用来转行media和season_id**/
+    private AnimationMapper animationMapper = BeanContext.getBean(AnimationMapper.class);
     /**
      * 解析动态
      * @param jsonObject
@@ -145,8 +149,10 @@ public class DynamicListener extends Thread{
         //番剧类型单独处理
         if (type == Const.Dynamic.MEDIA || type == Const.Dynamic.TV_SHOW){
             JSONObject apiSeasonInfo = card.getJSONObject("apiSeasonInfo");
-            //todo 把sessionId转换成mediaId
-            dynamic.setAuthorId(apiSeasonInfo.getLong("season_id"));
+            Long season_id = apiSeasonInfo.getLong("season_id");
+            //把seasonId转行成media_id
+            Integer media_id = animationMapper.selectBySeasonId(season_id).getMedia_id();
+            dynamic.setAuthorId(Long.valueOf(media_id));
             dynamic.setAuthorName(apiSeasonInfo.getString("title"));
             dynamic.setUrl(card.getString("url"));
 

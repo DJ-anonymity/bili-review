@@ -50,6 +50,12 @@
         </if>
     </select>
 
+    <select id="selectBySeasonId" parameterType="Integer" resultType="com.zfg.learn.model.po.Animation">
+        select *from animation
+        where season_id = #{season_id}
+    </select>
+
+
     <select id="selectLongReviewPersistenceMarkByMedia_id" parameterType="Integer" resultType="Integer">
         select longReviewPersistenceMark from animation
         where media_id = #{media_id}

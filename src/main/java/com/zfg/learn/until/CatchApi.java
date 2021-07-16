@@ -17,6 +17,7 @@ import java.util.Map;
 public class CatchApi {
     public final String METHOD_DEFAULT = "GET";
 
+
     //获取输入的api的数据
     public String getJsonFromApi(String originalUrl) throws IOException {
         return getJsonFromApi(originalUrl, METHOD_DEFAULT);
@@ -256,8 +257,79 @@ public class CatchApi {
         return result;
     }
 
-    @Test
-    public void demo() throws IOException {
-        getJsonFromApiByCook("https://api.bilibili.com/x/web-interface/nav", null);
+    /**
+     * 最多选择版
+     * @param originalUrl
+     * @param header
+     * @param data
+     * @param method
+     * @return
+     * @throws IOException
+     */
+    public static String request(String originalUrl, HashMap<String, String> header, String data, String method) throws IOException {
+        String result = "";
+        URL url = new URL(originalUrl);
+
+        HttpURLConnection connection = null;
+        try {
+            connection = (HttpURLConnection) url.openConnection();
+        } catch (IOException e) {
+            System.out.println("请求过于频繁，请一小时后再获取数据");
+            e.printStackTrace();
+        }
+
+        // 设置连接主机服务器超时时间：10000毫秒
+        connection.setConnectTimeout(10000);
+        // 设置读取主机服务器返回数据超时时间：60000毫秒
+        connection.setReadTimeout(60000);
+
+        //设置请求头
+        for (Map.Entry<String, String> entry:header.entrySet()){
+            connection.setRequestProperty(entry.getKey(), entry.getValue());
+        }
+
+        connection.setRequestMethod(method);
+        //connection.setRequestProperty("Content-Type", "application/json");
+        //发送数据
+        if (data != null){
+            connection.setDoOutput(true);
+        }
+        OutputStream outputStream = connection.getOutputStream();
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, "utf-8");
+        PrintWriter printWriter = new PrintWriter(outputStreamWriter);
+        printWriter.println(data);
+        printWriter.flush();
+
+        // 通过连接对象获取一个输入流，向远程读取
+        if (connection.getResponseCode() == 200) {
+            System.out.println("link ok");
+            InputStream is = connection.getInputStream();
+            //对输入流对象进行包装:charset根据工作项目组的要求来设置
+            BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            //使用字符缓冲流，
+            StringBuffer sbf = new StringBuffer();
+            String temp = null;
+            // 循环遍历一行一行读取数据
+            while ((temp = br.readLine()) != null) {
+                sbf.append(temp);
+                sbf.append("\r\n");
+            }
+
+            result = sbf.toString();
+        } else {
+            System.out.println("link fault");
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) throws IOException {
+        HashMap hashMap = new HashMap();
+        hashMap.put("cookie", "SESSDATA=e1319954%2C1639991814%2C9f66d*61; bili_jct=1bda6f083fb5cbe1f451fbb7bc6ee100;buvid3=448EC7E8-5003-7E20-FFE9-4EA8436B235A46228infoc;");
+        hashMap.put("content-type", "application/x-www-form-urlencoded");
+        hashMap.put("referer","https://www.bilibili.com/");
+        System.out.println(request("https://api.bilibili.com/pgc/web/follow/del",hashMap ,
+                "csrf=1bda6f083fb5cbe1f451fbb7bc6ee100&season_id=20001",
+                "POST"));
     }
 }
