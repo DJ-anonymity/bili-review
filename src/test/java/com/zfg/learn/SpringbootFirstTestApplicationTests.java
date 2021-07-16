@@ -1,12 +1,15 @@
 package com.zfg.learn;
+
 import com.zfg.learn.common.RedisConst;
 import com.zfg.learn.dao.*;
-import com.zfg.learn.interview.ReadTxt;
-import com.zfg.learn.pojo.*;
+import com.zfg.learn.model.po.BiliUser;
+import com.zfg.learn.model.po.Demo;
+import com.zfg.learn.model.po.ShortReview;
 import com.zfg.learn.service.AnimationService;
 import com.zfg.learn.service.KeywordCountService;
 import com.zfg.learn.service.LongReviewService;
 import com.zfg.learn.service.ShortReviewService;
+import com.zfg.learn.until.BiliUntil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,12 +45,21 @@ class SpringbootFirstTestApplicationTests {
     private AnimationService animationService;
     @Autowired
     private KeywordCountService keywordCountService;
-    @Autowired
-    private IconMapper iconMapper;
+    private static String privateKeyStr = "{\"kty\":\"RSA\",\"kid\":\"fa677d525c0e4ee485a61543937794af\",\"alg\":\"RS256\",\"n\":\"ki6NKW2ow53FBjWf21xNGF0v-Fzv9R4-vu5tz7LHz4vZ7TE2Lp7Xx0N2vFIH-HLZPLfAYW35W5iV29sW_MkbhVlh6f0q4AeCIeYrVjBGbcYTK5g-Sb8i9sO78DkGivryKTU4tUnOjqar2bfobwXScFhAgc4-BjIcvZ9V8LEzcAW76he500-sqekXqvYv7LbxIMlbadGEwbBqjscE83hiYjk1KSFrEeNWKP6E0X_cHVGEEGys8IKlBcfwOOCgaJ0sCFxvN3M54V33jSUknFzHAi1qJRsOI87-Fk1oYS-aniQOTfm5y5x1syTIgWEX9JvXCQgTxjp2kMItuoL2G2faoQ\",\"e\":\"AQAB\",\"d\":\"OmSUCN-AEZv9LwzOrW6CcWAQIHLne4-4WsadYOE2hcaEqAYHcboL0dI2JOXTv0AJXQK9u22VtSwPeMJcvV-MOclJnpF9xf3Z0rbByuz_xSvhToHDJ-xNCCuJ8FynK28wuptC6s_vzfXwIckf9PFrbWsjYXbEOe9cobZ7Ould9boHkEq-x0eKkDFfcQbevuQeM54FCk5FGl_D4wpbuqudZiT8FYCJPO7m-MTnND6xzdEVuApuQUPCjAin34ygp9QPk2VfQaM1z-ZHchTaXtsv5gyLwu3bqA91vugmrtGuSBG8pFaN6mYL_ivt1Q_7QDLqXZ5_WBhkoXO5DZ4-6ApLvQ\",\"p\":\"58fTzOMjU1zJ42ZdUkJjSpRlZXdlWx3ILStrvVw7kCHH1iBZ4Lckd7SdqJ9DUfdIBFTNPaAKfDqpoz7fWOUZyyUpy7_8qaDagFi53pAjuCGUuKnOV5hbSPBIOvGi9iTHwLNz6Om5eRV6lBXoTRJgT7g8u88HeSyl29RmYt-N7rs\",\"q\":\"oXTxPC0BFDxpFjk2Jpuj6hBkioD3Kiv7HEJjxRoOL3TEAAc3811f7V7bO5FWK2L_2g8I5YiZhsyh0SyxjPBfuIzcbAfGSTAsFqKiIOGZ7fqiFTOV319FJIkcMOrT2dbvGxNeGgTJpWB1vcX6C8i3ytzPFto1H9Bl3xAPVFflHFM\",\"dp\":\"RU-eaLCryav_u37K_WRY6N6Di9oudxbq24cWiuPf8_QGHGREPEzIHPvoAZrOuN4nrRPm5DzNpeStAeI1TBIGqpcMbp-U4Oz3KlZeDs4vwEpafPZafBtVgPRJxUapIs5Q5bFEQixSiIEBzPLYKuQJ5Q0FLGx2oafWWWykyYBsoy0\",\"dq\":\"SS2_yQ581rcqyi_UI1uXx5b2evBJFowonH5ayhMtKsU5sOmUqnE_8U50_2K4M6IDZMo7tg1byIUnMq-XKdIpEHSH008SyElVMk00PsMCCaL3o7Rl0YBUzmJ2rJVCwBFy_kqg9BoHazV1KDZ7RqwK4Z-DHVB5k5nZEmktCYVtCpE\",\"qi\":\"jDbVP3xGaYx2wgAGJT7KNjdoC4dYbl5ajp9saRCgAih3TYr1CjZSrLRm9L90UukgwajU0pHaffP74epVx0RBhnS5GtZhCoGitpLwYSDkZ9qTMTVnFPHrg6M1OYEEXjZ_UKlnYCrzrDe6tfHcO1UTzMzsuOgHjRAV7IS6ImfzwVw\"}";
+    private static String publicKeyStr = "{\"kty\":\"RSA\",\"kid\":\"fa677d525c0e4ee485a61543937794af\",\"alg\":\"RS256\",\"n\":\"ki6NKW2ow53FBjWf21xNGF0v-Fzv9R4-vu5tz7LHz4vZ7TE2Lp7Xx0N2vFIH-HLZPLfAYW35W5iV29sW_MkbhVlh6f0q4AeCIeYrVjBGbcYTK5g-Sb8i9sO78DkGivryKTU4tUnOjqar2bfobwXScFhAgc4-BjIcvZ9V8LEzcAW76he500-sqekXqvYv7LbxIMlbadGEwbBqjscE83hiYjk1KSFrEeNWKP6E0X_cHVGEEGys8IKlBcfwOOCgaJ0sCFxvN3M54V33jSUknFzHAi1qJRsOI87-Fk1oYS-aniQOTfm5y5x1syTIgWEX9JvXCQgTxjp2kMItuoL2G2faoQ\",\"e\":\"AQAB\"}";
+
 
     private  int num = 1;
     //多线程
     private static BlockingQueue blockingQueue = new ArrayBlockingQueue(10);
+
+    @Test
+    public void demo1251621(){
+        redisTemplate.opsForValue().set("gateway.jwk", privateKeyStr);
+        String o = (String) redisTemplate.opsForValue().get("gateway.jwk");
+        System.out.println(o);
+    }
+
 
     @Test
     public void demo() throws IOException {
@@ -427,18 +439,6 @@ class SpringbootFirstTestApplicationTests {
     }
 
     @Test
-    public void xlsRead(){
-        List<String> iconList = ReadTxt.readTxt("C:\\Users\\Administrator\\Desktop\\icon.txt", "\".*?\"");
-        List<String> menuNameList = ReadTxt.readTxt("C:\\Users\\Administrator\\Desktop\\菜单名称.txt", null);
-        for (int i = 0;i < iconList.size();i++){
-            //iconMapper.updateIcon(menuNameList.get(i), iconList.get(i));
-            System.out.println(iconMapper.selectByName(menuNameList.get(i)));
-        }
-
-        //System.out.println(iconMapper.updateIcon("感知数据录管理","zfgnb"));
-    }
-
-    @Test
     public void demo300() {
         String title = "abc[笑a哭][笑b哭][笑c哭]def[笑d哭][笑e哭][笑f哭]ghk";
         String regex = "(\\[[\\w\\W].+?\\])";
@@ -450,4 +450,11 @@ class SpringbootFirstTestApplicationTests {
             System.out.println(group);
         }
     }
+
+    @Test
+    public void demo12121() throws IOException {
+        BiliUntil biliUntil = new BiliUntil("e1319954%2C1639991814%2C9f66d*61", "1bda6f083fb5cbe1f451fbb7bc6ee100", "448EC7E8-5003-7E20-FFE9-4EA8436B235A46228infoc");
+        biliUntil.followUp(25406930L);
+    }
+
 }

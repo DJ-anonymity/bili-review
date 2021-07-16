@@ -266,7 +266,7 @@ public class CatchApi {
      * @return
      * @throws IOException
      */
-    public static String request(String originalUrl, HashMap<String, String> header, String data, String method) throws IOException {
+    public String request(String originalUrl, HashMap<String, String> header, String data, String method) throws IOException {
         String result = "";
         URL url = new URL(originalUrl);
 
@@ -323,7 +323,7 @@ public class CatchApi {
         return result;
     }
 
-    public static void main(String[] args) throws IOException {
+    /*public static void main(String[] args) throws IOException {
         HashMap hashMap = new HashMap();
         hashMap.put("cookie", "SESSDATA=e1319954%2C1639991814%2C9f66d*61; bili_jct=1bda6f083fb5cbe1f451fbb7bc6ee100;buvid3=448EC7E8-5003-7E20-FFE9-4EA8436B235A46228infoc;");
         hashMap.put("content-type", "application/x-www-form-urlencoded");
@@ -331,5 +331,5 @@ public class CatchApi {
         System.out.println(request("https://api.bilibili.com/pgc/web/follow/del",hashMap ,
                 "csrf=1bda6f083fb5cbe1f451fbb7bc6ee100&season_id=20001",
                 "POST"));
-    }
+    }*/
 }
